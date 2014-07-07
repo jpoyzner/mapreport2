@@ -43,8 +43,8 @@ public class DBQueryBuilder {
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
 
-  static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsFilter nf, \n ( ";
-  static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ";
+  static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, \n ( ";
+  static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
   static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
   static final String FROM_EXTERNAL_END = "";
   static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterid = nf.filterid  and nl.newsid = nf.newsid   and f.filterid = nf.filterid";
@@ -84,7 +84,7 @@ public class DBQueryBuilder {
 	
  //   from filter f, location l, news n, newsFilter nf
 	// "\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ";
-	private StringBuilder fromSQL = new StringBuilder("\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ");
+	private StringBuilder fromSQL = new StringBuilder("\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
 	private StringBuilder whereSQL = new StringBuilder(" f.filterid = l.filterid " + 
        " and n.newsid = nf.newsid " + 
        "  and f.filterid = nf.filterid " + 

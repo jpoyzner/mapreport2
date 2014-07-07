@@ -10,7 +10,7 @@ public class FilterDBQueryBuilder {
 	String sql;
 	PreparedStatement pst;
 	private static String sqlBegin = "select p.filterId, p.name, p.label, p.image, p.priority, p.isLocation " + 
-		"from filter p, filter c, filterFilter ff " + 
+		"from filter p, filter c, filterfilter ff " + 
 		"where p.filterId = ff.parentFilterId and c.filterId = ff.childFilterId " + 
 		"and ff.childFilterId in (";
 	
