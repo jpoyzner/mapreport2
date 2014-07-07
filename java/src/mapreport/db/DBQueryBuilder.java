@@ -190,7 +190,7 @@ public class DBQueryBuilder {
 		return json;
 	}
 
-	private static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {
 		LocationByCoords coordFilter;
 		DBQueryBuilder queryBuilder = new DBQueryBuilder(size);
 
