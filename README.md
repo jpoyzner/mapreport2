@@ -1,4 +1,4 @@
 mapreport2
 ==========
 
-Dynamic News
+Dynamic News!
