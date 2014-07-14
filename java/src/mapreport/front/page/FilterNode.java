@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.tools.JavaFileManager.Location;
+
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
@@ -268,12 +270,13 @@ public class FilterNode {
 			whereSQL.append(coordFilter.getWhereSQL());
 		}		
 		
+
+		boolean anyIdFilter = false;
+	    StringBuilder filterIds = new StringBuilder("");
 		for (Filter filter : filterList) {
-			boolean anyIdFilter = false;
 			// and (fp.name IN ('Angola') || f.name IN ('Angola'))
 				Log.log("FilterNode getWhereSQL filter=" + filter);
 			
-		    StringBuilder filterIds = new StringBuilder("");
 		    
 			if (filter instanceof DBFilter) {
 					String filterName = ((DBFilter) filter).getName();
@@ -282,21 +285,22 @@ public class FilterNode {
 						continue;
 					}
 					//  and  f.name='Farallon Islands, San Francisco, California, USA' 
-					filterIds.append("'" + filterName.replaceAll("\'", "\'\'") + "'");
+
 					if (anyIdFilter) {
 						filterIds.append(", ");
 					} 
+					filterIds.append("'" + filterName.replaceAll("\'", "\'\'") + "'");
 					anyIdFilter = true;
-			}
-			
-			Log.log("FilterNode getWhereSQL filterIds=" + filterIds + " anyIdFilter=" + anyIdFilter);
-	
-			if (anyIdFilter) {           // and fp.name IN ('Angola') 
-				whereSQL.append(" and fp.name IN (");		
-				whereSQL.append(filterIds);
-				whereSQL.append(" ) ");	
-			}
+			}			
 		}
+		Log.log("FilterNode getWhereSQL filterIds=" + filterIds + " anyIdFilter=" + anyIdFilter);
+		
+		if (anyIdFilter) {           // and fp.name IN ('Angola') 
+			whereSQL.append(" and fp.name IN (");		
+			whereSQL.append(filterIds);
+			whereSQL.append(" ) ");	
+		}
+
 		
 		if (timeFilter != null) {
 			whereSQL.append(timeFilter.getWhereSQL());
