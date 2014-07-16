@@ -1,35 +1,51 @@
 package mapreport.db;
 
 import java.io.UnsupportedEncodingException;
+
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.SQLException; 
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.TimeFilter;
 import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
+import mapreport.front.page.PageMetaData;
+import mapreport.front.page.PageMetaDataSerialiser;
 import mapreport.front.page.PagePresentation;
+import mapreport.front.page.PagePresentationSerialiser;
+import mapreport.front.param.RequestParameter;
 import mapreport.front.url.PageURL;
+import mapreport.nav.NavigationNode;
+import mapreport.nav.NavigationNodeSerializer;
+import mapreport.nav.NavigationPath;
+import mapreport.nav.NavigationPathSerializer;
 import mapreport.news.News;
 import mapreport.util.JSONHandler;
+import mapreport.util.JsonError;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class DBQueryBuilder {	
-  FilterNode filterNode = new FilterNode();
+  FilterNode filterNode = new FilterNode();   
   int limit = 2;
   
   static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
@@ -43,8 +59,8 @@ public class DBQueryBuilder {
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
 
-  static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, \n ( ";
-  static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
+  static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsFilter nf, \n ( ";
+  static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ";
   static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
   static final String FROM_EXTERNAL_END = "";
   static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterid = nf.filterid  and nl.newsid = nf.newsid   and f.filterid = nf.filterid";
@@ -84,7 +100,7 @@ public class DBQueryBuilder {
 	
  //   from filter f, location l, news n, newsFilter nf
 	// "\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ";
-	private StringBuilder fromSQL = new StringBuilder("\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
+	private StringBuilder fromSQL = new StringBuilder("\n from  filter f, filter fp, newsFilter nf, filterFilter ff, news n \n ");
 	private StringBuilder whereSQL = new StringBuilder(" f.filterid = l.filterid " + 
        " and n.newsid = nf.newsid " + 
        "  and f.filterid = nf.filterid " + 
@@ -159,8 +175,8 @@ public class DBQueryBuilder {
 	    	// Json by URL by Java objects
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-	  //  nameFilters.add(new DBFilter("San Francisco"));
-	//    nameFilters.add(new DBFilter("San Jose"));
+	    nameFilters.add(new DBFilter("Crime"));
+	  //  nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -172,7 +188,6 @@ public class DBQueryBuilder {
         	System.out.println("end main");
 	}
 
-	@SuppressWarnings("unused")
 	private static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
@@ -191,72 +206,75 @@ public class DBQueryBuilder {
 	}
 
 	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {
-		LocationByCoords coordFilter;
-		DBQueryBuilder queryBuilder = new DBQueryBuilder(size);
-
-			Log.log("buildJson rect=" + rect + " nameFilters=" + nameFilters + " size=" + size);
-		// Rectangle rect = new Rectangle(-10000000, 20000000, -10000000, 20000000);
-		// Rectangle rect = new Rectangle(options);
-		if (rect != null && rect.getxSpan() > 0) {
-			          Log.log("queryBuilder buildJson rect.getxSpan() > 0");
-	    	coordFilter = new LocationByCoords (rect);
-	    	queryBuilder.addFilter(coordFilter);
-		}		
+		String json = null;
 		
-		if (nameFilters != null) {
-			for (NameFilter filter: nameFilters) {
-				   System.out.println("before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
-		    	queryBuilder.addFilter(filter);  
+		try {
+			LocationByCoords coordFilter;
+			DBQueryBuilder queryBuilder = new DBQueryBuilder(size);
+
+				Log.log("buildJson rect=" + rect + " nameFilters=" + nameFilters + " size=" + size);
+
+			if (rect != null && rect.getxSpan() > 0) {
+				          Log.log("queryBuilder buildJson rect.getxSpan() > 0");
+				coordFilter = new LocationByCoords (rect);
+				queryBuilder.addFilter(coordFilter);
+			}		
+			
+			if (nameFilters != null) {
+				for (NameFilter filter: nameFilters) {
+					Log.log("before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
+			    	queryBuilder.addFilter(filter);  
+				}
 			}
-		}
+			
+			if (queryBuilder.filterNode.getFilterList().size() == 0) {   // no filters added, so just global latest
+				     Log.log("queryBuilder buildJson ading Latest");
+				queryBuilder.addFilter(new Latest());  
+			}
+			
+				Log.log("queryBuilder.filterNode.getFilterList().size()=" + queryBuilder.filterNode.getFilterList().size());
+				
+			queryBuilder.setWhereSQL(queryBuilder.filterNode.getWhereSQL());
+			queryBuilder.setOrderBySQL(new StringBuilder(queryBuilder.filterNode.getOrderSQL())); 
+			  
+			List<NewsFilterRow> rows = queryBuilder.runQuery();
+	
+			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilter(rows);
+			List<News> newsList = NewsFilterRow.buildNews(rows);
+			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);		
+			Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters);
+				
+			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes) ;
+			   Log.log("buildJson page.getView()=" + page.getView());
+			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
+			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
+			int newsListsize = page.getView().getNewsList().getNewses().size();
+			Log.log("end main newsListsize=" + newsListsize);
+			   Log.log ("page.getNavigationPath=" + page.getNavigationPath());     
 		
-		if (queryBuilder.filterNode.getFilterList().size() == 0) {   // no filters added, so just global latest
-			     Log.log("queryBuilder buildJson ading Latest");
-			queryBuilder.addFilter(new Latest());  
-		}
-		
-    		Log.log("queryBuilder.filterNode.getFilterList().size()=" + queryBuilder.filterNode.getFilterList().size());
-    		
-    	queryBuilder.setWhereSQL(queryBuilder.filterNode.getWhereSQL());
-    	queryBuilder.setOrderBySQL(new StringBuilder(queryBuilder.filterNode.getOrderSQL()));
-		  
-    	List<NewsFilterRow> rows = null;
-    	
-    	try {
-    		rows = queryBuilder.runQuery();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			   // just for test
+			  // if (true) throw new Exception("test exception"); 
+			   
+			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
+		} catch (Exception e) {		
+			   Log.log ("catch (Exception e) e.getMessage()" + e.getMessage());	
 			e.printStackTrace();
+			   Log.log ("printStackTrace");	
+			json = new JsonError(e.getMessage(), e).getText();
+			   Log.log ("buildJson ends");	
 		}
-
-		List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilter(rows);
-		List<News> newsList = NewsFilterRow.buildNews(rows);
-		List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);		
-		Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters);
-		//FilterNode pageFilters = new FilterNode();
-		//pageFilters.add(coordFilter);
-    	
-		PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes) ;
-		   System.out.println("buildJson page.getView()=" + page.getView());
-		   System.out.println("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
-		   System.out.println("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
-		int newsListsize = page.getView().getNewsList().getNewses().size();
-		   System.out.println("end main newsListsize=" + newsListsize);
-		   Log.log ("page.getNavigationPath=" + page.getNavigationPath());
-		//Gson gson = new Gson();      
-		String json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
 		return json;
 	}
 	
 	public List<NewsFilterRow> runQuery() throws SQLException {
 		begin();
-    	    System.out.println("start startBindQuery");
+		Log.log("start startBindQuery");
 		startBindQuery();	
-	    	System.out.println("start bindFilters");	
+		Log.log("start bindFilters");	
 		bindFilters();
-	    	System.out.println("start executeQuery");
+		Log.log("start executeQuery");
 		ResultSet resultSet = pst.executeQuery();
-	    	System.out.println("start processResultSet");		
+		Log.log("start processResultSet");		
 	    List<NewsFilterRow> rows = processResultSet(resultSet);
 	    return rows;
 	}
@@ -283,7 +301,7 @@ public class DBQueryBuilder {
         // select  f.priority as filterPriority, 
         // f.name as fName, n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, 
         
-        System.out.println("DBQueryBuilder con=" + con);
+		Log.log("DBQueryBuilder con=" + con);
         return pst;
 	}
 		

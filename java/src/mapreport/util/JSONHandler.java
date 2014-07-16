@@ -21,6 +21,7 @@ public class JSONHandler {
 		    gsonBuilder.registerTypeAdapter(PageMetaData.class, new PageMetaDataSerialiser());
 		    gsonBuilder.registerTypeAdapter(NavigationPath.class, new NavigationPathSerializer());
 		    gsonBuilder.registerTypeAdapter(NavigationNode.class, new NavigationNodeSerializer());
+		 //   gsonBuilder.registerTypeAdapter(JsonError.class, new JsonErrorSerializer());
 		    
 		    gsonBuilder.setPrettyPrinting();
 		    gson = gsonBuilder.create();
