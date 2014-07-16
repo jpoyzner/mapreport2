@@ -203,8 +203,8 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		return false;
 	}
 
-//	from        ,     filter fl, newsFilter nfl  -- for location
-   // ,     filter fpl, filter fcl, filterFilter ffl   -- for location
+//	from        ,     filter fl, newsfilter nfl  -- for location
+   // ,     filter fpl, filter fcl, filterfilter ffl   -- for location
 	
   /*
 	and n.newsid = nfl.newsid  -- for location
@@ -218,7 +218,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
             and (fl.filterid in   -- location   if no coords
                 (  -- location
                        select  fc.filterId
-                      from filter fp, filter fc, filterFilter ff
+                      from filter fp, filter fc, filterfilter ff
                       where fc.filterid = ff.childFilterId
                        and fp.filterid = ff.parentFilterId
                        and fp.label in ('Northern Mexico')   -- fp.filterId in (...)
