@@ -1,13 +1,13 @@
 package mapreport.db;
 
 import java.io.UnsupportedEncodingException;
-
 import java.net.MalformedURLException;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException; 
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -23,6 +23,7 @@ import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
+import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
@@ -69,9 +70,16 @@ public class DBQueryBuilder {
   void addFilter(Filter filter) {
 	  	Log.log("DBQueryBuilder addFilter filter=" + filter);
 	  filterNode.add(filter);
+	  // just for logging
+	     if (filter instanceof DBFilter) {
+	    	 DBFilter dBFilter = (DBFilter) filter;
+	    	    Log.log("DBQueryBuilder addFilter dBFilter=" + dBFilter + " getName=" + dBFilter.getName()+ " getDbFilterCntr=" + dBFilter.getDbFilterCntr());
+	     }
 	  selectSQL.append(filter.getSelectSQL());
 	  fromSQL.append(filter.getFromSQL());
+	                Log.log("DBQueryBuilder addFilter fromSQL=" + fromSQL);
 	  whereSQL.append(filter.getWhereSQL());
+                    Log.log("DBQueryBuilder addFilter filter.getWhereSQL()=" + filter.getWhereSQL());
 	  orderBySQL.append(filter.getOrderBySQL());
   }
 	
@@ -115,8 +123,8 @@ public class DBQueryBuilder {
 	public String buildSql() {
 		StringBuilder sql = new StringBuilder();
 		sql.append(SELECT_EXTERNAL);
-		sql.append(fromSQL);
 		sql.append(selectSQL);
+		sql.append(fromSQL);
 		sql.append("\r\n");
 		
 		/*   for coord filter
@@ -176,7 +184,7 @@ public class DBQueryBuilder {
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
 	    nameFilters.add(new DBFilter("Crime"));
-	  //  nameFilters.add(new DBFilter("San Jose"));
+	    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -316,65 +324,94 @@ public class DBQueryBuilder {
 		return pst;
 	}
 	
+	public static boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
+	    ResultSetMetaData rsmd = rs.getMetaData();
+	    int columns = rsmd.getColumnCount();
+	    for (int x = 1; x <= columns; x++) {
+	        if (columnName.equals(rsmd.getColumnName(x))) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
+	
 	public List<NewsFilterRow> processResultSet(ResultSet res) throws SQLException{ 
 		List<NewsFilterRow> rows = new ArrayList<NewsFilterRow>(100);
 		while (res.next()) {
-			NewsFilterRow row = new NewsFilterRow();
 			//	select  f.priority as filterPriority, 
 			//     f.name as fName, n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, 
-				  int filterPriority = res.getInt("filterPriority");
-				  String fName = res.getString("fName");
-				  String pName = res.getString("pName");
-				  String newsId = res.getString("newsId");
-				  String label = res.getString("label");
-				  String nPriority = res.getString("nPriority");
-				  int nfPriority = res.getInt("nfPriority");
-				  Date date = res.getDate("dateTime");
-				  
-				  /* for coord filter
-				  double topCoord = res.getDouble("topCoord");
-				  double bottomCoord = res.getDouble("bottomCoord");
-				  double leftCoord = res.getDouble("leftCoord");
-				  double rightCoord = res.getDouble("rightCoord");
-				  boolean isOfficial = res.getBoolean("isOfficial");
-				  */
-				  boolean isLocation = res.getBoolean("isLocation");
-				  // 			 "n.url as url, n.video as video, n.image as image, n.addressText as addressText, n.shortLabel as shortLabel, n.description as description,
-				  // n.newsText as newsText \n "
-				  String url = res.getString("url");
-				  String video = res.getString("video");
-				  String image = res.getString("image");
-				  String addressText = res.getString("addressText");
-				  String shortLabel = res.getString("shortLabel");
-				  String description = res.getString("description");
-				  
-				  row.setDate(date);
-				  row.setFilterPriority(filterPriority);
-				  row.setName(label);
-				  row.setNewsFilterPriority(nfPriority);
-				  row.setNewsId(Integer.parseInt(newsId));
-				  row.setFilterId(fName);
-				  row.setPriority(Integer.parseInt(nPriority));
-				  
-				  //for coord filter
-				 // row.setOfficial(isOfficial);
-						  
-				  row.setLocation(isLocation);
-				  row.setUrl(url);
-				  row.setVideo(video);
-				  row.setImage(image);
-				  row.setAddressText(addressText);
-				  row.setShortLabel(shortLabel);
-				  row.setDescription(description);
-				  row.setParentId(pName);
-				  
-				  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
-						  +  " fName=" + fName +  " pName=" + pName  +  " newsId=" + newsId  +  " isLocation=" + isLocation 
-						  +  " nPriority=" + nPriority  );		
-			rows.add(row);
+			  String fName = res.getString("fName");
+			  int filterPriority = res.getInt("filterPriority");
+			  String pName = res.getString("pName");
+			  int nfPriority = res.getInt("nfPriority");
+			  NewsFilterRow row = createNewsFilterRow(res, filterPriority, fName, pName, nfPriority);	
+			  rows.add(row);	
+
+			  //  , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.nfPriority as nfPriority2 		  
+			  if (hasColumn(res, "fName2")) {	  			  
+				  String fName2 = res.getString("fName2");
+				  int filterPriority2 = res.getInt("filterPriority2");
+				  String pName2 = res.getString("pName2");
+				  int nfPriority2 = res.getInt("nfPriority2");
+				  NewsFilterRow row2 = createNewsFilterRow(res, filterPriority2, fName2, pName2, nfPriority2);	
+				  rows.add(row2);	
+			  }
 		}
 		
 		return rows;
+	}
+
+	private NewsFilterRow createNewsFilterRow(ResultSet res,
+			int filterPriority, String fName, String pName, int nfPriority)
+			throws SQLException {
+		  NewsFilterRow row = new NewsFilterRow();
+		  
+		  String newsId = res.getString("newsId");
+		  String label = res.getString("label");
+		  String nPriority = res.getString("nPriority");
+		  Date date = res.getDate("dateTime");
+		  
+		  /* for coord filter
+		  double topCoord = res.getDouble("topCoord");
+		  double bottomCoord = res.getDouble("bottomCoord");
+		  double leftCoord = res.getDouble("leftCoord");
+		  double rightCoord = res.getDouble("rightCoord");
+		  boolean isOfficial = res.getBoolean("isOfficial");
+		  */
+		  boolean isLocation = res.getBoolean("isLocation");
+		  // 			 "n.url as url, n.video as video, n.image as image, n.addressText as addressText, n.shortLabel as shortLabel, n.description as description,
+		  // n.newsText as newsText \n "
+		  String url = res.getString("url");
+		  String video = res.getString("video");
+		  String image = res.getString("image");
+		  String addressText = res.getString("addressText");
+		  String shortLabel = res.getString("shortLabel");
+		  String description = res.getString("description");
+		  
+		  row.setDate(date);
+		  row.setFilterPriority(filterPriority);
+		  row.setName(label);
+		  row.setNewsFilterPriority(nfPriority);
+		  row.setNewsId(Integer.parseInt(newsId));
+		  row.setFilterId(fName);
+		  row.setPriority(Integer.parseInt(nPriority));
+		  
+		  //for coord filter
+		 // row.setOfficial(isOfficial);			  
+				  
+		  row.setLocation(isLocation);
+		  row.setUrl(url);
+		  row.setVideo(video);
+		  row.setImage(image);
+		  row.setAddressText(addressText);
+		  row.setShortLabel(shortLabel);
+		  row.setDescription(description);
+		  row.setParentId(pName);
+		  
+		  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
+			  +  " fName=" + fName +  " pName=" + pName  +  " newsId=" + newsId  +  " isLocation=" + isLocation 
+			  +  " nPriority=" + nPriority  );
+		  return row;
 	}
 	
 	public void end(){
