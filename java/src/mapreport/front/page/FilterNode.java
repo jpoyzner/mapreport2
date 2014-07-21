@@ -28,6 +28,7 @@ public class FilterNode {
 	LocationByName locationFilter2 = null;
 	
 	String link = "";
+	int dbFilterNo = 0;
 	
 	public List<Filter> getFilterList() {
 		return filterList;
@@ -156,15 +157,18 @@ public class FilterNode {
 	          addFilterType(topic);
 		} else if (filter instanceof LocationByName) {
 			LocationByName locationByName = (LocationByName)filter;
-	          System.out.println("FilterNode add LocationByName");   
+			Log.log("FilterNode add LocationByName");   
 	          addFilterType(locationByName);
-	          
+	               Log.log("FilterNode add(Filter filter) name=" + locationByName.getName() + " dbFilterCntr=" + locationByName.getDbFilterCntr());
 		        
 	    } else if (filter instanceof DBFilter) {
 				LocationByName locationByName = new LocationByName(((DBFilter) filter).getName());  // TEMPORARY !!!!!!!!!!!!!!!!!!!!!!!!
+				locationByName.setDbFilterCntr(((DBFilter) filter).getDbFilterCntr());
 		          System.out.println("filter instanceof DBFilter  FilterNode add LocationByName.getName()=" + locationByName.getName());  
 		        addFilterType(locationByName);
-
+		        ((DBFilter) filter).setDbFilterCntr(locationByName.getDbFilterCntr());
+	               Log.log("FilterNode add(Filter filter) instanceof DBFilter   name=" + locationByName.getName() +
+	            		   " dbFilterCntr=" + locationByName.getDbFilterCntr() +  " ((DBFilter) filter).dbFilterCntr=" + ((DBFilter) filter).getDbFilterCntr());
 		}
 	}
 	
@@ -186,6 +190,7 @@ public class FilterNode {
 	public void addFilterType(Topic filter) {
                        Log.log("addFilterType(Topic filter) filter=" + filter);
 		   if (filter != null) Log.log("addFilterType(Topic filter) filter.getName=" + filter.getName());
+		incrementDBFilterCntr(filter);
 		if (topicFilter == null) {
 			topicFilter = filter;		
 		} else {
@@ -194,9 +199,19 @@ public class FilterNode {
 		filterList.add(filter);
 	}
 
+	private void incrementDBFilterCntr(DBFilter filter) {
+		if (filter == null) {
+			return;
+		}
+		dbFilterNo++;
+		filter.setDbFilterCntr(dbFilterNo);
+	}
+
 	public void addFilterType(LocationByName filter) {
 		          Log.log("addFilterType(LocationByName filter) filter=" + filter);
 			if (filter != null) Log.log("addFilterType(LocationByName filter) filter.getName=" + filter.getName());
+		incrementDBFilterCntr(filter);
+			
 		if (locationFilter == null) {
 			locationFilter = filter;		
 		} else {
@@ -275,13 +290,16 @@ public class FilterNode {
 	    StringBuilder filterIds = new StringBuilder("");
 		for (Filter filter : filterList) {
 			// and (fp.name IN ('Angola') || f.name IN ('Angola'))
-				Log.log("FilterNode getWhereSQL filter=" + filter);
-			
+				Log.log("FilterNode getWhereSQL filter=" + filter);			
 		    
 			if (filter instanceof DBFilter) {
 					String filterName = ((DBFilter) filter).getName();
 					         System.out.println("FilterNode getWhereSQL filter.getName()=" + filterName);
 					if (filterName == null || filterName.equals("news") || filterName.isEmpty()) {
+						continue;
+					}
+					if (anyIdFilter) {
+						whereSQL.append(((DBFilter) filter).getWhereSQL());
 						continue;
 					}
 					//  and  f.name='Farallon Islands, San Francisco, California, USA' 

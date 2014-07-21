@@ -155,7 +155,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	public String getLink() {
 		// link = name.replace(' ', '-');	
 	    link = name;	
-	        Log.log("DBFilter getLink()  name=" + name + " link=" + link);
+	    //    Log.log("NameFilter getLink()  name=" + name + " link=" + link);
 		return link;
 	}
 	
