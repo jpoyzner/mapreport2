@@ -31,7 +31,7 @@ public class JsonError {
         try {
 			jObject.put("errMsg", errMsg);
 			for (StackTraceElement element : e.getStackTrace()) {
-				   exception += element.toString() + "\n";
+				   exception += element.toString() + "<br> \n";
 			}
 
 			jObject.put("exceptionStack", exception);
