@@ -55,7 +55,7 @@ public class DBQueryBuilder {
 	 ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation \n " + 
 	 ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
 
-  static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, nf.priority as nfPriority, " + 
+  static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority, " + 
 			 " \n n.addressX , n.addressY, n.newsId, n.label, n.priority as nPriority, " + 
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
@@ -184,7 +184,7 @@ public class DBQueryBuilder {
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
 	    nameFilters.add(new DBFilter("Crime"));
-	    nameFilters.add(new DBFilter("San Jose"));
+	 //   nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));

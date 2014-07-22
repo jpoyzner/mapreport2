@@ -35,20 +35,20 @@ public class PagePresentation {
 		List<NewsFilterRow> newsFilters,
 		List<News> newsList,
 		List<NewsFilterRow> filters,	
-		Map<String, NameFilter> idFilters) {
+		Map<String, NameFilter> childFilters) {
 		
 			System.out.println("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
-		for (String filterName : idFilters.keySet()) {
-				NameFilter filter = idFilters.get(filterName);
+		for (String filterName : childFilters.keySet()) {
+				NameFilter filter = childFilters.get(filterName);
 	                      Log.log("PagePresentation filter=" + filter + " filterName=" + filterName  + " filter.getName()=" + filter.getName() );
 	                      
                 if (filter instanceof LocationByName) {       
-  	            	navLocations.addFilter(filter, pageFilters); 
+  	            	navLocations.addChildFilter(filter, pageFilters); 
   	            } else if (filter instanceof Topic) {       
-  	            	navTopics.addFilter(filter, pageFilters); 
+  	            	navTopics.addChildFilter(filter, pageFilters); 
 	            } else if (filter instanceof OfficialTimeFilter) {       
-	            	navDates.addFilter(filter, pageFilters); 
+	            	navDates.addChildFilter(filter, pageFilters); 
 	            }
 			//	NavigationNode navNode = new NavigationNode(filterNode, filter);
 	         //              Log.log("NavigationPath navNode=" + navNode + " navNode.pageFilters=" + navNode.pageFilters);
@@ -58,7 +58,7 @@ public class PagePresentation {
 		view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
 		metaData = new PageMetaData(pageFilters);
-		navigationPath = new NavigationPath(pageFilters, idFilters);
+		navigationPath = new NavigationPath(pageFilters, childFilters);
 	//	view = new MapView // MapView  just is one of the view, extend later
 	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
 		
