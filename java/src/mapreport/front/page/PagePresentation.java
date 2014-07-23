@@ -10,8 +10,10 @@ import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
 import mapreport.nav.NavigationList;
 import mapreport.nav.NavigationPath;
@@ -60,14 +62,18 @@ public class PagePresentation {
 		List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
 		
 		for (NewsFilterRow parent : parents) {
-			NameFilter filter = new DBFilter(parent.getName());
 			       Log.log("PagePresentation parent.getName()=" + parent.getName()  + " parent.isLocation()=" + parent.isLocation());
 			if (parent.isLocation()) {
+				NameFilter filter = new LocationByName(parent.getName());
 	            navLocations.addParentFilter(filter, pageFilters); 				
 			} else  {
+				NameFilter filter = new Topic(parent.getName());
 				navTopics.addParentFilter(filter, pageFilters); 				
 			}
 		}
+
+	//	navLocations.addParentFilter(new Global("Global"), pageFilters); 
+	//	navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters); 		
 		
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);

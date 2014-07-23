@@ -1,5 +1,6 @@
 package mapreport.filter;
 
+import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
 
@@ -75,5 +76,14 @@ public class DBFilter extends NameFilter {
 			sql = new StringBuilder(SECOND_WHERE_SQL);
 		}
 		return sql;
+	}
+	
+	protected void updateFilterNode(FilterNode filterNode) {
+	}
+	
+	@Override
+	public void upFilter(FilterNode filterNode) {
+				Log.log("DBFilter upFilter getName()=" + getName());   
+		updateFilterNode(filterNode);
 	}
 }

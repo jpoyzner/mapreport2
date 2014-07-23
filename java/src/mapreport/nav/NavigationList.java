@@ -33,7 +33,7 @@ public class NavigationList {
 	}
 	
 	public void addParentFilter (NameFilter filter, FilterNode filterNode) {
-		NavigationNode navNode = new NavigationNode(filterNode, filter);
+		NavigationNode navNode = new NavigationNode(filterNode, filter, nodeType.PARENT);
 		parents.add(navNode);
 	}
 	

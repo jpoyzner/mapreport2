@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import mapreport.filter.DBFilter;
+import mapreport.filter.Filter;
+import mapreport.filter.NameFilter;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
@@ -28,21 +30,31 @@ public class Topic extends DBFilter{
 	
 	@Override
 	public void limitFilter(FilterNode filterNode) {  
-		          Log.log("LocationByName limitFilter filterNode.getTopicFilter()=" + filterNode.getTopicFilter());
+		          Log.log("Topic limitFilter filterNode.getTopicFilter()=" + filterNode.getTopicFilter());
 
 		if (filterNode.getTopicFilter() == null || this.getParents().get(filterNode.getTopicFilter().getName()) != null) {
-					Log.log("LocationByName limitFilter setTopicFilter");
-				filterNode.getFilterList().remove(filterNode.getTopicFilter());
-				filterNode.setTopicFilter(this);
-				filterNode.getFilterList().add(this);
+					Log.log("Topic limitFilter setTopicFilter");
+			updateFilterNode(filterNode);
 		}
-	}
-		
+	}		
+	
 	@Override
-	public void upFilter(FilterNode filterNode) {
-		if (filterNode.getTopicFilter() == null || filterNode.getTopicFilter().getParents().containsKey(getName())) {
-				filterNode.setTopicFilter(this);
+	protected void updateFilterNode(FilterNode filterNode) {
+		Log.log("Topic updateFilterNode bef filterNode=" + filterNode);
+		// filterNode.getFilterList().remove(filterNode.getTopicFilter());
+		
+		for (Filter filter : filterNode.getFilterList()) {
+			if (filter instanceof NameFilter) {
+				NameFilter nameFilter = (NameFilter)filter;
+				if (getName().equals(nameFilter.getName())) {
+					filterNode.getFilterList().remove(filter);
+					break;
+				}
+			}
 		}
+		filterNode.setTopicFilter(this);
+		filterNode.getFilterList().add(this);
+		Log.log("Topic updateFilterNode aft filterNode=" + filterNode);
 	}
 
 

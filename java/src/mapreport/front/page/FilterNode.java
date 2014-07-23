@@ -162,6 +162,7 @@ public class FilterNode {
 	               Log.log("FilterNode add(Filter filter) name=" + locationByName.getName() + " dbFilterCntr=" + locationByName.getDbFilterCntr());
 		        
 	    } else if (filter instanceof DBFilter) {
+	   // 	filter.
 				LocationByName locationByName = new LocationByName(((DBFilter) filter).getName());  // TEMPORARY !!!!!!!!!!!!!!!!!!!!!!!!
 				locationByName.setDbFilterCntr(((DBFilter) filter).getDbFilterCntr());
 		          System.out.println("filter instanceof DBFilter  FilterNode add LocationByName.getName()=" + locationByName.getName());  
@@ -267,8 +268,14 @@ public class FilterNode {
 				+ filterToString("locationFilter2", locationFilter2);
 	}
 	
-	public String filterToString( String name, Filter filter) {
-		 if (filter != null) return ("     name=" + name + " " + filter.toString());
+	public String filterToString( String type, Filter filter) {
+		 if (filter != null) {
+			 String ret = " \n    type=" + type + " " + filter.toString();
+			 if (filter instanceof NameFilter) {
+				 ret += " name=" + ((NameFilter)filter).getName();
+			 }
+			 return ret;
+		 }
 		 else return "";
 	}
 	
@@ -278,10 +285,10 @@ public class FilterNode {
 		limitFilter.limitFilter(this);
 	}
 
-	public void upFilter(NameFilter limitFilter) {
+	public void upFilter(NameFilter upFilter) {
 	    System.out.println("FilterNode upFilter this.toString()=" + this.toString());
-	    System.out.println("FilterNode upFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
-		limitFilter.upFilter(this);
+	    System.out.println("FilterNode upFilter.getName()=" + upFilter.getName() + " limitFilter=" + upFilter);
+		upFilter.upFilter(this);
 	}
 
 	public StringBuilder getWhereSQL() {
