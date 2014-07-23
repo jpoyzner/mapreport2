@@ -273,10 +273,15 @@ public class FilterNode {
 	}
 	
 	public void limitFilter(NameFilter limitFilter) {
-		    System.out.println("FilterNode limitFilter this.toString()=" + this.toString());
-		    System.out.println("FilterNode limitFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
+	    System.out.println("FilterNode limitFilter this.toString()=" + this.toString());
+	    System.out.println("FilterNode limitFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
 		limitFilter.limitFilter(this);
-	//	init();
+	}
+
+	public void upFilter(NameFilter limitFilter) {
+	    System.out.println("FilterNode upFilter this.toString()=" + this.toString());
+	    System.out.println("FilterNode upFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
+		limitFilter.upFilter(this);
 	}
 
 	public StringBuilder getWhereSQL() {

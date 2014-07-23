@@ -183,8 +183,8 @@ public class DBQueryBuilder {
 	    	// Json by URL by Java objects
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-	    nameFilters.add(new DBFilter("Crime"));
-	 //   nameFilters.add(new DBFilter("San Jose"));
+	    nameFilters.add(new DBFilter("Fire"));
+	    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -249,8 +249,10 @@ public class DBQueryBuilder {
 	
 			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilter(rows);
 			List<News> newsList = NewsFilterRow.buildNews(rows);
-			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);		
-			Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters);
+			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);
+			
+			List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>(filters.size());
+			Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters, parents);
 				
 			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
@@ -343,8 +345,9 @@ public class DBQueryBuilder {
 			  String fName = res.getString("fName");
 			  int filterPriority = res.getInt("filterPriority");
 			  String pName = res.getString("pName");
+			  int pLevel = res.getInt("pLevel");
 			  int nfPriority = res.getInt("nfPriority");
-			  NewsFilterRow row = createNewsFilterRow(res, filterPriority, fName, pName, nfPriority);	
+			  NewsFilterRow row = createNewsFilterRow(res, filterPriority, fName, pName, pLevel, nfPriority);	
 			  rows.add(row);	
 
 			  //  , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.nfPriority as nfPriority2 		  
@@ -352,8 +355,9 @@ public class DBQueryBuilder {
 				  String fName2 = res.getString("fName2");
 				  int filterPriority2 = res.getInt("filterPriority2");
 				  String pName2 = res.getString("pName2");
+				  int pLevel2 = res.getInt("pLevel2");
 				  int nfPriority2 = res.getInt("nfPriority2");
-				  NewsFilterRow row2 = createNewsFilterRow(res, filterPriority2, fName2, pName2, nfPriority2);	
+				  NewsFilterRow row2 = createNewsFilterRow(res, filterPriority2, fName2, pName2, pLevel2, nfPriority2);	
 				  rows.add(row2);	
 			  }
 		}
@@ -362,7 +366,7 @@ public class DBQueryBuilder {
 	}
 
 	private NewsFilterRow createNewsFilterRow(ResultSet res,
-			int filterPriority, String fName, String pName, int nfPriority)
+			int filterPriority, String fName, String pName, int pLevel, int nfPriority)
 			throws SQLException {
 		  NewsFilterRow row = new NewsFilterRow();
 		  
@@ -407,9 +411,10 @@ public class DBQueryBuilder {
 		  row.setShortLabel(shortLabel);
 		  row.setDescription(description);
 		  row.setParentId(pName);
+		  row.setParentLevel(pLevel);
 		  
 		  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
-			  +  " fName=" + fName +  " pName=" + pName  +  " newsId=" + newsId  +  " isLocation=" + isLocation 
+			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation 
 			  +  " nPriority=" + nPriority  );
 		  return row;
 	}

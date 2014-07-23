@@ -1,9 +1,14 @@
 package mapreport.front.page;
 
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
+import mapreport.filter.DBFilter;
+import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
@@ -35,10 +40,35 @@ public class PagePresentation {
 		List<NewsFilterRow> newsFilters,
 		List<News> newsList,
 		List<NewsFilterRow> filters,	
-		Map<String, NameFilter> childFilters) {
+		Map<String, NameFilter> childFilters) throws SQLException {
 		
 			System.out.println("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
+			for (NewsFilterRow filter : filters) {
+				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
+			}			
+		
+		List<String> filterIds = new ArrayList<String>(pageFilters.getFilterList().size());
+		
+		for (Filter filter : pageFilters.getFilterList()) {
+			if (filter instanceof DBFilter) {
+				filterIds.add(((DBFilter)filter).getName());
+			}
+		}
+		
+		FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
+		List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
+		
+		for (NewsFilterRow parent : parents) {
+			NameFilter filter = new DBFilter(parent.getName());
+			       Log.log("PagePresentation parent.getName()=" + parent.getName()  + " parent.isLocation()=" + parent.isLocation());
+			if (parent.isLocation()) {
+	            navLocations.addParentFilter(filter, pageFilters); 				
+			} else  {
+				navTopics.addParentFilter(filter, pageFilters); 				
+			}
+		}
+		
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
 	                      Log.log("PagePresentation filter=" + filter + " filterName=" + filterName  + " filter.getName()=" + filter.getName() );

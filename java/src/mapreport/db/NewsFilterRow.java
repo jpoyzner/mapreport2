@@ -32,7 +32,10 @@ public class NewsFilterRow implements Comparable<Object>{
 	int newsId = 0;
 	String filterId = null;
 	Date date = null;
+	
 	String parentId = null;
+	int parentLevel = 0;
+	
 	int level = 0;
 	boolean isOfficial = false;
 	boolean isLocation = false;
@@ -45,6 +48,13 @@ public class NewsFilterRow implements Comparable<Object>{
 	String description = null;
 	String newsText = null;	
 	
+	public int getParentLevel() {
+		return parentLevel;
+	}
+
+	public void setParentLevel(int parentLevel) {
+		this.parentLevel = parentLevel;
+	}
 	public String getFilterId() {
 		return filterId;
 	}

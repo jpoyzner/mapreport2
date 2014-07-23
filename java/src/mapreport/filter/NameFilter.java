@@ -85,18 +85,19 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	public void addParent(NewsFilterRow parent) {
-			Log.log("NameFilter  addParent  name=" + name + "parent.getParentId()=" + parent.getParentId() + "  parent.getFilterId()=" + parent.getFilterId());
+			Log.log("NameFilter  addParent  name=" + name + " parent.getParentId()=" + parent.getParentId() + "  parent.getFilterId()=" + parent.getFilterId());
 		parents.put(parent.getParentId(), new NameFilter(parent.getParentId(), parent.getLevel()));
 		parentList.add(new NameFilter(parent.getParentId(), parent.getLevel()));
 	}
 	
-	public static Map<String, NameFilter> buildIdFilters(List<NewsFilterRow> list) { 
+	public static Map<String, NameFilter> buildIdFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
            System.out.println("buildFilterNodes list.size()=" +list.size());
 
 		Map<String, NameFilter> filters = new HashMap<String, NameFilter>(list.size());
 		
 		for (NewsFilterRow newsFilter : list) {
 			addNewsFilter(filters, newsFilter);
+			addParentFilter(parents, newsFilter);
 		}
 		
 		// for debug
@@ -111,7 +112,9 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		return filters;
 	}
 	
-
+	static void addParentFilter(List<NewsFilterRow> parents, NewsFilterRow newsFilter) {
+		
+	}
 	
 	static void addNewsFilter(Map<String, NameFilter> filters, NewsFilterRow newsFilter) {
 		        System.out.println("addNewsFilter filter.id=" + newsFilter.getFilterId()); 
