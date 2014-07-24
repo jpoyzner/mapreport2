@@ -72,8 +72,8 @@ public class PagePresentation {
 			}
 		}
 
-	//	navLocations.addParentFilter(new Global("Global"), pageFilters); 
-	//	navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters); 		
+		navLocations.addParentFilter(new Global("Global"), pageFilters); 
+		navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters); 		
 		
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);

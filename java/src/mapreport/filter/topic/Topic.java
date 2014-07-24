@@ -41,15 +41,11 @@ public class Topic extends DBFilter{
 	@Override
 	protected void updateFilterNode(FilterNode filterNode) {
 		Log.log("Topic updateFilterNode bef filterNode=" + filterNode);
-		// filterNode.getFilterList().remove(filterNode.getTopicFilter());
 		
 		for (Filter filter : filterNode.getFilterList()) {
-			if (filter instanceof NameFilter) {
-				NameFilter nameFilter = (NameFilter)filter;
-				if (getName().equals(nameFilter.getName())) {
+			if (filter instanceof Topic) {
 					filterNode.getFilterList().remove(filter);
 					break;
-				}
 			}
 		}
 		filterNode.setTopicFilter(this);
