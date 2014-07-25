@@ -18,6 +18,8 @@ public class Year extends OfficialTimeFilter {
 		end = new GregorianCalendar(year, 11, 31);
 		setName(String.valueOf(year));
 			Log.log("Year year=" + year + " name=" + getName());
+
+		parent = new Decade((year - 5) / 10 * 10);	
 	}
 	
 

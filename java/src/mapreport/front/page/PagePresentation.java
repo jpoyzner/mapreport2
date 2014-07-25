@@ -13,6 +13,7 @@ import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
 import mapreport.nav.NavigationList;
@@ -50,6 +51,37 @@ public class PagePresentation {
 				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
 			}			
 		
+		addParentNodes(pageFilters); 			
+		addChildNodes(pageFilters, childFilters);
+		view = new View(new NewsList(newsList, pageFilters));
+		//view.setNewsList(new NewsList(newsList, pageFilters));
+		metaData = new PageMetaData(pageFilters);
+		navigationPath = new NavigationPath(pageFilters, childFilters);
+	//	view = new MapView // MapView  just is one of the view, extend later
+	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
+		
+	}
+
+	private void addChildNodes(FilterNode pageFilters,
+			Map<String, NameFilter> childFilters) {
+		for (String filterName : childFilters.keySet()) {
+				NameFilter filter = childFilters.get(filterName);
+	                      Log.log("PagePresentation filter=" + filter + " filterName=" + filterName  + " filter.getName()=" + filter.getName() );
+	                      
+                if (filter instanceof LocationByName) {       
+  	            	navLocations.addChildFilter(filter, pageFilters); 
+  	            } else if (filter instanceof Topic) {       
+  	            	navTopics.addChildFilter(filter, pageFilters); 
+	            } else if (filter instanceof OfficialTimeFilter) {       
+	            	navDates.addChildFilter(filter, pageFilters); 
+	            }
+			//	NavigationNode navNode = new NavigationNode(filterNode, filter);
+	         //              Log.log("NavigationPath navNode=" + navNode + " navNode.pageFilters=" + navNode.pageFilters);
+			//	addNode (navNode);  
+		}
+	}
+
+	private void addParentNodes(FilterNode pageFilters) throws SQLException {
 		List<String> filterIds = new ArrayList<String>(pageFilters.getFilterList().size());
 		
 		for (Filter filter : pageFilters.getFilterList()) {
@@ -73,31 +105,14 @@ public class PagePresentation {
 		}
 
 		navLocations.addParentFilter(new Global("Global"), pageFilters); 
-		navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters); 		
+		navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters);
 		
-		for (String filterName : childFilters.keySet()) {
-				NameFilter filter = childFilters.get(filterName);
-	                      Log.log("PagePresentation filter=" + filter + " filterName=" + filterName  + " filter.getName()=" + filter.getName() );
-	                      
-                if (filter instanceof LocationByName) {       
-  	            	navLocations.addChildFilter(filter, pageFilters); 
-  	            } else if (filter instanceof Topic) {       
-  	            	navTopics.addChildFilter(filter, pageFilters); 
-	            } else if (filter instanceof OfficialTimeFilter) {       
-	            	navDates.addChildFilter(filter, pageFilters); 
-	            }
-			//	NavigationNode navNode = new NavigationNode(filterNode, filter);
-	         //              Log.log("NavigationPath navNode=" + navNode + " navNode.pageFilters=" + navNode.pageFilters);
-			//	addNode (navNode);  
+		TimeFilter timeFilter = pageFilters.getTimeFilter();
+		while(timeFilter != null && timeFilter.getParent() != null) {
+			navDates.addParentFilter(timeFilter.getParent(), pageFilters);	
+			timeFilter = timeFilter.getParent();
 		}
-
-		view = new View(new NewsList(newsList, pageFilters));
-		//view.setNewsList(new NewsList(newsList, pageFilters));
-		metaData = new PageMetaData(pageFilters);
-		navigationPath = new NavigationPath(pageFilters, childFilters);
-	//	view = new MapView // MapView  just is one of the view, extend later
-	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
-		
+	
 	}
 	
 	/*

@@ -30,6 +30,7 @@ public class Day extends OfficialTimeFilter {
 		end.setTimeInMillis(begin.getTimeInMillis() + 24 * 60 * 60 * 1000);
 		// end.add(Calendar.DAY_OF_YEAR, 2);
 		// end = new GregorianCalendar(year, month, day, 11, 59, 59);
+		parent = new Month(year, month);
 		           Log.log("Day year=" + year + " month=" + month + " day=" + day + 
 		        		    " name=" + getName() + " begin:" + begin + "\n  end:" + end + " begin:" + begin.getTimeInMillis() + "  end:" + end.getTimeInMillis());
 		
