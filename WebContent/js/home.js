@@ -7,10 +7,8 @@ requirejs.config({
     }
 });
 
-requirejs(['models/news', 'views/Map', 'views/Options', 'views/Report', 'jquery', 'backbone'], function(News, Map, Options, Report) {
+requirejs(['collections/news', 'views/Map', 'views/Options', 'views/Report', 'jquery', 'backbone'], function(News, Map, Options, Report) {
 	var news = new News();
-	//TODO: these will be loaded on sync ? NO loads views first
-	//and make each of these views implement on sync listeners
 	new Map({news: news, bucket: $('#mr-top-left-bucket')});
 	new Options({news: news, bucket: $('#mr-top-right-bucket')});
 	new Report({news: news, bucket: $('#mr-bottom-bucket')});
