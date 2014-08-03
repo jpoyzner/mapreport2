@@ -88,26 +88,24 @@ public class PagePresentation {
 			if (filter instanceof DBFilter) {
 				filterIds.add(((DBFilter)filter).getName());
 			}
-		}
+		} 
 		
-		if (filterIds.size() > 0) {	
-			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
-			List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
-			
-			for (NewsFilterRow parent : parents) {
-				       Log.log("PagePresentation parent.getName()=" + parent.getName()  + " parent.isLocation()=" + parent.isLocation());
-				if (parent.isLocation()) {
-					NameFilter filter = new LocationByName(parent.getName());
-		            navLocations.addParentFilter(filter, pageFilters); 				
-				} else  {
-					NameFilter filter = new Topic(parent.getName());
-					navTopics.addParentFilter(filter, pageFilters); 				
-				}
+		FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
+		List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
+		
+		for (NewsFilterRow parent : parents) {
+			       Log.log("PagePresentation parent.getName()=" + parent.getName()  + " parent.isLocation()=" + parent.isLocation());
+			if (parent.isLocation()) {
+				NameFilter filter = new LocationByName(parent.getName());
+	            navLocations.addParentFilter(filter, pageFilters); 				
+			} else  {
+				NameFilter filter = new Topic(parent.getName());
+				navTopics.addParentFilter(filter, pageFilters); 				
 			}
-	
-			navLocations.addParentFilter(new Global("Global"), pageFilters); 
-			navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters);
 		}
+
+		navLocations.addParentFilter(new Global("Global"), pageFilters); 
+		navTopics.addParentFilter(new AllTopics("AllTopics"), pageFilters);
 		
 		TimeFilter timeFilter = pageFilters.getTimeFilter();
 		while(timeFilter != null && timeFilter.getParent() != null) {
