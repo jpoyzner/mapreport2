@@ -8,6 +8,10 @@ body {
 	width: 100%;
 }
 
+#mr-buckets > div {
+	overflow: scroll;
+}
+
 #mr-top-bucket {
 	height: 50%;
 }
