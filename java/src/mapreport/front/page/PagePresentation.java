@@ -86,7 +86,7 @@ public class PagePresentation {
 		
 		for (Filter filter : pageFilters.getFilterList()) {
 			if (filter instanceof DBFilter) {
-				filterIds.add(((DBFilter)filter).getName());
+				filterIds.add(((DBFilter)filter).getName());   
 			}
 		}
 		
