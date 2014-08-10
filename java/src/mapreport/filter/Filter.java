@@ -4,6 +4,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.google.gson.annotations.Expose;
+
 import mapreport.front.dimension.Dimension;
 import mapreport.util.Log;
 
@@ -19,6 +21,16 @@ public abstract class Filter {
 	//  treeNode ????
 	
 	String link = "";
+
+	@Expose String name = null;
+	  
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 	
 	public String getLink() {
 		//	Log.log("Filter getLink() this=" + this + " link=" + link);

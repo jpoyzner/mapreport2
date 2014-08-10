@@ -31,6 +31,7 @@ public class PagePresentation {
 	List<String> keywords;
 	Tree navigationTree;
 	NavigationPath navigationPath;
+	String title = null;
 
 	NavigationList navLocations = new NavigationList("Locations");
 	NavigationList navTopics = new NavigationList("Topics");
@@ -53,6 +54,7 @@ public class PagePresentation {
 		
 		addParentNodes(pageFilters); 			
 		addChildNodes(pageFilters, childFilters);
+		title = pageFilters.buildName();
 		view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
 		metaData = new PageMetaData(pageFilters);

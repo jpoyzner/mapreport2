@@ -18,7 +18,6 @@ import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
 public class NameFilter extends Filter implements ExclusionStrategy  {
-	@Expose String name = null;
 	String filterTable = null;
 	String filterParentTable = null;
 	String filterFilterTable = null;
@@ -75,14 +74,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		  //   shouldSkipField = excludedThisClass.equals(f.getDeclaredClass());
 		     return shouldSkipField;
 	}
-	  
-	public String getName() {
-		return name;
-	}
 
-	public void setName(String name) {
-		this.name = name;
-	}
 	
 	public void addParent(NewsFilterRow parent) {
 			Log.log("NameFilter  addParent  name=" + name + " parent.getParentId()=" + parent.getParentId() + "  parent.getFilterId()=" + parent.getFilterId());

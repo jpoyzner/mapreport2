@@ -41,6 +41,7 @@ public class FilterNode {
 	String header = "";
 	String description = "";
 	String orderSQL = "\n order by n.dateTime desc, nfPriority / nPriority desc ";
+	String name = "";
 	
 	public String getOrderSQL() {
 		if (timeFilter != null) {
@@ -48,9 +49,28 @@ public class FilterNode {
 		}
 		return orderSQL;
 	}
-
-	
 		
+	public String buildName() {
+		StringBuilder nameSb = new StringBuilder();
+
+		for (Filter filter: filterList) {
+			       //    Log.log("FilterNode getLink() filter=" + filter);
+			if (filter != null) {
+				String filterName = filter.getName();
+				        Log.log("FilterNode buildName() filterName=" + filterName);
+				if (filterName != null && !filterName.isEmpty()) {     
+					if (nameSb.length() > 0) {
+						nameSb.append(", ");
+					}	        
+					nameSb.append(filterName);
+				}
+			}
+		}
+		name = nameSb.toString();
+		     Log.log("FilterNode buildName() name=" + name);
+		return name;
+	}
+	
 	public String getLink() {
 		link = "";
 		if (getLocationFilter() != null){

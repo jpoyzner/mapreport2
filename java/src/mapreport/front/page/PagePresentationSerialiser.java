@@ -14,6 +14,8 @@ public class PagePresentationSerialiser implements JsonSerializer<PagePresentati
 	    final JsonObject jsonObject = new JsonObject();
       //  jsonObject.addProperty("title", "titleaaaa");
 	//    jsonObject.addProperty("isbn", book.getIsbn());
+	    final JsonElement jsonTitle = context.serialize(page.title); 
+	    jsonObject.add("title", jsonTitle);   
 
 	    final JsonElement jsonMetaData = context.serialize(page.getMetaData());
 	    jsonObject.add("metaData", jsonMetaData);
@@ -33,7 +35,7 @@ public class PagePresentationSerialiser implements JsonSerializer<PagePresentati
 	    final JsonElement jsonNavDates = context.serialize(page.navDates); 
 	    jsonObject.add("dates", jsonNavDates);   
 
-	 //   final JsonElement jsonNavTree = context.serialize(page.getNavigationTree()); 
+		 //   final JsonElement jsonNavTree = context.serialize(page.getNavigationTree()); 
 	   // jsonObject.add("tree", jsonNavTree);
 
 	    return jsonObject;
