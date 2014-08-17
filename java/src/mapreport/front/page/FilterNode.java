@@ -12,6 +12,7 @@ import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
+import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.util.Log;
@@ -203,6 +204,10 @@ public class FilterNode {
 
 	public void addFilterType(TimeFilter filter) {
                  Log.log("addFilterType(TimeFilter filter) filter=" + filter);
+                 if (filter instanceof OfficialTimeFilter)  {
+                	 OfficialTimeFilter officialTimeFilter = (OfficialTimeFilter)filter;
+                	 Log.log("addFilterType(TimeFilter filter) getBegin=" + officialTimeFilter.getBegin());
+                 }
 		   if (filter != null)   Log.log("addFilterType(TimeFilter filter) filter.getName=" + filter.getName());
 		timeFilter = filter;	
 		filterList.add(filter);	
@@ -312,12 +317,11 @@ public class FilterNode {
 	}
 
 	public StringBuilder getWhereSQL() {
-		      Log.log("FilterNode getWhereSQL filterList.size()=" + filterList.size());
+		      Log.log("FilterNode getWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
 		if (coordFilter != null) {
 			whereSQL.append(coordFilter.getWhereSQL());
 		}		
 		
-
 		boolean anyIdFilter = false;
 	    StringBuilder filterIds = new StringBuilder("");
 		for (Filter filter : filterList) {
@@ -353,6 +357,8 @@ public class FilterNode {
 
 		
 		if (timeFilter != null) {
+			   Log.log("FilterNode getWhereSQL  timeFilter=" + timeFilter);
+			   Log.log("FilterNode getWhereSQL  timeFilter.getWhereSQL()=" + timeFilter.getWhereSQL());
 			whereSQL.append(timeFilter.getWhereSQL());
 		}
 		      Log.log("FilterNode getWhereSQL whereSQL=" + whereSQL);

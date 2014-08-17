@@ -40,34 +40,40 @@ public class OfficialTimeFilter extends TimeFilter {
 			//ret = new Year(date.getYear());
 		} catch (NumberFormatException e) {
 			// e.printStackTrace();
-			       Log.log("Can't format as Year:" + dateStr);				  
-			   try {
-					date = LocalDate.parse(dateStr, formatterDay);
-					ret = new Day(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
-					   Log.log("format as Day:" + dateStr);		  				  
-			} catch (DateTimeParseException me) {
-				//me.printStackTrace();
-				  Log.log("Can't format as Day:" + dateStr);
-				try {
-					date = LocalDate.parse(dateStr + "-01", formatterMonth);
-					ret = new Month(date.getYear(), date.getMonthValue());
-					  Log.log("format as Month:" + dateStr);
-
-				} catch (DateTimeParseException de) {
-					// de.printStackTrace();
-
-					   Log.log("Can't format as Day:" + dateStr);
-					if (dateStr.length() == 5 && dateStr.endsWith("0s")) {
-						String yearStr = dateStr.substring(0, 4);
-						try {
-							int year = Integer.parseInt(yearStr);  
-							ret = new Decade(year);
-						} catch (NumberFormatException e1) {
-							// e1.printStackTrace();
-
-							    Log.log("Can't format as Decade:" + dateStr);
-						}
-					}	
+			 if (dateStr.equals(AllTime.ALL_TIME_NAME)) {
+				  ret = new AllTime(); 
+			 } else  if (dateStr.equals(Future.FUTURE_NAME)) {
+				  ret = new Future(); 
+			 } else {			
+				       Log.log("Can't format as Year:" + dateStr);				  
+				 try {
+						date = LocalDate.parse(dateStr, formatterDay);
+						ret = new Day(date.getYear(), date.getMonthValue(), date.getDayOfMonth());
+						   Log.log("format as Day:" + dateStr);		  				  
+				 } catch (DateTimeParseException me) {
+					//me.printStackTrace();
+					  Log.log("Can't format as Day:" + dateStr);
+					try {
+						date = LocalDate.parse(dateStr + "-01", formatterMonth);
+						ret = new Month(date.getYear(), date.getMonthValue());
+						  Log.log("format as Month:" + dateStr);
+	
+					} catch (DateTimeParseException de) {
+						// de.printStackTrace();
+	
+						   Log.log("Can't format as Day:" + dateStr);
+						if (dateStr.length() == 5 && dateStr.endsWith("0s")) {
+							String yearStr = dateStr.substring(0, 4);
+							try {
+								int year = Integer.parseInt(yearStr);  
+								ret = new Decade(year);
+							} catch (NumberFormatException e1) {
+								// e1.printStackTrace();
+	
+								    Log.log("Can't format as Decade:" + dateStr);
+							}
+						}	
+					}
 				}
 			}
 		}

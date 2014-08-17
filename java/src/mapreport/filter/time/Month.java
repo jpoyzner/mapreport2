@@ -27,7 +27,8 @@ public class Month extends OfficialTimeFilter {
 		setName(String.valueOf(year) + "-" + String.valueOf(month));		
 		           Log.log("Month year=" + year + " month=" + month + " name=" + getName());
 
-		parent = new Year(year);		           
+		parent = new Year(year);		
+		buildTimeSQL(); 	           
 	}
 	
 	@Override

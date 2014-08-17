@@ -17,7 +17,8 @@ public class Latest extends TimeFilter {
 		
 		Log.log("Latest begin:" + begin.getTimeInMillis() + " end:" + end.getTimeInMillis() + " orderBySQL=" + getOrderBySQL());	
 		
-		setLink("");
+		setLink("");	
+		buildTimeSQL(); 
 	}
 	
 	public String getLink() {

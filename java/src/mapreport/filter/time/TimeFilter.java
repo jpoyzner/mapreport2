@@ -24,14 +24,24 @@ public class TimeFilter extends NameFilter {
 	}
 
 	// final StringBuilder whereStringBuilder = new StringBuilder(" \n and UNIX_TIMESTAMP(n.dateTime) > ? and UNIX_TIMESTAMP(n.dateTime) < ? ");
-	final StringBuilder whereSQL = new StringBuilder(" \n and n.dateTime > ? and n.dateTime < ? ");
+	StringBuilder whereSQL = new StringBuilder(" \n ");
 	StringBuilder orderSQL = new StringBuilder("\n order by n.priority, n.dateTime ");
 //	final StringBuilder selectStringBuilder = new StringBuilder(" \n  n.dateTime > ? and n.dateTime < ? ");
 	
 	public TimeFilter(String name) {
 		super(name);	
+		buildTimeSQL(); 
+	}
+	protected void buildTimeSQL() {
+		if (begin != null) {
+			whereSQL.append(" and n.dateTime > ? ");
+		}
+		if (end != null) {
+			whereSQL.append(" and n.dateTime < ?  ");
+		}
+	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString());
 		setWhereSQL(whereSQL); 
-		setOrderBySQL(orderSQL); 
+		setOrderBySQL(orderSQL);
 	}
 	public Calendar getBegin() {
 		return begin;
@@ -85,12 +95,17 @@ public class TimeFilter extends NameFilter {
 	
 	@Override
 	public void bindQuery(PreparedStatement pst)  throws SQLException{				
-		System.out.println("TimeFilter bindQuery ");
+		System.out.println("TimeFilter bindQuery begin=" + begin);			
+		System.out.println("TimeFilter bindQuery end=" + end);
 		int col = 0;
 	//	pst.setDouble(++col, begin.getTimeInMillis());	
 	//	pst.setDouble(++col, end.getTimeInMillis());	
-		pst.setDate(++col, new java.sql.Date(begin.getTimeInMillis()));	
-		pst.setDate(++col, new java.sql.Date(end.getTimeInMillis()));	
+		if (begin != null) {
+			pst.setDate(++col, new java.sql.Date(begin.getTimeInMillis()));	
+		}
+		if (end != null) {
+			pst.setDate(++col, new java.sql.Date(end.getTimeInMillis()));	
+		}
 	}
 	
 	@Override

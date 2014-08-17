@@ -1,10 +1,22 @@
 package mapreport.filter.time;
 
-public class Future extends TimeFilter {
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
-	public Future(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+public class Future extends OfficialTimeFilter {
+    final static public String FUTURE_NAME = "Future";
+    
+	public Future() {
+		super(FUTURE_NAME);
+		begin = new GregorianCalendar();
+		end = null;  // no need, just for clarification 	
+		buildTimeSQL(); 
 	}
+	
+	public void buildName() {
+		setName(FUTURE_NAME);
+	}
+	
+
 
 }

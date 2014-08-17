@@ -30,7 +30,8 @@ public class Topic extends DBFilter{
 	
 	@Override
 	public void limitFilter(FilterNode filterNode) {  
-		          Log.log("Topic limitFilter filterNode.getTopicFilter()=" + filterNode.getTopicFilter());
+		          Log.log("Topic limitFilter filterNode.getTopicFilter()=" + filterNode.getTopicFilter()
+		        		  + "  filterNode=" + filterNode);
 
 		if (filterNode.getTopicFilter() == null || this.getParents().get(filterNode.getTopicFilter().getName()) != null) {
 					Log.log("Topic limitFilter setTopicFilter");
@@ -40,17 +41,30 @@ public class Topic extends DBFilter{
 	
 	@Override
 	protected void updateFilterNode(FilterNode filterNode) {
-		Log.log("Topic updateFilterNode bef filterNode=" + filterNode);
+		          Log.log("Topic updateFilterNode name=" + getName() + " bef filterNode=" + filterNode);
 		
 		for (Filter filter : filterNode.getFilterList()) {
-			if (filter instanceof Topic) {
-					filterNode.getFilterList().remove(filter);
-					break;
+			 Log.log("Topic updateFilterNode filterNode.getTopicFilter()=" + filterNode.getTopicFilter() + " filter=" + filter);
+			 if  (filterNode.getTopicFilter() != null && filter != null) {
+				 Log.log("Topic updateFilterNode filterNode.getTopicFilter().getName()=" + filterNode.getTopicFilter().getName() + " filter.getName()=" + filter.getName()); 
+			 }
+			if (filter instanceof Topic
+					|| (filterNode.getTopicFilter() != null && filter != null && filterNode.getTopicFilter().getName().equals(filter.getName()))) {
+						filterNode.getFilterList().remove(filter);
+						Log.log("Topic updateFilterNode removed!");
+						break;
 			}
 		}
+			Log.log("Topic updateFilterNode this.name=" + this.getName() + " bef filterNode=" + filterNode);
 		filterNode.setTopicFilter(this);
 		filterNode.getFilterList().add(this);
-		Log.log("Topic updateFilterNode aft filterNode=" + filterNode);
+        Log.log("Topic updateFilterNode aft filterNode.getTopicFilter()=" + filterNode.getTopicFilter().getName());
+        Log.log("Topic updateFilterNode aft filterNode=" + filterNode);
+        
+		for (Filter filter : filterNode.getFilterList()) {
+			if (filter != null) Log.log("Topic updateFilterNode aft filter=" + filter.getName() + " filter instanceof Topic=" + (filter instanceof Topic));
+		}
+
 	}
 
 

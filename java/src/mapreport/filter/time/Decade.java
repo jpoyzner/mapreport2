@@ -2,7 +2,7 @@ package mapreport.filter.time;
 
 public class Decade extends Year {
 
-	private static final String ALL_TIME_NAME = "All Time";
+//	private static final String ALL_TIME_NAME = "All Time";
 
 	public Decade(String name) {
 		super(name);
@@ -13,6 +13,7 @@ public class Decade extends Year {
 		super(String.valueOf(year) + "'s");		
 		this.year = year;
 		setName(String.valueOf(year) + "'s");
-		parent = new AllTime(ALL_TIME_NAME);	
+		parent = new AllTime();	
+		buildTimeSQL(); 
 	}
 }
