@@ -1,6 +1,6 @@
-define(['templates/maphtml', 'utils/css', 'googlemap', 'backbone', 'underscore'], function(MapTemplate, Css) {
+define(['utils/css', 'googlemap', 'backbone', 'underscore'], function(Css) {
 	return Backbone.View.extend({
-		template: _.template(MapTemplate),
+		template: _.template($('#mr-map-template').html()),
 		initialize: function(options) {
 			Css.load('map');
 			options.bucket.append(this.template);

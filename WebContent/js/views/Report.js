@@ -1,7 +1,7 @@
-define(['templates/reporthtml', 'utils/css', 'backbone', 'underscore'],
-function(ReportTemplate, Css) {
+define(['utils/css', 'backbone', 'underscore'],
+function(Css) {
 	return Backbone.View.extend({
-		template: _.template(ReportTemplate),
+		template: _.template($('#mr-report-template').html()),
 		initialize: function(options) {
 			this.news = options.news;
 			this.bucket = options.bucket;

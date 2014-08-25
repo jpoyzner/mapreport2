@@ -1,6 +1,6 @@
-define(['templates/consolehtml', 'utils/css', 'backbone', 'underscore'], function(ConsoleTemplate, Css) {
+define(['utils/css', 'backbone', 'underscore'], function(Css) {
 	return Backbone.View.extend({
-		template: _.template(ConsoleTemplate),
+		template: _.template($('#mr-console-template').html()),
 		initialize: function() {
 			Css.load('console');
 			$('body').append(this.template);

@@ -1,7 +1,7 @@
-define(['templates/optionshtml', 'utils/css', 'backbone', 'underscore'],
-function(OptionsTemplate, Css) {
+define(['utils/css', 'backbone', 'underscore'],
+function(Css) {
 	return Backbone.View.extend({
-		template: _.template(OptionsTemplate),
+		template: _.template($('#mr-options-template').html()),
 		initialize: function(options) {
 			Css.load('options');
 			options.bucket.append(this.template(options.news));

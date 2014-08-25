@@ -16,13 +16,35 @@
 	
 	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 	</head>
-<body>
-	<div id="mr-buckets">
-		<div id="mr-top-bucket">
-			<div id="mr-top-left-bucket"></div>
-			<div id="mr-top-right-bucket"></div>
+	<body>
+		<div id="mr-buckets">
+			<div id="mr-top-bucket">
+				<div id="mr-top-left-bucket"></div>
+				<div id="mr-top-right-bucket"></div>
+			</div>
+			<div id="mr-bottom-bucket"></div>
 		</div>
-		<div id="mr-bottom-bucket"></div>
-	</div>
-</body>
+	</body>
+	<script type="text/template" id="mr-map-template">
+		<div id="mr-map">
+			<div id="gmap_canvas"></div>
+		</div>
+	</script>
+	<script type="text/template" id="mr-console-template">
+		<div id="mr-console"></div>
+	</script>
+	<script type="text/template" id="mr-options-template">
+		<div id="mr-options">
+			<div class="mr-option">TOPIC</div>
+			<div class="mr-option">LOCATION</div>
+			<div class="mr-option">TIME</div>
+		</div>
+	</script>
+	<script type="text/template" id="mr-report-template">
+		<div id="mr-report">
+			<% _.each(models, function(article) { %>
+				<div class="mr-report-article"><%= article.get("label") %></div>
+			<% }); %>
+		</div>
+	</script>
 </html>
