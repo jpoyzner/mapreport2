@@ -28,6 +28,7 @@ import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
+import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
 import mapreport.front.page.PageMetaData;
@@ -184,7 +185,7 @@ public class DBQueryBuilder {
 	    	// Json by URL by Java objects
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-	  //  nameFilters.add(new DBFilter("Fire"));
+	//    nameFilters.add(new DBFilter("Fire"));
 	//    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
@@ -202,12 +203,9 @@ public class DBQueryBuilder {
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
 		pageURL.parseParams();
-	//	Map<String, RequestParameter> params = pageURL.getParamMap();
 		Options options = pageURL.getOptions();
 
 		Set<NameFilter> nameFilters = pageURL.getFilters();
-	//	LocationByCoords coordFilter = null;	
-	//	TimeFilter timeFilter = null;	
 
 		Rectangle rect = new Rectangle(options);
 		int size = Integer.parseInt(options.getParam("size"));
@@ -230,10 +228,39 @@ public class DBQueryBuilder {
 				queryBuilder.addFilter(coordFilter);
 			}		
 			
+			List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
+			
 			if (nameFilters != null) {
+				List<String> filterIds = new ArrayList<String>(nameFilters.size());
 				for (NameFilter filter: nameFilters) {
-					Log.log("before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
-			    	queryBuilder.addFilter(filter);  
+					filterIds.add(filter.getName());
+				}
+					
+				FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
+				
+				if (filterIds.size() > 0) {
+					parents = filterDBQueryBuilder.runQuery(filterIds);
+				}
+				
+				for (NameFilter filter: nameFilters) {
+					Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
+					
+					if (filter instanceof TimeFilter) {
+						queryBuilder.addFilter(filter);  
+					} else {
+						boolean isLocation = true;
+						for (NewsFilterRow parentNewsFilterRow : parents) {
+							       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.getFilterName=" + parentNewsFilterRow.getFilterName() + " filter.getName()=" + filter.getName());
+							if (parentNewsFilterRow.filterName.equals(filter.getName())) {
+								isLocation = parentNewsFilterRow.isFilterLocation;
+							       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.filterId.equals(filter.getName()) isLocation=" + isLocation);
+								break;
+							}
+						}
+						
+						NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
+				    	queryBuilder.addFilter(newFilter);   //  adding named filters
+					}
 				}
 			}
 			
@@ -253,10 +280,9 @@ public class DBQueryBuilder {
 			List<News> newsList = NewsFilterRow.buildNews(rows);
 			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);
 			
-			List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>(filters.size());
 			Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters, parents);
 				
-			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes) ;
+			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes, parents) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
@@ -300,12 +326,7 @@ public class DBQueryBuilder {
 	}
 		
 	public PreparedStatement begin(){
-        try {
-			con = DriverManager.getConnection(url, user, password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}        
+        buildConnection();        
 
 		buildSql();
 		pst = prepareStmt();
@@ -315,6 +336,15 @@ public class DBQueryBuilder {
         
 		Log.log("DBQueryBuilder con=" + con);
         return pst;
+	}
+
+	public static void buildConnection() {
+		try {
+			con = DriverManager.getConnection(url, user, password);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 		
 	

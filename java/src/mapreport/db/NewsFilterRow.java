@@ -46,8 +46,27 @@ public class NewsFilterRow implements Comparable<Object>{
 	String addressText = null;
 	String shortLabel = null;
 	String description = null;
-	String newsText = null;	
+	String newsText = null;		
+
+	boolean isFilterLocation = false;
+	String filterName = null;
 	
+	public String getFilterName() {
+		return filterName;
+	}
+
+	public void setFilterName(String filterName) {
+		this.filterName = filterName;
+	}
+
+	public boolean isFilterLocation() {
+		return isFilterLocation;
+	}
+
+	public void setFilterLocation(boolean isFilterLocation) {
+		this.isFilterLocation = isFilterLocation;
+	}
+
 	public int getParentLevel() {
 		return parentLevel;
 	}

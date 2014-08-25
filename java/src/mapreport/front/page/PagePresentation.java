@@ -44,7 +44,8 @@ public class PagePresentation {
 		List<NewsFilterRow> newsFilters,
 		List<News> newsList,
 		List<NewsFilterRow> filters,	
-		Map<String, NameFilter> childFilters) throws SQLException {
+		Map<String, NameFilter> childFilters,
+		List<NewsFilterRow> parents) throws SQLException {
 		
 			System.out.println("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
@@ -52,7 +53,7 @@ public class PagePresentation {
 				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
 			}			
 		
-		addParentNodes(pageFilters); 			
+		addParentNodes(pageFilters, parents); 			
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
 		view = new View(new NewsList(newsList, pageFilters));
@@ -83,7 +84,7 @@ public class PagePresentation {
 		}
 	}
 
-	private void addParentNodes(FilterNode pageFilters) throws SQLException {
+	private void addParentNodes(FilterNode pageFilters, List<NewsFilterRow> parents) throws SQLException {
 		List<String> filterIds = new ArrayList<String>(pageFilters.getFilterList().size());
 		
 		for (Filter filter : pageFilters.getFilterList()) {
@@ -94,7 +95,7 @@ public class PagePresentation {
 		
 		if (filterIds.size() > 0) {	
 			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
-			List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
+		//	List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
 			
 			for (NewsFilterRow parent : parents) {
 				       Log.log("PagePresentation parent.getName()=" + parent.getName()  + " parent.isLocation()=" + parent.isLocation());

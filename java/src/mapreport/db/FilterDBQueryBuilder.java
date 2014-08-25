@@ -11,7 +11,7 @@ import mapreport.util.Log;
 public class FilterDBQueryBuilder {
 	String sql;
 	PreparedStatement pst;
-	private static String sqlBegin = "select p.filterId, p.name, p.label, p.image, p.priority, p.isLocation, ff.level " + 
+	private static String sqlBegin = "select p.filterId, p.name, p.label, p.image, p.priority, p.isLocation, c.isLocation as filterLocation, c.name as filterName, ff.level " + 
 		"\n from filter p, filter c, filterfilter ff " + 
 		"\n where p.filterId = ff.parentFilterId and c.filterId = ff.childFilterId " + 
 		"\n and c.name in (";
@@ -29,6 +29,8 @@ public class FilterDBQueryBuilder {
 			String label = res.getString("label");
 			String image = res.getString("image");
 			boolean isLocation = res.getBoolean("isLocation");
+			boolean isFilterLocation = res.getBoolean("filterLocation");
+			String filterName = res.getString("filterName");
 			  
 			row.setFilterPriority(filterPriority);
 			row.setLevel(level);
@@ -36,6 +38,8 @@ public class FilterDBQueryBuilder {
 			row.setFilterId(filterId);
 			row.setLocation(isLocation);
 			row.setImage(image);
+			row.setFilterLocation(isFilterLocation);
+			row.setFilterName(filterName);
 			  
 			  Log.log("FilterDBQueryBuilder processResultSet label=" + label +  " level=" + level  +  " filterPriority=" + filterPriority +  " filterId=" + filterId 
 					  +  " fName=" + fName   +  " filterPriority=" + filterPriority   +  " isLocation=" + isLocation   +  " image=" + image  );		
@@ -45,6 +49,7 @@ public class FilterDBQueryBuilder {
 		return rows;
 	}
 	public String buildSql(List<String> filterIds) {
+		     Log.log("FilterDBQueryBuilder buildSql filterIds.size()=" + filterIds.size());
 		StringBuilder sqlBuff = new StringBuilder();
 		sqlBuff.append(sqlBegin);
 		
@@ -76,6 +81,9 @@ public class FilterDBQueryBuilder {
 	
 	public PreparedStatement prepareStmt() {
 		try {
+			if (DBQueryBuilder.con == null) {
+				DBQueryBuilder.buildConnection();
+			}
 			pst = DBQueryBuilder.con.prepareStatement(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

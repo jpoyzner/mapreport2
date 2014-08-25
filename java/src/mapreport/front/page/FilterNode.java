@@ -115,14 +115,6 @@ public class FilterNode {
 	}
 
 	private StringBuilder whereSQL = new StringBuilder("");
-	/*
-	public void init() {
-		addIdFilter(locationFilter);
-		addIdFilter(topicFilter);
-		addIdFilter(timeFilter);
-		addIdFilter(locationFilter2);
-		addIdFilter(topicFilter2);
-	}*/
 	
 	public String getHeader() {
 		return header;
@@ -162,7 +154,7 @@ public class FilterNode {
     }
     */
 	public void add(Filter filter) {
-		        System.out.println("FilterNode add filter:" + filter);    
+		        System.out.println("FilterNode add filter:" + filter + " filter:" + filter.getName());    
 		if (filter instanceof LocationByCoords) {
 			LocationByCoords locationByCoords = (LocationByCoords)filter;
 			          System.out.println("FilterNode add locationByCoords");    
@@ -171,7 +163,7 @@ public class FilterNode {
 			TimeFilter timeFilter = (TimeFilter)filter;
 	          System.out.println("FilterNode add TimeFilter");   
 	          addFilterType(timeFilter);
-	   
+	 
 		} else if (filter instanceof Topic) {
 			Topic topic = (Topic)filter;
 	          System.out.println("FilterNode add Topic");   
@@ -181,16 +173,6 @@ public class FilterNode {
 			Log.log("FilterNode add LocationByName");   
 	          addFilterType(locationByName);
 	               Log.log("FilterNode add(Filter filter) name=" + locationByName.getName() + " dbFilterCntr=" + locationByName.getDbFilterCntr());
-		        
-	    } else if (filter instanceof DBFilter) {
-	   // 	filter.
-				LocationByName locationByName = new LocationByName(((DBFilter) filter).getName());  // TEMPORARY !!!!!!!!!!!!!!!!!!!!!!!!
-				locationByName.setDbFilterCntr(((DBFilter) filter).getDbFilterCntr());
-		          System.out.println("filter instanceof DBFilter  FilterNode add LocationByName.getName()=" + locationByName.getName());  
-		        addFilterType(locationByName);
-		        ((DBFilter) filter).setDbFilterCntr(locationByName.getDbFilterCntr());
-	               Log.log("FilterNode add(Filter filter) instanceof DBFilter   name=" + locationByName.getName() +
-	            		   " dbFilterCntr=" + locationByName.getDbFilterCntr() +  " ((DBFilter) filter).dbFilterCntr=" + ((DBFilter) filter).getDbFilterCntr());
 		}
 	}
 	
