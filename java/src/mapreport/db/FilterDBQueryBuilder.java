@@ -76,7 +76,7 @@ public class FilterDBQueryBuilder {
         
       //  System.out.println("DBQueryBuilder con=" + DBQueryBuilder.con);
         return pst;
-	}
+	}  
 		
 	
 	public PreparedStatement prepareStmt() {

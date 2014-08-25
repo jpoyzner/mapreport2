@@ -153,7 +153,7 @@ public class FilterNode {
     	}
     }
     */
-	public void add(Filter filter) {
+	public void add(Filter filter) {   
 		        System.out.println("FilterNode add filter:" + filter + " filter:" + filter.getName());    
 		if (filter instanceof LocationByCoords) {
 			LocationByCoords locationByCoords = (LocationByCoords)filter;

@@ -25,7 +25,7 @@ public class NewsFilterRow implements Comparable<Object>{
 
 	private NameFilter filter = null;	
 
-	int newsPriority = 0;
+	int newsPriority = 0;  
 	int priority = 0;
 	int newsFilterPriority = 0;
 	int filterPriority = 0;
