@@ -17,22 +17,20 @@
 		
 		<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/platform.js"></script>
 		<link rel="import" href="js/components/google-map/google-map.html">
+		<link rel="import" href="js/components/web-loader/web-loader.html">
 		
 	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 	</head>
 	<body>
 		<div id="mr-buckets">
-			<div id="mr-top-bucket">
-				<div id="mr-top-left-bucket"></div>
-				<div id="mr-top-right-bucket"></div>
-			</div>
-			<div id="mr-bottom-bucket"></div>
+			<div id="mr-options-bucket"></div>
+			<div id="mr-map-bucket"></div>
+			<div id="mr-report-bucket"><web-loader type="clock" color="white"></web-loader></div>	
 		</div>
 	</body>
 	<script type="text/template" id="mr-map-template">
 		<div id="mr-map">
-			<google-map latitude="<%= latitude %>" longitude="<%= longitude %>" fitToMarkers></google-map>
-			<!--<div id="gmap_canvas"></div>-->
+			<google-map fitToMarkers></google-map>
 		</div>
 	</script>
 	<script type="text/template" id="mr-console-template">
@@ -40,9 +38,9 @@
 	</script>
 	<script type="text/template" id="mr-options-template">
 		<div id="mr-options">
-			<div class="mr-option">TOPIC</div>
-			<div class="mr-option">LOCATION</div>
-			<div class="mr-option">TIME</div>
+			<div class="mr-option mr-topic-option">TOPIC: ALL</div>
+			<div class="mr-option mr-location-option">LOCATION: San Francisco Bay Area</div>
+			<div class="mr-option mr-time-option">TIME: ANY</div>
 		</div>
 	</script>
 	<script type="text/template" id="mr-report-template">

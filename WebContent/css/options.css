@@ -1,0 +1,21 @@
+#mr-options {
+	height: 100%;
+}
+
+.mr-option {
+	background-color: lightpink;
+	height: 100%;
+	text-align: center;
+}
+
+.mr-topic-option {
+	border-right: 1px solid;
+	float: left;
+	width: 33.3%;
+}
+
+.mr-location-option {
+	border-right: 1px solid;
+	float: left;
+	width: 33.3%;
+}
