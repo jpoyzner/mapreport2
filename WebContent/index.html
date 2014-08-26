@@ -33,6 +33,11 @@
 			<google-map fitToMarkers></google-map>
 		</div>
 	</script>
+	<script type="text/template" id="mr-map-markers-template">
+		<% _.each(news.models, function(article) { %>
+			<google-map-marker latitude="<%= latitude + Math.random() - 0.5 %>" longitude="<%= longitude + Math.random() - 0.5 %>" icon="<%= article.get('icon') %>"><%= article.get('shortLabel') %></google-map-marker>
+		<% }); %>
+	</script>
 	<script type="text/template" id="mr-console-template">
 		<div id="mr-console"></div>
 	</script>
