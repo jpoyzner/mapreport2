@@ -23,8 +23,8 @@
 	</head>
 	<body>
 		<div id="mr-buckets">
-			<div id="mr-options-bucket"></div>
-			<div id="mr-map-bucket"></div>
+			<div id="mr-options-bucket"><web-loader type="dot" color="black"></div>
+			<div id="mr-map-bucket"><web-loader type="circle" color="black"></div>
 			<div id="mr-report-bucket"><web-loader type="clock" color="white"></web-loader></div>	
 		</div>
 	</body>
@@ -46,7 +46,10 @@
 	<script type="text/template" id="mr-report-template">
 		<div id="mr-report">
 			<% _.each(models, function(article) { %>
-				<div class="mr-report-article"><%= article.get("label") %></div>
+				<div class="mr-report-article">
+					<img src="images/ukraine.gif"></img>
+					<p><%= article.get("label") %></p>
+				</div>
 			<% }); %>
 		</div>
 	</script>
