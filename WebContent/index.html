@@ -16,8 +16,10 @@
 		<link rel="stylesheet" type="text/css" href="css/mapreport.css">
 		
 		<script src="//cdnjs.cloudflare.com/ajax/libs/polymer/0.3.4/platform.js"></script>
+		<!--<link rel="import" href="js/components/document-veil/document-veil.html">-->
 		<link rel="import" href="js/components/google-map/google-map.html">
 		<link rel="import" href="js/components/web-loader/web-loader.html">
+		<link rel="import" href="js/components/input-options/input-options.html">
 		
 	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 	</head>
@@ -27,6 +29,7 @@
 			<div id="mr-map-bucket"><web-loader type="circle" color="black"></div>
 			<div id="mr-report-bucket"><web-loader type="clock" color="white"></web-loader></div>	
 		</div>
+		<document-veil id="document-veil"></document-veil>
 	</body>
 	<script type="text/template" id="mr-map-template">
 		<div id="mr-map">
@@ -43,9 +46,18 @@
 	</script>
 	<script type="text/template" id="mr-options-template">
 		<div id="mr-options">
-			<div class="mr-option mr-topic-option">TOPIC: ALL</div>
-			<div class="mr-option mr-location-option">LOCATION: San Francisco Bay Area</div>
-			<div class="mr-option mr-time-option">TIME: ANY</div>
+			<div class="mr-option mr-topic-option">
+				<span>TOPIC: </span>
+				<input-options options="[['Crime', 'crime'], ['Sports', 'sports']]" value="sports"></input-options>
+			</div>
+			<div class="mr-option mr-location-option">
+				<span>LOCATION: </span>
+				<input-options options="[['Bay Area', 'bayarea'], ['Los Angeles', 'la']]" value="bayarea"></input-options>
+			</div>
+			<div class="mr-option mr-time-option">
+				<span>TIME: </span>
+				<input-options options="[['ANY', 'any'], ['2014', '2014']]" value="2014"></input-options>
+			</div>
 		</div>
 	</script>
 	<script type="text/template" id="mr-report-template">
