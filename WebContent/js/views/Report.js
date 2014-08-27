@@ -4,10 +4,16 @@ function(Templates, Css) {
 		el: $('#mr-report-bucket'),
 		initialize: function(options) {
 			this.news = options.news;
+			
+			Css.load('report');
+			
+			this.listenTo(this.news, 'request', this.refresh);
 			this.listenTo(this.news, 'sync', this.render);
 		},
-		render: function() {
-			Css.load('report');
+		refresh: function() {
+			this.$el.html('<web-loader type="clock" color="white"></web-loader>');
+		},
+		render: function() {		
 			this.$el.html(Templates['mr-report-template'](this.news));
 		}
 	});

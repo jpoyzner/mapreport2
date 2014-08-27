@@ -8,11 +8,16 @@ define(['templates', 'utils/css', 'googlemap', 'backbone', 'underscore'], functi
 			
 			Css.load('map');
 			this.$el.html(Templates['mr-map-template']({latitude: this.latitude, longitude: this.longitude}));
+			this.map = this.$el.find('google-map');
 			
-			this.listenTo(options.news, 'sync', this.addMarkers);
+			this.listenTo(options.news, 'request', this.refresh);
+			this.listenTo(options.news, 'sync', this.populateMarkers);
 		},
-		addMarkers: function() {
-			this.$el.find('google-map').html(Templates['mr-map-markers-template']({
+		refresh: function() {
+			this.map[0].clear();
+		},
+		populateMarkers: function() {
+			this.map.html(Templates['mr-map-markers-template']({
 				news: this.news,
 				latitude: this.latitude,
 				longitude: this.longitude}));
