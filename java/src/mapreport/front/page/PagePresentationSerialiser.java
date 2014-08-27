@@ -12,10 +12,12 @@ public class PagePresentationSerialiser implements JsonSerializer<PagePresentati
 	@Override
 	public JsonElement serialize(PagePresentation page, final Type typeOfSrc, final JsonSerializationContext context) {
 	    final JsonObject jsonObject = new JsonObject();
-      //  jsonObject.addProperty("title", "titleaaaa");
-	//    jsonObject.addProperty("isbn", book.getIsbn());
+
 	    final JsonElement jsonTitle = context.serialize(page.title); 
 	    jsonObject.add("title", jsonTitle);   
+	    
+	 //   final JsonElement jsonView = context.serialize(page.getView()); 
+	 //   jsonObject.add("view", jsonView);   
 
 	    final JsonElement jsonMetaData = context.serialize(page.getMetaData());
 	    jsonObject.add("metaData", jsonMetaData);
