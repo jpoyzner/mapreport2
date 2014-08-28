@@ -10,7 +10,7 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			this.listenTo(options.news, 'sync', this.render);
 		},
 		refresh: function() {
-			this.$el.html('<web-loader type="dot" color="black">');
+			this.$el.html('<span class="header">&nbsp;MAPREPORT</span>');
 		},
 		render: function() {
 			this.$el.html(Templates['mr-options-template'](this.news));

@@ -42,7 +42,13 @@
 	</script>
 	<script type="text/template" id="mr-map-markers-template">
 		<% _.each(news.models, function(article) { %>
-			<google-map-marker latitude="<%= latitude + Math.random() - 0.5 %>" longitude="<%= longitude + Math.random() - 0.5 %>" icon="<%= article.get('icon') %>"><%= article.get('shortLabel') %></google-map-marker>
+			<google-map-marker
+				longitude="<%= article.get('x') %>"
+				latitude="<%= article.get('y') %>"
+				icon="<%= article.get('icon') %>">
+
+				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('shortLabel') %></a>
+			</google-map-marker>
 		<% }); %>
 	</script>
 	<script type="text/template" id="mr-console-template">
@@ -69,7 +75,7 @@
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
 					<img src="images/ukraine.gif"></img>
-					<a href="<%= article.get('url') %>"><p><%= article.get('label') %></p></a>
+					<a href="<%= article.get('url') %>" target="_blank"><p><%= article.get('label') %></p></a>
 				</div>
 			<% }); %>
 		</div>
