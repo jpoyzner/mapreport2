@@ -1,5 +1,5 @@
-define(['templates', 'utils/css', 'backbone', 'underscore'],
-function(Templates, Css) {
+define(['templates', 'utils/css', 'utils/color', 'backbone', 'underscore'],
+function(Templates, Css, Color) {
 	return Backbone.View.extend({
 		el: $('#mr-report-bucket'),
 		initialize: function(options) {
@@ -14,7 +14,7 @@ function(Templates, Css) {
 			this.$el.html('<web-loader type="clock" color="white"></web-loader>');
 		},
 		render: function() {		
-			this.$el.html(Templates['mr-report-template'](this.news));
+			this.$el.html(Templates['mr-report-template']({news: this.news, randomColor: Color.random}));
 		}
 	});
 });

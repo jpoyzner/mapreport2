@@ -1,4 +1,4 @@
-define(['templates', 'utils/css', 'googlemap', 'backbone', 'underscore'], function(Templates, Css) {
+define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates, Css) {
 	return Backbone.View.extend({
 		el: $('#mr-map-bucket'),
 		initialize: function(options) {

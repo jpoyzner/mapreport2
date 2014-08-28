@@ -25,9 +25,13 @@
 	</head>
 	<body>
 		<div id="mr-buckets">
-			<div id="mr-options-bucket"><web-loader type="dot" color="black"></div>
-			<div id="mr-map-bucket"><web-loader type="circle" color="black"></div>
-			<div id="mr-report-bucket"><web-loader type="clock" color="white"></web-loader></div>	
+			<div id="mr-options-bucket"><span class="header">&nbsp;MAPREPORT</span></div>
+			<div id="mr-map-bucket">
+				<web-loader type="circle" color="black"></web-loader>
+			</div>
+			<div id="mr-report-bucket">
+				<web-loader type="clock" color="white"></web-loader>
+			</div>	
 		</div>
 		<document-veil id="document-veil"></document-veil>
 	</body>
@@ -62,10 +66,10 @@
 	</script>
 	<script type="text/template" id="mr-report-template">
 		<div id="mr-report">
-			<% _.each(models, function(article) { %>
-				<div class="mr-report-article">
+			<% _.each(news.models, function(article) { %>
+				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
 					<img src="images/ukraine.gif"></img>
-					<p><%= article.get("label") %></p>
+					<a href="<%= article.get('url') %>"><p><%= article.get('label') %></p></a>
 				</div>
 			<% }); %>
 		</div>

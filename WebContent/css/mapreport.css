@@ -13,8 +13,19 @@ body {
 }
 
 #mr-options-bucket {
-	height: 5%;
+	background-color: lightpink;
 	border-bottom: 1px solid;
+	border-color: black;
+	color: white;
+	font-weight: bold;
+	height: 5%;
+}
+
+#mr-options-bucket .header {	
+	font-size: 20px;
+	letter-spacing: 5.4em;
+	text-align: center;
+	vertical-align: middle;
 }
 
 #mr-map-bucket {
@@ -30,6 +41,24 @@ body {
 	height: 95%;
 	top: 5%;
 }
+
+/* #mr-options-bucket web-loader {
+	position: absolute;
+	top: 1%;
+	z-index: -1;
+}
+
+#mr-options-bucket web-loader:nth-of-type(1) {
+	left: 14.7%;
+}
+
+#mr-options-bucket web-loader:nth-of-type(2) {
+	left: 48%;
+}
+
+#mr-options-bucket web-loader:nth-of-type(3) {
+	left: 81.3%;
+} */
 
 #mr-map-bucket web-loader {
 	position: absolute;

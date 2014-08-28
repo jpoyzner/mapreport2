@@ -1,4 +1,5 @@
 #mr-options {
+	background-color: lightblue;
 	height: 100%;
 }
 
@@ -23,7 +24,7 @@ input-options::shadow nested-menu::shadow nested-submenu {
 }
 
 .mr-topic-option {
-	border-right: 1px solid;
+	border-right: 1px solid black;
 	float: left;
 	width: 33.3%;
 }
@@ -33,7 +34,7 @@ input-options::shadow nested-menu::shadow nested-submenu {
 }
 
 .mr-location-option {
-	border-right: 1px solid;
+	border-right: 1px solid black;
 	float: left;
 	width: 33.3%;
 }
