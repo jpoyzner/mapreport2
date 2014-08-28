@@ -10,7 +10,7 @@ public class NewsPresentation extends News {
 		video = news.getVideo();
 		image = news.getImage();
 		shortLabel = news.getShortLabel();
-		description = news.getDescription();
+		description = news.getDescription();  
 		newsText = news.getNewsText();
 		dateTime = news.getDateTime();
 		id = news.getId();

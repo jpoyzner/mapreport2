@@ -12,7 +12,7 @@ public class RectangleSerializer  implements JsonSerializer<Rectangle> {
 	@Override
 	public JsonElement serialize(Rectangle rect, final Type typeOfSrc, final JsonSerializationContext context) {
 	    final JsonObject jsonObject = new JsonObject();
-
+ 
 	    jsonObject.add("bottom", context.serialize(rect.bottom));
 	    jsonObject.add("left", context.serialize(rect.left));
 	    jsonObject.add("right", context.serialize(rect.right));

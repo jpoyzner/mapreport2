@@ -12,7 +12,7 @@ public class MapViewSerializer  implements JsonSerializer<MapView> {
 	@Override
 	public JsonElement serialize(MapView mapView, final Type typeOfSrc, final JsonSerializationContext context) {
 	    final JsonObject jsonObject = new JsonObject();
-	    
+	      
   	    final JsonElement jsonName = context.serialize(mapView.rect);
 	    jsonObject.add("rectangle", jsonName);
 	    

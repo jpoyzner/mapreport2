@@ -184,7 +184,7 @@ public class DBQueryBuilder {
 		*/     		
 	    	// Json by URL by Java objects
 	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
-	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
+	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
 	//    nameFilters.add(new DBFilter("Fire"));
 	//    nameFilters.add(new DBFilter("San Jose"));
 	    

@@ -45,7 +45,7 @@ public class PagePresentation {
 		List<News> newsList,
 		List<NewsFilterRow> filters,	
 		Map<String, NameFilter> childFilters,
-		List<NewsFilterRow> parents) throws SQLException {   
+		List<NewsFilterRow> parents) throws SQLException {    
 		
 			System.out.println("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
