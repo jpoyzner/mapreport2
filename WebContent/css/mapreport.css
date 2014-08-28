@@ -12,24 +12,34 @@ body {
 	overflow: scroll;
 }
 
-#mr-top-bucket {
-	height: 50%;
+#mr-options-bucket {
+	height: 5%;
+	border-bottom: 1px solid;
 }
 
-#mr-top-left-bucket {
+#mr-map-bucket {
+	border-right: 1px solid;
 	float: left;
-    height: 100%;
-    width: 90%;
+    height: 95%;
+    top: 5%;
+    width: 50%;
 }
 
-#mr-top-right-bucket {
-	border-left: 1px solid #000000;
-    float: left;
-    height: 100%;
+#mr-report-bucket {
+	background-color: lightblue;
+	height: 95%;
+	top: 5%;
 }
 
-#mr-bottom-bucket {
-	border: 1px solid black;
-	height: 50%;
-	top: 50%;
+#mr-map-bucket web-loader {
+	position: absolute;
+	left: 22%;
+	top: 40%;
 }
+
+#mr-report-bucket web-loader {
+	position: absolute;
+	left: 72%;
+	top: 40%;
+}
+wwe

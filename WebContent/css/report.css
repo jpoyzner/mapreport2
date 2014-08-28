@@ -4,3 +4,11 @@
 	border-radius: 3px;
 	padding: 20px;
 }
+
+.mr-report-article img {
+	margin-right: 10px;
+}
+
+.mr-report-article p {
+	display: inline;
+}

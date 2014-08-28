@@ -1,15 +1,20 @@
-define(['templates/reporthtml', 'utils/css', 'backbone', 'underscore'],
-function(ReportTemplate, Css) {
+define(['templates', 'utils/css', 'backbone', 'underscore'],
+function(Templates, Css) {
 	return Backbone.View.extend({
-		template: _.template(ReportTemplate),
+		el: $('#mr-report-bucket'),
 		initialize: function(options) {
 			this.news = options.news;
-			this.bucket = options.bucket;
+			
+			Css.load('report');
+			
+			this.listenTo(this.news, 'request', this.refresh);
 			this.listenTo(this.news, 'sync', this.render);
 		},
-		render: function() {
-			Css.load('report');
-			this.bucket.append(this.template(this.news));
+		refresh: function() {
+			this.$el.html('<web-loader type="clock" color="white"></web-loader>');
+		},
+		render: function() {		
+			this.$el.html(Templates['mr-report-template'](this.news));
 		}
 	});
 });

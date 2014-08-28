@@ -1,37 +1,26 @@
-define(['templates/maphtml', 'utils/css', 'googlemap', 'backbone', 'underscore'], function(MapTemplate, Css) {
+define(['templates', 'utils/css', 'googlemap', 'backbone', 'underscore'], function(Templates, Css) {
 	return Backbone.View.extend({
-		template: _.template(MapTemplate),
+		el: $('#mr-map-bucket'),
 		initialize: function(options) {
-			Css.load('map');
-			options.bucket.append(this.template);
+			this.news = options.news;
+			this.latitude = options.latitude;
+			this.longitude = options.longitude;
 			
-			$(document).ready(function() {
-				var script = document.createElement('script');
-				script.type = 'text/javascript';
-				script.src = 'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false&callback=embedMap';
-				document.body.appendChild(script);
-				
-				window.embedMap = function() {
-					var map = new google.maps.Map(document.getElementById("gmap_canvas"), {
-						zoom:14,
-						center: new google.maps.LatLng(37.759753,-122.50232699999998),
-						mapTypeId: google.maps.MapTypeId.ROADMAP
-					});
-					
-					var marker = new google.maps.Marker({map: map,position: new google.maps.LatLng(37.759753, -122.50232699999998)});
-					
-					var infowindow = new google.maps.InfoWindow({
-						content:"<span style='height:auto !important; display:block; white-space:nowrap; overflow:hidden !important;'>" +
-							"<strong style='font-weight:400;'>Jeff Poyzner</strong><br>1442 43rd ave<br>94122 san francisco</span>"
-					});
-					
-					google.maps.event.addListener(marker, "click", function(){
-						infowindow.open(map,marker);
-					});
-					
-					infowindow.open(map,marker);
-				};
-			});
-		}
+			Css.load('map');
+			this.$el.html(Templates['mr-map-template']({latitude: this.latitude, longitude: this.longitude}));
+			this.map = this.$el.find('google-map');
+			
+			this.listenTo(options.news, 'request', this.refresh);
+			this.listenTo(options.news, 'sync', this.populateMarkers);
+		},
+		refresh: function() {
+			this.map[0].clear();
+		},
+		populateMarkers: function() {
+			this.map.html(Templates['mr-map-markers-template']({
+				news: this.news,
+				latitude: this.latitude,
+				longitude: this.longitude}));
+		}	
 	});
 });

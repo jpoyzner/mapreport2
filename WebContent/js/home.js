@@ -9,7 +9,7 @@ requirejs.config({
 
 requirejs(['collections/news', 'views/Map', 'views/Options', 'views/Report', 'jquery', 'backbone'], function(News, Map, Options, Report) {
 	var news = new News();
-	new Map({news: news, bucket: $('#mr-top-left-bucket')});
-	new Options({news: news, bucket: $('#mr-top-right-bucket')});
-	new Report({news: news, bucket: $('#mr-bottom-bucket')});
+	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
+	new Options({news: news});
+	new Report({news: news});
 });

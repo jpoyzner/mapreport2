@@ -1,11 +1,10 @@
 #mr-map {	
-	border: 1px solid;
 	height: 100%;
 	overflow: hidden;
 	width: 100%;
 }
 
-#gmap_canvas {
-	height: 100%;
-	width: 100%;
+google-map {
+    display: block;
+    height: 100%;
 }
