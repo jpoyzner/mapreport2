@@ -5,6 +5,11 @@ import mapreport.front.option.Options;
 import mapreport.util.Log;
 
 public class Rectangle {
+	double left;
+	double right;
+	double top;
+	double bottom;
+	
 	public Rectangle(
 		double xCenter,
 		double yCenter,
@@ -82,10 +87,7 @@ public class Rectangle {
 	public void setBottom(double bottom) {
 		this.bottom = bottom;
 	}
-	double left;
-	double right;
-	double top;
-	double bottom;
+
 	public double getxSpan() {
 		return xSpan;
 	}

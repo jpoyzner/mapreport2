@@ -58,7 +58,7 @@ public class DBQueryBuilder {
 	 ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
 
   static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority, " + 
-			 " \n n.addressX , n.addressY, n.newsId, n.label, n.priority as nPriority, " + 
+			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " + 
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
 
@@ -423,7 +423,12 @@ public class DBQueryBuilder {
 		  String addressText = res.getString("addressText");
 		  String shortLabel = res.getString("shortLabel");
 		  String description = res.getString("description");
-		  
+
+		  double x = res.getDouble("addressX");
+		  double y = res.getDouble("addressY");
+
+		  row.setX(x);
+		  row.setY(y);
 		  row.setDate(date);
 		  row.setFilterPriority(filterPriority);
 		  row.setName(label);

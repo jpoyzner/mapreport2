@@ -50,7 +50,26 @@ public class NewsFilterRow implements Comparable<Object>{
 
 	boolean isFilterLocation = false;
 	String filterName = null;
+
+	double x = 0;
+	double y = 0;
 	
+	public double getX() {
+		return x;
+	}
+
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
+
 	public String getFilterName() {
 		return filterName;
 	}
@@ -316,6 +335,8 @@ public class NewsFilterRow implements Comparable<Object>{
 		this.parentId = clonedNewsFilter.parentId;
 		this.level = clonedNewsFilter.level;
 		this.filterId = name;		
+		this.x = clonedNewsFilter.x;		
+		this.y = clonedNewsFilter.y;		
 	}
 	
 	public void calculatePriority(int newsNm) {
@@ -345,13 +366,13 @@ public class NewsFilterRow implements Comparable<Object>{
 }
 
 	public static List<News> buildNews(List<NewsFilterRow> srcFilters) {
-		System.out.println("buildNews srcFilters.size()=" + srcFilters.size());
-	List<News> newsList = new ArrayList<News>(srcFilters.size());
-	Set<String> labelTimes = new HashSet<String>(srcFilters.size());  
-	
-	for (NewsFilterRow filter : srcFilters) {
-		News news = new News();
-		String labelTime = filter.getName() + filter.getDate();
+			System.out.println("buildNews srcFilters.size()=" + srcFilters.size());
+		List<News> newsList = new ArrayList<News>(srcFilters.size());
+		Set<String> labelTimes = new HashSet<String>(srcFilters.size());  
+		
+		for (NewsFilterRow filter : srcFilters) {
+			News news = new News();
+			String labelTime = filter.getName() + filter.getDate();
 		
 		if (labelTimes.contains(labelTime)) {
 		//	System.out.println("buildNews already contains news.getLabel()=" + news.getLabel());
@@ -369,6 +390,8 @@ public class NewsFilterRow implements Comparable<Object>{
 		news.setUrl(filter.getUrl());
 		news.setVideo(filter.getVideo());
 		news.setPriority(filter.getNewsPriority());
+		news.setX(filter.getX());
+		news.setY(filter.getY());
 		newsList.add(news);
 			System.out.println("buildNews add(news) news.getLabel()=" + news.getLabel());
 	}

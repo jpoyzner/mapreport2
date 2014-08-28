@@ -16,6 +16,8 @@ public class NewsPresentation extends News {
 		id = news.getId();
 		priority = news.getPriority();
 		address = news.getAddress();
+		x = news.getX();
+		y = news.getY();
 	}
 
 	PageMetaData locationColumn;

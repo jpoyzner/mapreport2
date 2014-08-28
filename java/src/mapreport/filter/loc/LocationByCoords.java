@@ -11,7 +11,6 @@ import mapreport.view.map.Rectangle;
 
 public class LocationByCoords extends Filter implements Location {
 	@Expose Rectangle rect;
-//	final String EXTERNAL_SQL = "where  f.filterid = nf.filterid  and nl.newsid = nf.newsid   and f.filterid = nf.filterid";
 	final StringBuilder selectStringBuilder = new StringBuilder(" ");
 	
 	final StringBuilder whereStringBuilder = new StringBuilder(" \n and f.filterid = l.filterid  \n and ( \n (   \n" + 

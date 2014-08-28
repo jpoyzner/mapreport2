@@ -20,16 +20,36 @@ public class News {
 	int id = 0;
 	@Expose int priority = 0;
 	String address;
+	
+	double x = 0;
+	double y = 0;
+	
+	LocationByName primaryLocation;
+	List<LocationByName> locationList;
+	List<LocationByName> topicList;
+	
+	public double getX() {
+		return x;
+	}
 
+	public void setX(double x) {
+		this.x = x;
+	}
+
+	public double getY() {
+		return y;
+	}
+
+	public void setY(double y) {
+		this.y = y;
+	}
 	public String getAddress() {
 		return address;
 	}
 	public void setAddress(String address) {
 		this.address = address;
 	}
-	LocationByName primaryLocation;
-	List<LocationByName> locationList;
-	List<LocationByName> topicList;
+
 	
 	public String getLabel() {
 		return label;
