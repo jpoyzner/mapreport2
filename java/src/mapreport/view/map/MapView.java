@@ -14,7 +14,7 @@ public class MapView extends View {
 	List<MapZoomLink> mapZoomLinks;
 	
 	public MapView(MapNewsList newsList) {
-		super(newsList) ;
+		super(newsList) ;  
 		
 		double left = Integer.MAX_VALUE;
 		double right = Integer.MIN_VALUE;

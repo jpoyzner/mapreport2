@@ -33,7 +33,7 @@ public class LocationByCoords extends Filter implements Location {
 	public String toString() {
 		return "LocationByCoords: " + rect.toString();
 	}
-	
+	 
 	@Override
 	public void bindQuery(PreparedStatement pst) throws SQLException {
 				System.out.println("bindQuery " + rect.toString());

@@ -13,7 +13,7 @@ public class News {
 	@Expose String url = null;
 	@Expose String video = null;
 	@Expose String image = null;
-	@Expose String shortLabel = null;
+	@Expose String shortLabel = null;  
 	@Expose String description = null;
 	@Expose String newsText = null;
 	@Expose Date dateTime = null;

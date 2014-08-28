@@ -9,7 +9,7 @@ public class Rectangle {
 	double right;
 	double top;
 	double bottom;
-	
+	  
 	public Rectangle(
 		double xCenter,
 		double yCenter,

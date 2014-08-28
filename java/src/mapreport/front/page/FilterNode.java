@@ -158,7 +158,7 @@ public class FilterNode {
 		if (filter instanceof LocationByCoords) {
 			LocationByCoords locationByCoords = (LocationByCoords)filter;
 			          System.out.println("FilterNode add locationByCoords");    
-			addFilterType(locationByCoords);
+			addFilterType(locationByCoords);     
 		} else if (filter instanceof TimeFilter) {
 			TimeFilter timeFilter = (TimeFilter)filter;
 	          System.out.println("FilterNode add TimeFilter");   

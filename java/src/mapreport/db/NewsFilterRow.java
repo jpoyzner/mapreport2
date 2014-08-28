@@ -48,7 +48,7 @@ public class NewsFilterRow implements Comparable<Object>{
 	String description = null;
 	String newsText = null;		
 
-	boolean isFilterLocation = false;
+	boolean isFilterLocation = false;  
 	String filterName = null;
 
 	double x = 0;
