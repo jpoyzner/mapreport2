@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 
 import mapreport.front.dimension.Dimension;
 import mapreport.util.Log;
-
+  
 public abstract class Filter {
 
 	private StringBuilder selectSQL = new StringBuilder("");

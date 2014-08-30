@@ -53,7 +53,7 @@ public class PagePresentation {
 			
 			for (NewsFilterRow filter : filters) {
 				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
-			}			
+			}			  
 		
 		addParentNodes(pageFilters, parents); 			
 		addChildNodes(pageFilters, childFilters);

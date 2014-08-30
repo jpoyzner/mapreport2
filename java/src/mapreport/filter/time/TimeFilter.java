@@ -24,7 +24,7 @@ public class TimeFilter extends NameFilter {
 	}
 
 	public TimeFilter(String name) {
-		super(name);	
+		super(name);	 
 		buildTimeSQL(); 
 	}
 	protected void buildTimeSQL() {

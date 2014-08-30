@@ -23,7 +23,7 @@ public class MapView extends View {
 		double top = Integer.MAX_VALUE;
 		double bottom = Integer.MIN_VALUE;
 		
-		for (NewsPresentation news : newsList.getNewses()) {
+		for (NewsPresentation news : newsList.getNewses()) { 
 			if (news.getX() < left) {
 				left = news.getX();
 			}

@@ -22,6 +22,6 @@ public class PageMetaDataSerialiser implements JsonSerializer<PageMetaData> {
 	    final JsonElement jsonImage = context.serialize(page.image); 
 	    jsonObject.add("image", jsonImage);
 
-	    return jsonObject;
+	    return jsonObject; 
 	}
 }
