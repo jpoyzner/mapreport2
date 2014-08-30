@@ -6,13 +6,23 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			this.longitude = options.longitude;
 			
 			Css.load('map');
-			
-			var mapBucket =
+
+			this.map =
 				$('#mr-map-bucket').html(
-					Templates['mr-map-template']({latitude: this.latitude, longitude: this.longitude}));
+					Templates['mr-map-template']({latitude: this.latitude, longitude: this.longitude}))
+						.find('google-map');
+
+			//EVENTS ARE HERE: https://developers.google.com/maps/documentation/javascript/reference#MapsEventListener
 			
-			this.map = mapBucket.find('google-map');
-			
+			this.map.on('google-map-ready', _.bind(function(event) {
+				window.google.maps.event.addListener(event.target.map, 'dragend', _.bind(function(object) {
+				    this.map.removeAttr('fitToMarkers');
+				    var bounds = event.target.map.getBounds();
+					this.news.mapBounds = {left: bounds.pa.j, right: bounds.pa.k, top: bounds.Ca.j, bottom: bounds.Ca.k};
+				    this.news.fetch();
+				}, this));
+			}, this));
+
 			this.listenTo(options.news, 'request', this.refresh);
 			this.listenTo(options.news, 'sync', this.populateMarkers);
 		},
