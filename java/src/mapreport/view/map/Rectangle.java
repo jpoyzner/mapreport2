@@ -22,6 +22,18 @@ public class Rectangle {
 		
 		init(xCenter, yCenter, xSpan, ySpan);
 	}
+	
+	public Rectangle(Bounds bounds) {
+		this.left = bounds.getLeft();
+		this.right = bounds.getRight();
+		this.top = bounds.getTop();
+		this.bottom = bounds.getBottom();
+		
+		this.xCenter = (this.left + this.right) / 2;
+		this.yCenter = (this.top + this.bottom) / 2;
+		this.xSpan = Math.abs(this.left - this.right);
+		this.ySpan = Math.abs(this.top - this.bottom);
+	}
 
 	private void init(double xCenter, double yCenter, double xSpan, double ySpan) {
 		left = xCenter - xSpan / 2;
@@ -128,4 +140,30 @@ public class Rectangle {
 		return ret;
 	}
 	
+	public static class Bounds {
+		final double left, right, top, bottom;
+		
+		public Bounds(double left, double right, double top, double bottom) {
+			this.left = left;
+			this.right = right;
+			this.top = top;
+			this.bottom = bottom;
+		}
+
+		public double getLeft() {
+			return left;
+		}
+
+		public double getRight() {
+			return right;
+		}
+
+		public double getTop() {
+			return top;
+		}
+
+		public double getBottom() {
+			return bottom;
+		}
+	}
 }

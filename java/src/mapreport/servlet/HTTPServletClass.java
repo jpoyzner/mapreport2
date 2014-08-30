@@ -19,7 +19,7 @@ public class HTTPServletClass extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
 		
         try {
-            response.getWriter().write(Endpoints.news());
+            response.getWriter().write(Endpoints.news(request));
         } catch (IOException e) {
            throw new IOException("IOException in populateWithJSON", e);
         }    

@@ -13,7 +13,13 @@ function() {
 			return response.news.newsList.newses;
 		},
 		url: function() {
-            return 'news';
+            return "news"
+            	+ (this.mapBounds ?
+            		"?left=" + this.mapBounds.left
+            			+ "&right=" + this.mapBounds.right
+            			+ "&top=" + this.mapBounds.top
+            			+ "&bottom=" + this.mapBounds.bottom
+            		: "");
         }
 	});
 });

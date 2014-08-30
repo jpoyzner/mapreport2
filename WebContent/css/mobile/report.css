@@ -1,0 +1,16 @@
+.mr-report-article {
+	background-color: lightblue;
+	border: 1px solid black;
+	border-radius: 3px;
+	padding: 6px;
+	white-space: nowrap;
+	word-wrap: break-word;
+}
+
+.mr-report-article img {
+	margin-right: 10px;
+}
+
+.mr-report-article p {
+	display: inline;
+}
