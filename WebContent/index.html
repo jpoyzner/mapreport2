@@ -23,8 +23,11 @@
 		
 	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 	</head>
-	<body>
-		<div id="mr-buckets">
+	<body style="background-color: lightblue">
+		<p style="color: white">&nbsp;LOADING...<p>
+	</body>
+	<script type="text/template" id="mr-template" class="template">
+		<div id="mr-buckets" class="<%= platform %>">
 			<div id="mr-options-bucket"><span class="header">&nbsp;MAPREPORT</span></div>
 			<div id="mr-map-bucket">
 				<web-loader type="circle" color="black"></web-loader>
@@ -34,13 +37,13 @@
 			</div>	
 		</div>
 		<document-veil id="document-veil"></document-veil>
-	</body>
-	<script type="text/template" id="mr-map-template">
+	</script>
+	<script type="text/template" id="mr-map-template" class="template">
 		<div id="mr-map">
 			<google-map fitToMarkers></google-map>
 		</div>
 	</script>
-	<script type="text/template" id="mr-map-markers-template">
+	<script type="text/template" id="mr-map-markers-template" class="template">
 		<% _.each(news.models, function(article) { %>
 			<google-map-marker
 				longitude="<%= article.get('x') %>"
@@ -51,10 +54,10 @@
 			</google-map-marker>
 		<% }); %>
 	</script>
-	<script type="text/template" id="mr-console-template">
+	<script type="text/template" id="mr-console-template" class="template">
 		<div id="mr-console"></div>
 	</script>
-	<script type="text/template" id="mr-options-template">
+	<script type="text/template" id="mr-options-template" class="template">
 		<div id="mr-options">
 			<div class="mr-option mr-topic-option">
 				<span>TOPIC: </span>
@@ -70,7 +73,7 @@
 			</div>
 		</div>
 	</script>
-	<script type="text/template" id="mr-report-template">
+	<script type="text/template" id="mr-report-template" class="template">
 		<div id="mr-report">
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: <%= randomColor() %>">

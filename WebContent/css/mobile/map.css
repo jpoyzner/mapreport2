@@ -1,0 +1,10 @@
+#mr-map {	
+	height: 100%;
+	overflow: hidden;
+	width: 100%;
+}
+
+google-map {
+    display: block;
+    height: 100%;
+}

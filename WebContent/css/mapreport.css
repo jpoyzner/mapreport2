@@ -3,7 +3,7 @@ body {
 }
 
 #mr-buckets {
-	position: absolute;
+	position: fixed;
 	height: 100%;
 	width: 100%;
 }
@@ -36,10 +36,24 @@ body {
     width: 50%;
 }
 
+.mobile #mr-map-bucket {
+	border-bottom: 1px solid;
+	border-right: none;
+    height: 55%;
+    width: 100%;
+}
+
 #mr-report-bucket {
 	background-color: lightblue;
 	height: 95%;
 	top: 5%;
+}
+
+.mobile #mr-report-bucket {
+	height: 40%;
+	position: fixed;
+	top: 60%;
+	width: 100%;
 }
 
 /* #mr-options-bucket web-loader {
@@ -71,4 +85,8 @@ body {
 	left: 72%;
 	top: 40%;
 }
-wwe
+
+.mobile #mr-report-bucket web-loader {
+	left: 37%;
+	top: 28%;
+}
