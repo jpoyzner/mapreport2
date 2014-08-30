@@ -8,6 +8,8 @@ import mapreport.nav.NavigationNode;
 import mapreport.nav.NavigationNodeSerializer;
 import mapreport.nav.NavigationPath;
 import mapreport.nav.NavigationPathSerializer;
+import mapreport.view.map.MapView;
+import mapreport.view.map.MapViewSerializer;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -21,6 +23,7 @@ public class JSONHandler {
 		    gsonBuilder.registerTypeAdapter(PageMetaData.class, new PageMetaDataSerialiser());
 		    gsonBuilder.registerTypeAdapter(NavigationPath.class, new NavigationPathSerializer());
 		    gsonBuilder.registerTypeAdapter(NavigationNode.class, new NavigationNodeSerializer());
+		    gsonBuilder.registerTypeAdapter(MapView.class, new MapViewSerializer());
 		 //   gsonBuilder.registerTypeAdapter(JsonError.class, new JsonErrorSerializer());
 		    
 		    gsonBuilder.setPrettyPrinting();

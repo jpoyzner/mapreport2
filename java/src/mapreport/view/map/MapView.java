@@ -3,19 +3,21 @@ package mapreport.view.map;
 import java.util.List;
 
 import mapreport.news.NewsPresentation;
+import mapreport.util.Log;
 import mapreport.view.View;
 import mapreport.view.list.NewsList;
 
 public class MapView extends View {
 
 	Rectangle rect;
-	MapNewsList newsList;
+//	MapNewsList newsList;
 	String mapUrl;
 	List<MapZoomLink> mapZoomLinks;
 	
 	public MapView(MapNewsList newsList) {
 		super(newsList) ;  
 		
+		    Log.log("MapView newsList.size=" + newsList.getNewses().size());
 		double left = Integer.MAX_VALUE;
 		double right = Integer.MIN_VALUE;
 		double top = Integer.MAX_VALUE;
@@ -29,14 +31,16 @@ public class MapView extends View {
 				right = news.getX();
 			}
 			if (news.getY() < top) {
-				top = news.getX();
+				top = news.getY();
 			}
 			if (news.getY() > bottom) {
-				bottom = news.getX();
+				bottom = news.getY();
 			}
 		}
+		          Log.log("MapView left=" + left + " right=" + right + " top=" + top + " bottom=" + bottom);
 		
 		rect = new Rectangle((left + right) / 2, (top + bottom) / 2, right - left, top - bottom);
+		           Log.log("MapView newsList=" + newsList + " getNewsList()=" + getNewsList());
 	}
 	
 	public Rectangle getRect() {
@@ -47,6 +51,7 @@ public class MapView extends View {
 		this.rect = rect;
 	}
 
+	/*
 	public MapNewsList getNewsList() {
 		return newsList;
 	}
@@ -54,6 +59,7 @@ public class MapView extends View {
 	public void setNewsList(MapNewsList newsList) {
 		this.newsList = newsList;
 	}
+	*/
 
 	public String getMapUrl() {
 		return mapUrl;

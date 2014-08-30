@@ -23,6 +23,8 @@ import mapreport.tree.Tree;
 import mapreport.util.Log;
 import mapreport.view.View;
 import mapreport.view.list.NewsList;
+import mapreport.view.map.MapNewsList;
+import mapreport.view.map.MapView;
 
 public class PagePresentation {
 	//private String value2 = "abc";
@@ -56,11 +58,12 @@ public class PagePresentation {
 		addParentNodes(pageFilters, parents); 			
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
-		view = new View(new NewsList(newsList, pageFilters));
+	//	view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
 		metaData = new PageMetaData(pageFilters);
 		navigationPath = new NavigationPath(pageFilters, childFilters);
-	//	view = new MapView // MapView  just is one of the view, extend later
+		view = new MapView(new MapNewsList(newsList, pageFilters)); // MapView  just is one of the view, extend later
+		   Log.log("PagePresentation view.getNewsList()=" + view.getNewsList());
 	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
 		
 	}

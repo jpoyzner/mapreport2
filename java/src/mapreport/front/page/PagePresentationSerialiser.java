@@ -22,7 +22,10 @@ public class PagePresentationSerialiser implements JsonSerializer<PagePresentati
 	    final JsonElement jsonMetaData = context.serialize(page.getMetaData());
 	    jsonObject.add("metaData", jsonMetaData);
 	    
-	    final JsonElement jsonNews = context.serialize(page.getView()); //.getNewsList());
+	    final JsonElement jsonView = context.serialize(page.getView()); //.getNewsList());
+	    jsonObject.add("view", jsonView);
+	    
+	    final JsonElement jsonNews = context.serialize(page.getView().getNewsList().getNewses()); //.getNewsList());
 	    jsonObject.add("news", jsonNews);
 
 	//    final JsonElement jsonNavPath = context.serialize(page.getNavigationPath()); 

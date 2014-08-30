@@ -13,8 +13,8 @@ public abstract class Filter {
 
 	private StringBuilder selectSQL = new StringBuilder("");
 	private StringBuilder fromSQL = new StringBuilder("");
-	private StringBuilder whereSQL = new StringBuilder("");
-	private StringBuilder orderBySQL = new StringBuilder("");
+	protected StringBuilder whereSQL = new StringBuilder("");
+	protected StringBuilder orderBySQL = new StringBuilder("");
 	
 	Dimension dimension;
 	int priority;

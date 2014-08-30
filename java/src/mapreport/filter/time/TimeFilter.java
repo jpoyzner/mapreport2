@@ -23,16 +23,14 @@ public class TimeFilter extends NameFilter {
 		this.parent = parent;
 	}
 
-	// final StringBuilder whereStringBuilder = new StringBuilder(" \n and UNIX_TIMESTAMP(n.dateTime) > ? and UNIX_TIMESTAMP(n.dateTime) < ? ");
-	StringBuilder whereSQL = new StringBuilder(" \n ");
-	StringBuilder orderSQL = new StringBuilder("\n order by n.priority, n.dateTime ");
-//	final StringBuilder selectStringBuilder = new StringBuilder(" \n  n.dateTime > ? and n.dateTime < ? ");
-	
 	public TimeFilter(String name) {
 		super(name);	
 		buildTimeSQL(); 
 	}
 	protected void buildTimeSQL() {
+		whereSQL = new StringBuilder(" \n ");
+		orderBySQL = new StringBuilder("\n order by n.priority, n.dateTime ");
+
 		if (begin != null) {
 			whereSQL.append(" and n.dateTime > ? ");
 		}
@@ -41,7 +39,7 @@ public class TimeFilter extends NameFilter {
 		}
 	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString());
 		setWhereSQL(whereSQL); 
-		setOrderBySQL(orderSQL);
+		setOrderBySQL(orderBySQL);
 	}
 	public Calendar getBegin() {
 		return begin;
