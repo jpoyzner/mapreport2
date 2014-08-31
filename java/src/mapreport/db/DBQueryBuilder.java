@@ -189,8 +189,8 @@ public class DBQueryBuilder {
 	    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
-	 //   nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
-	 //   nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
+	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+	    nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
 	    json = buildJson(null, nameFilters, 100);
@@ -305,7 +305,7 @@ public class DBQueryBuilder {
 			}
 		}
 		
-		if (queryBuilder.filterNode.getFilterList().size() == 0) {   // no filters added, so just global latest
+		if (queryBuilder.filterNode.getFilterList().size() == 0 || queryBuilder.filterNode.getTimeFilter() == null) {   // no filters added, so just global latest
 			     Log.log("queryBuilder buildJson ading Latest");
 			queryBuilder.addFilter(new Latest());  
 		}

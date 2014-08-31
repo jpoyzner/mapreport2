@@ -15,8 +15,9 @@ public class Latest extends TimeFilter {
 		begin.add(Calendar.DAY_OF_MONTH, -300);    // TEMPORARY, since no latest data
 		end = new GregorianCalendar();
 		
-		Log.log("Latest begin:" + begin.getTimeInMillis() + " end:" + end.getTimeInMillis() + " orderBySQL=" + getOrderBySQL());	
-		
+		   Log.log("Latest begin:" + begin.getTimeInMillis() + " end:" + end.getTimeInMillis() + " orderBySQL=" + getOrderBySQL());	
+
+		parent = new AllTime();	
 		setLink("");	
 		buildTimeSQL(); 
 	}
