@@ -27,7 +27,7 @@ public class WebSocketServletClass extends WebSocketServlet {
 		protected void onTextMessage(CharBuffer message) throws IOException {
 			//Don't forget that WebSockets recycle the connection (uses this same class instance and variables)!
 			
-			getWsOutbound().writeTextMessage(CharBuffer.wrap(Endpoints.news()));
+			//getWsOutbound().writeTextMessage(CharBuffer.wrap(Endpoints.news()));
 			getWsOutbound().flush();
 		}
 		

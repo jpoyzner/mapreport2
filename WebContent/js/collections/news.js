@@ -10,7 +10,7 @@ function() {
 //				return response;
 //			}
 			
-			return response.news.newsList.newses;
+			return response.news;
 		},
 		url: function() {
             return "news"
