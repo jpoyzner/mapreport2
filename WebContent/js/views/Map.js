@@ -18,7 +18,8 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				window.google.maps.event.addListener(event.target.map, 'dragend', _.bind(function(object) {
 				    this.map.removeAttr('fitToMarkers');
 				    var bounds = event.target.map.getBounds();
-					this.news.mapBounds = {left: bounds.pa.j, right: bounds.pa.k, top: bounds.Ca.j, bottom: bounds.Ca.k};
+					this.news.fetching = true;
+				    this.news.mapBounds = {left: bounds.pa.j, right: bounds.pa.k, top: bounds.Ca.j, bottom: bounds.Ca.k};
 				    this.news.fetch();
 				}, this));
 			}, this));
@@ -30,10 +31,12 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			this.map[0].clear();
 		},
 		populateMarkers: function() {
-			this.map.html(Templates['mr-map-markers-template']({
-				news: this.news,
-				latitude: this.latitude,
-				longitude: this.longitude}));
-		}	
+			if (!this.news.fetches) {
+				this.map.html(Templates['mr-map-markers-template']({
+					news: this.news,
+					latitude: this.latitude,
+					longitude: this.longitude}));
+			}
+		}
 	});
 });

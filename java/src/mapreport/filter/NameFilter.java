@@ -9,13 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.google.gson.ExclusionStrategy;
-import com.google.gson.FieldAttributes;
-import com.google.gson.annotations.Expose;
-
 import mapreport.db.NewsFilterRow;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
 
 public class NameFilter extends Filter implements ExclusionStrategy  {
 	String filterTable = null;

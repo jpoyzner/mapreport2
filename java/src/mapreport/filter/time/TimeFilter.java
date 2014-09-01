@@ -1,13 +1,12 @@
 package mapreport.filter.time;
 
-import java.util.Calendar ;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
-import mapreport.filter.topic.Topic;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 

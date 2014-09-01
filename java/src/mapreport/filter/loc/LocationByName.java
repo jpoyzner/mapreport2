@@ -1,10 +1,6 @@
 package mapreport.filter.loc;
 
-import java.util.Iterator;
-import java.util.Map.Entry;
-
 import mapreport.filter.DBFilter;
-import mapreport.filter.NameFilter;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
@@ -15,7 +11,6 @@ public class LocationByName extends DBFilter  implements Location {
 		// TODO Auto-generated constructor stub
 	}
 	
-	@SuppressWarnings("unused")
 	@Override
 	public void limitFilter(FilterNode filterNode) { 
 		        	Log.log("LocationByName limitFilter getName()=" + getName() + " filterNode.getLocationFilter()=" + filterNode.getLocationFilter());

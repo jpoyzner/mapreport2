@@ -22,7 +22,6 @@ import mapreport.news.News;
 import mapreport.tree.Tree;
 import mapreport.util.Log;
 import mapreport.view.View;
-import mapreport.view.list.NewsList;
 import mapreport.view.map.MapNewsList;
 import mapreport.view.map.MapView;
 
@@ -97,6 +96,7 @@ public class PagePresentation {
 		}
 		
 		if (filterIds.size() > 0) {	
+			@SuppressWarnings("unused")
 			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
 		//	List<NewsFilterRow> parents = filterDBQueryBuilder.runQuery(filterIds);
 			

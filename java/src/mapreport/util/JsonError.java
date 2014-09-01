@@ -48,7 +48,7 @@ public class JsonError {
 		
 	}
 	
-	private void addException() {
-		
-	}
+//	private void addException() {
+//		
+//	}
 }

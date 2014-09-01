@@ -1,6 +1,5 @@
 package mapreport.filter.time;
 
-import java.util.Calendar;
 import java.util.GregorianCalendar;
 
 public class Future extends OfficialTimeFilter {

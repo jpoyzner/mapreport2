@@ -1,7 +1,6 @@
 package mapreport.filter.loc;
 
 import mapreport.filter.Filter;
-import mapreport.filter.topic.Topic;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 

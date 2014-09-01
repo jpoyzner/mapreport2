@@ -13,6 +13,10 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			this.bucket.html('<span class="header">&nbsp;MAPREPORT</span>');
 		},
 		render: function() {
+			if (this.news.fetches) {
+				return;
+			}
+			
 			this.bucket.html(Templates['mr-options-template'](this.news));
 			
 			$('.mr-option').click(function(e) {

@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
-import mapreport.filter.NameFilter;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 

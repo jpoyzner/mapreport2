@@ -8,16 +8,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
-import java.sql.SQLException; 
-import java.sql.Statement;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
@@ -31,16 +27,8 @@ import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
-import mapreport.front.page.PageMetaData;
-import mapreport.front.page.PageMetaDataSerialiser;
 import mapreport.front.page.PagePresentation;
-import mapreport.front.page.PagePresentationSerialiser;
-import mapreport.front.param.RequestParameter;
 import mapreport.front.url.PageURL;
-import mapreport.nav.NavigationNode;
-import mapreport.nav.NavigationNodeSerializer;
-import mapreport.nav.NavigationPath;
-import mapreport.nav.NavigationPathSerializer;
 import mapreport.news.News;
 import mapreport.util.JSONHandler;
 import mapreport.util.JsonError;
@@ -164,7 +152,8 @@ public class DBQueryBuilder {
     public static void main (String args[]) {
     	System.out.println("start main");
     
-    	String json = null;
+    	@SuppressWarnings("unused")
+		String json = null;
     /*  
      * Json by URL
      * 
@@ -197,6 +186,7 @@ public class DBQueryBuilder {
         	System.out.println("end main");
 	}
 
+	@SuppressWarnings("unused")
 	private static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);

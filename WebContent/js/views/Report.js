@@ -13,8 +13,10 @@ function(Templates, Css, Color) {
 		refresh: function() {
 			this.bucket.html('<web-loader type="clock" color="white"></web-loader>');
 		},
-		render: function() {		
-			this.bucket.html(Templates['mr-report-template']({news: this.news, randomColor: Color.random}));
+		render: function() {
+			if (!this.news.fetches) {
+				this.bucket.html(Templates['mr-report-template']({news: this.news, randomColor: Color.random}));
+			}
 		}
 	});
 });

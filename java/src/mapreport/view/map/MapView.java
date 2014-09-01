@@ -5,7 +5,6 @@ import java.util.List;
 import mapreport.news.NewsPresentation;
 import mapreport.util.Log;
 import mapreport.view.View;
-import mapreport.view.list.NewsList;
 
 public class MapView extends View {
 
