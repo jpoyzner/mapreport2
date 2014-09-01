@@ -92,7 +92,7 @@ public abstract class Filter {
 
 	
 
-	public abstract void bindQuery(PreparedStatement pst) throws SQLException; 
+	public abstract int bindQuery(PreparedStatement pst, int col) throws SQLException; 
 	
 	public abstract void processResultSet(ResultSet resultSet); 
 	

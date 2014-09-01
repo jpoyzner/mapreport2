@@ -154,9 +154,10 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	@Override
-	public void bindQuery(PreparedStatement pst) throws SQLException {
+	public int bindQuery(PreparedStatement pst, int col) throws SQLException {
 		//    int col = 1;
 		//	pst.setString(++col, name);
+		return col;
 	}
 	
 	public void setSelectSQL(StringBuilder toAddSQL) {

@@ -35,18 +35,20 @@ public class LocationByCoords extends Filter implements Location {
 	}
 	 
 	@Override
-	public void bindQuery(PreparedStatement pst) throws SQLException {
-				System.out.println("bindQuery " + rect.toString());
-			    int col = 0;
-				pst.setDouble(++col, rect.getTop() * 1000000);	
+	public int bindQuery(PreparedStatement pst, int col) throws SQLException {
+				System.out.println("LocationByCoords bindQuery " + rect.toString());
+				
 				pst.setDouble(++col, rect.getBottom() * 1000000);	
+				pst.setDouble(++col, rect.getTop() * 1000000);	
 				pst.setDouble(++col, rect.getLeft() * 1000000);	
 				pst.setDouble(++col, rect.getRight() * 1000000);	
 
-				pst.setDouble(++col, rect.getTop() * 1000000);	
-				pst.setDouble(++col, rect.getBottom() * 1000000);		
+				pst.setDouble(++col, rect.getBottom() * 1000000);	
+				pst.setDouble(++col, rect.getTop() * 1000000);		
 				pst.setDouble(++col, rect.getLeft() * 1000000);	
-				pst.setDouble(++col, rect.getRight() * 1000000);	
+				pst.setDouble(++col, rect.getRight() * 1000000);
+				
+				return col;
 	}
 
 	@Override

@@ -75,23 +75,23 @@ public class FilterNode {
 	public String getLink() {
 		link = "";
 		if (getLocationFilter() != null){
-	    	  Log.log("getLink()  locationFilter().getLink()=" + getLocationFilter().getLink());
+	    //	  Log.log("getLink()  locationFilter().getLink()=" + getLocationFilter().getLink());
 	    }
 		if (getTimeFilter() != null){
-	    	  Log.log("getLink()  timeFilter().getLink()=" + getTimeFilter().getLink());
+	    	//  Log.log("getLink()  timeFilter().getLink()=" + getTimeFilter().getLink());
 	    }
 		    Log.log("FilterNode getLink() filterList.size()=" + filterList.size());
 		for (Filter filter: filterList) {
 			       //    Log.log("FilterNode getLink() filter=" + filter);
 			if (filter != null) {
 				String filterLink = filter.getLink();
-				        Log.log("FilterNode getLink() filterLink=" + filterLink);
+			//	        Log.log("FilterNode getLink() filterLink=" + filterLink);
 				if (filterLink != null && !filterLink.isEmpty()) {     
 					link += filterLink + '/';
 				}
 			}
 		}
-		     Log.log("FilterNode getLink() link=" + link);
+		 //    Log.log("FilterNode getLink() link=" + link);
 		return link;
 	}
 
@@ -135,8 +135,9 @@ public class FilterNode {
 	
 
 	public void bindFilters(PreparedStatement pst) throws SQLException {
+		int col = 0;
 		for (Filter filter :  filterList) {
-			filter.bindQuery(pst);
+			col = filter.bindQuery(pst, col);
 		}
 	}
 
@@ -185,7 +186,7 @@ public class FilterNode {
 	}
 
 	public void addFilterType(TimeFilter filter) {
-                 Log.log("addFilterType(TimeFilter filter) filter=" + filter);
+         //        Log.log("addFilterType(TimeFilter filter) filter=" + filter);
                  if (filter instanceof OfficialTimeFilter)  {
                 	 OfficialTimeFilter officialTimeFilter = (OfficialTimeFilter)filter;
                 	 Log.log("addFilterType(TimeFilter filter) getBegin=" + officialTimeFilter.getBegin());
@@ -196,7 +197,7 @@ public class FilterNode {
 	}
 
 	public void addFilterType(Topic filter) {
-                       Log.log("addFilterType(Topic filter) filter=" + filter);
+                 //      Log.log("addFilterType(Topic filter) filter=" + filter);
 		   if (filter != null) Log.log("addFilterType(Topic filter) filter.getName=" + filter.getName());
 		incrementDBFilterCntr(filter);
 		if (topicFilter == null) {

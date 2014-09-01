@@ -17,9 +17,9 @@ public class Topic extends DBFilter{
 	}
 
 	@Override
-	public void bindQuery(PreparedStatement pst) {
+	public int bindQuery(PreparedStatement pst, int col) {
 		// pst.setString(++col, label);
-		
+		return col;
 	}
 
 	@Override

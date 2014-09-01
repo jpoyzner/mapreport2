@@ -92,10 +92,11 @@ public class TimeFilter extends NameFilter {
 
 	
 	@Override
-	public void bindQuery(PreparedStatement pst)  throws SQLException{				
-		System.out.println("TimeFilter bindQuery begin=" + begin);			
-		System.out.println("TimeFilter bindQuery end=" + end);
-		int col = 0;
+	public int bindQuery(PreparedStatement pst, int col)  throws SQLException{		  		
+		System.out.println("TimeFilter bindQuery begin1=" + begin);	  		
+		System.out.println("TimeFilter bindQuery end1=" + end);
+		System.out.println("TimeFilter bindQuery beginsql=" + new java.sql.Date(begin.getTimeInMillis()));	
+		System.out.println("TimeFilter bindQuery endsql=" + new java.sql.Date(end.getTimeInMillis()));	
 	//	pst.setDouble(++col, begin.getTimeInMillis());	
 	//	pst.setDouble(++col, end.getTimeInMillis());	
 		if (begin != null) {
@@ -104,6 +105,7 @@ public class TimeFilter extends NameFilter {
 		if (end != null) {
 			pst.setDate(++col, new java.sql.Date(end.getTimeInMillis()));	
 		}
+		return col;
 	}
 	
 	@Override

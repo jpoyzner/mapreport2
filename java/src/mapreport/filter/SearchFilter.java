@@ -6,9 +6,9 @@ import java.sql.ResultSet;
 public class SearchFilter extends Filter {
 
 	@Override
-	public void bindQuery(PreparedStatement pst) {
+	public int bindQuery(PreparedStatement pst, int col) {
 		// TODO Auto-generated method stub
-		
+		return col;
 	}
 
 	@Override

@@ -188,13 +188,12 @@ public class DBQueryBuilder {
 	 //   nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
-	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 	    nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
 	    json = buildJson(null, nameFilters, 100);
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
-	    System.out.println("end buildJson json=" + json);
         	System.out.println("end main");
 	}
 
@@ -248,6 +247,7 @@ public class DBQueryBuilder {
 			  // if (true) throw new Exception("test exception"); 
 			   
 			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
+		    Log.log("buildJson end json=" + json);
 		} catch (Exception e) {		
 			   Log.log ("catch (Exception e) e.getMessage()" + e.getMessage());	
 			e.printStackTrace();
