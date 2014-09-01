@@ -53,7 +53,7 @@ public class DBQueryBuilder {
   
   static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
 	 ", nf.priority as nfPriority" + 
-	 ", \n nl.topCoord , nl.bottomCoord , nl.leftCoord , nl.rightCoord, nl.isOfficial, nl.newsId, nl.label, nl.priority as nPriority" + 
+	 ", \n nl.topCoord as bottomCoord, nl.bottomCoord as topCoord, nl.leftCoord , nl.rightCoord, nl.isOfficial, nl.newsId, nl.label, nl.priority as nPriority" + 
 	 ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation \n " + 
 	 ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
 
@@ -183,10 +183,9 @@ public class DBQueryBuilder {
 		}
 		*/     		
 	    	// Json by URL by Java objects
-	   // json = buildJson(new Rectangle(-65.0, -15.0, 3.0, 10.0), null, 20);
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
 	//    nameFilters.add(new DBFilter("Fire"));
-	    nameFilters.add(new DBFilter("San Jose"));
+	 //   nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -194,7 +193,7 @@ public class DBQueryBuilder {
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
 	    json = buildJson(null, nameFilters, 100);
-
+	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
 	    System.out.println("end buildJson json=" + json);
         	System.out.println("end main");
 	}
@@ -414,14 +413,7 @@ public class DBQueryBuilder {
 		  String label = res.getString("label");
 		  String nPriority = res.getString("nPriority");
 		  Date date = res.getDate("dateTime");
-		  
-		  /* for coord filter
-		  double topCoord = res.getDouble("topCoord");
-		  double bottomCoord = res.getDouble("bottomCoord");
-		  double leftCoord = res.getDouble("leftCoord");
-		  double rightCoord = res.getDouble("rightCoord");
-		  boolean isOfficial = res.getBoolean("isOfficial");
-		  */
+
 		  boolean isLocation = res.getBoolean("isLocation");
 		  // 			 "n.url as url, n.video as video, n.image as image, n.addressText as addressText, n.shortLabel as shortLabel, n.description as description,
 		  // n.newsText as newsText \n "

@@ -94,31 +94,13 @@ public abstract class Filter {
 
 	public abstract void bindQuery(PreparedStatement pst) throws SQLException; 
 	
-  //  while (resultSet.next()) {
-//	      String label = resultSet.getString("Label");
-  //  }	
 	public abstract void processResultSet(ResultSet resultSet); 
 	
 	public void addFromSQL(String toAddSQL) {
-		//return queryBuilder.addFromSQL(toAddSQL);
+		
 	}
 	
 	public void addSelectSQL(String toAddSQL) {
-		/*
-	select  f.priority as filterPriority, 
-     f.name as fName, n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, 
-      
-     ft.priority as filterTopicPriority, fpt.priority as filterTopicParentPriority, -- for topic   
-                 ft.name as ftName, nft.priority as nftPriority, -- for topic   
-                 fpt.name topicParent, fpt.filterId, fft.level  as topicLevel  -- for topic        
-                 
-     l.topCoord , l.bottomCoord , l.leftCoord , l.rightCoord, l.isOfficial,
-    abs(l.topCoord - l.bottomCoord) * abs(l.leftCoord - l.rightCoord) / 1000000000 as span,  
-     fpl.priority as filterLocParentPriority, fl.priority as filterLocPriority,  -- for location 
-                 fl.name as flName, nfl.priority as nflPriority, -- for location
-                 fpl.name locParent, fpl.filterId, ffl.level as locLevel,  -- for location
-		*/
-		// return queryBuilder.addSelectSQL(toAddSQL);
 	}
 
 }

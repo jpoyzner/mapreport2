@@ -54,28 +54,6 @@ public class LocationByCoords extends Filter implements Location {
 		// TODO Auto-generated method stub
 		
 	}
-/*
- * select l.topCoord , l.bottomCoord , l.leftCoord , l.rightCoord, l.isOfficial,
- *  abs(l.topCoord - l.bottomCoord) * abs(l.leftCoord - l.rightCoord) / 1000000000 as span 
- *  
- *             (  
-                n.addressX <> 0 and n.addressY <> 0
-                and nf.isPrimary = true
-                and n.addressY < 28166454 and n.addressY > 23513626 and n.addressX > -106353149 and n.addressX < -101502686
-            )
-                     or
-            (
-                     l.topCoord > 23513626 and l.bottomCoord < 28166454 and l.leftCoord > -106353149 and l.rightCoord < -101502686
-                     and nf.isPrimary = true
-                    and l.topCoord <> 1000000000
-            )
-            
-         and f.filterid = l.filterid
-        and n.newsid = nf.newsid
-        and f.filterid = nf.filterid
-        and nf.isPrimary = 1  
-        
-        */
 	
 	public String getLink() {		
 		return rect.buildLink();

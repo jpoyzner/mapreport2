@@ -147,8 +147,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	@Override
-	public String getLink() {
-		// link = name.replace(' ', '-');	
+	public String getLink() {	
 	    link = name;	
 	    //    Log.log("NameFilter getLink()  name=" + name + " link=" + link);
 		return link;
@@ -161,28 +160,6 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	public void setSelectSQL(StringBuilder toAddSQL) {
-	 //    ft.priority as filterTopicPriority, fpt.priority as filterTopicParentPriority, 
-     //    ft.name as ftName, nft.priority as nftPriority, 
-     //    fpt.name topicParent, fpt.filterId, fft.level  as topicLevel  
-
-	//	final StringBuilder selectStringBuilder = new StringBuilder("ft.priority as filterTopicPriority, fpt.priority as filterTopicParentPriority, " +  
-   //  " ft.name as ftName, nft.priority as nftPriority, " +  
-   //  "  fpt.name topicParent, fpt.filterId, fft.level  as topicLevel");   
-         
-         
-		/*
-
-      
-     ft.priority as filterTopicPriority, fpt.priority as filterTopicParentPriority, -- for topic   
-                 ft.name as ftName, nft.priority as nftPriority, -- for topic   
-                 fpt.name topicParent, fpt.filterId, fft.level  as topicLevel  -- for topic        
-                 
-     l.topCoord , l.bottomCoord , l.leftCoord , l.rightCoord, l.isOfficial,
-    abs(l.topCoord - l.bottomCoord) * abs(l.leftCoord - l.rightCoord) / 1000000000 as span,  
-     fpl.priority as filterLocParentPriority, fl.priority as filterLocPriority,  -- for location 
-                 fl.name as flName, nfl.priority as nflPriority, -- for location
-                 fpl.name locParent, fpl.filterId, ffl.level as locLevel,  -- for location
-		*/
 		super.setSelectSQL(toAddSQL);
 	}
 
@@ -197,28 +174,4 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-//	from        ,     filter fl, newsfilter nfl  -- for location
-   // ,     filter fpl, filter fcl, filterfilter ffl   -- for location
-	
-  /*
-	and n.newsid = nfl.newsid  -- for location
-    and fl.filterid = nfl.filterid   -- for location
-    and nfl.isLocation = true   -- for location
-    
-    and fcl.filterid = ffl.childFilterId   -- for location
-    and fpl.filterid = ffl.parentFilterId    -- for location
-    and fcl.filterId = nfl.filterid     -- for location
-    
-            and (fl.filterid in   -- location   if no coords
-                (  -- location
-                       select  fc.filterId
-                      from filter fp, filter fc, filterfilter ff
-                      where fc.filterid = ff.childFilterId
-                       and fp.filterid = ff.parentFilterId
-                       and fp.label in ('Northern Mexico')   -- fp.filterId in (...)
-                )   or fl.label in ('Northern Mexico')   -- fp.filterId in (...) -- location
-            )
-    */
-
 }
