@@ -38,8 +38,8 @@ public class Rectangle {
 	private void init(double xCenter, double yCenter, double xSpan, double ySpan) {
 		left = xCenter - xSpan / 2;
 		right = xCenter + xSpan / 2;
-		top = yCenter - ySpan / 2;
-		bottom = yCenter + ySpan / 2;
+		top = yCenter + ySpan / 2;
+		bottom = yCenter - ySpan / 2;
 	}
 	
 	public Rectangle(Options options) {
