@@ -19,7 +19,7 @@ public class LocationByCoords extends Filter implements Location {
         ")  \n" + 
                 " or  \n" + 
         "(  \n" + 
-                " l.topCoord > ? and l.bottomCoord < ? and l.leftCoord > ? and l.rightCoord < ?  and topCoord <> 0 \n" + 
+                " f.isLocation = true and l.topCoord > ? and l.bottomCoord < ? and l.leftCoord > ? and l.rightCoord < ?  and topCoord <> 0 \n" + 
                " and l.topCoord <> 1000000000  \n" + 
         ") ) ");
 	
