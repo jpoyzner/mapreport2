@@ -15,23 +15,34 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			//EVENTS ARE HERE: https://developers.google.com/maps/documentation/javascript/reference#MapsEventListener
 			
 			this.map.on('google-map-ready', _.bind(function(event) {
-				window.google.maps.event.addListener(event.target.map, 'dragend', _.bind(function(object) {
-				    this.map.removeAttr('fitToMarkers');
-				    var bounds = event.target.map.getBounds();
-					this.news.fetching = true;
-				    this.news.mapBounds = {left: bounds.pa.j, right: bounds.pa.k, top: bounds.Ca.j, bottom: bounds.Ca.k};
-				    this.news.fetch();
-				}, this));
+				var boundLoadFunc = _.bind(this.loadNewsByCoords, this, event);
+				window.google.maps.event.addListener(event.target.map, 'dragend', boundLoadFunc);
+				window.google.maps.event.addListener(event.target.map, 'zoom_changed', _.after(3, boundLoadFunc));
 			}, this));
 
-			this.listenTo(options.news, 'request', this.refresh);
+			//this.listenTo(options.news, 'request', this.refresh);
 			this.listenTo(options.news, 'sync', this.populateMarkers);
 		},
-		refresh: function() {
-			this.map[0].clear();
+		loadNewsByCoords: function(event) {
+			this.map.removeAttr('fitToMarkers');
+		    var bounds = event.target.map.getBounds();
+		    var ne = bounds.getNorthEast();
+		    var sw = bounds.getSouthWest();
+			this.news.fetching = true;
+		    this.news.mapBounds = {left: sw.lng(), right: ne.lng(), top: ne.lat(), bottom: sw.lat()};
+		    this.news.fetch();
 		},
+//		refresh: function() {
+//			if (this.news.length) {
+//				this.map[0].clear();
+//			}
+//		},
 		populateMarkers: function() {
 			if (!this.news.fetches) {
+				if (this.news.length) {
+					this.map[0].clear();
+				}
+				
 				this.map.html(Templates['mr-map-markers-template']({
 					news: this.news,
 					latitude: this.latitude,
