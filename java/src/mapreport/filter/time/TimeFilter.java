@@ -36,7 +36,7 @@ public class TimeFilter extends NameFilter {
 		if (end != null) {
 			whereSQL.append(" and n.dateTime < ?  ");
 		}
-	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString());
+	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString().trim());
 		setWhereSQL(whereSQL); 
 		setOrderBySQL(orderBySQL);
 	}

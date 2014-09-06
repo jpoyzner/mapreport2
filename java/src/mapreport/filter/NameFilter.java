@@ -82,7 +82,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	public static Map<String, NameFilter> buildIdFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
-           System.out.println("buildFilterNodes list.size()=" +list.size());
+           System.out.println("buildIdFilters list.size()=" +list.size());
 
 		Map<String, NameFilter> filters = new HashMap<String, NameFilter>(list.size());
 		
@@ -95,7 +95,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		Set<String> keySet = filters.keySet();		
 		for (String filterName : keySet) {
 			NameFilter filter = filters.get(filterName);
-			System.out.println("buildFilterNodes filter.getName()=" + filter.getName() + " filter.level=" + filter.level
+				Log.log("buildIdFilters filter=" + filter + " filterName=" + filterName + " filter.getName()=" + filter.getName() + " filter.level=" + filter.level
 					// + " filter.getDisplayParent=" + filter.
 					 );
 		}		

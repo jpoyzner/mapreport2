@@ -45,7 +45,7 @@ public class DBQueryBuilder {
 	 ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation \n " + 
 	 ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
 
-  static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority, " + 
+  static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, fp.isLocation as isPLocation, ff.level as pLevel, nf.priority as nfPriority, " + 
 			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " + 
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
@@ -178,12 +178,12 @@ public class DBQueryBuilder {
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
-	//    nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
+	    nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	 //   json = buildJson(null, nameFilters, 100);
-	    json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
-        	System.out.println("end main");
+	    json = buildJson(null, nameFilters, 100);
+	  //  json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
+        	Log.log("end main");
 	}
 
 	@SuppressWarnings("unused")
@@ -405,6 +405,7 @@ public class DBQueryBuilder {
 		  Date date = res.getDate("dateTime");
 
 		  boolean isLocation = res.getBoolean("isLocation");
+		  boolean isParentLocation = res.getBoolean("isPLocation");
 		  // 			 "n.url as url, n.video as video, n.image as image, n.addressText as addressText, n.shortLabel as shortLabel, n.description as description,
 		  // n.newsText as newsText \n "
 		  String url = res.getString("url");
@@ -439,9 +440,10 @@ public class DBQueryBuilder {
 		  row.setDescription(description);
 		  row.setParentId(pName);
 		  row.setParentLevel(pLevel);
+		  row.setParentLocation(isParentLocation);
 		  
 		  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
-			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation 
+			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation  +  " isParentLocation=" + isParentLocation 
 			  +  " nPriority=" + nPriority  );
 		  return row;
 	}

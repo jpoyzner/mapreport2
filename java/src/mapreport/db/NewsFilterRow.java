@@ -39,6 +39,8 @@ public class NewsFilterRow implements Comparable<Object>{
 	int level = 0;
 	boolean isOfficial = false;
 	boolean isLocation = false;
+
+	boolean isParentLocation = false;
 	
 	String url = null;
 	String video = null;
@@ -53,6 +55,14 @@ public class NewsFilterRow implements Comparable<Object>{
 
 	double x = 0;
 	double y = 0;
+	
+	public boolean isParentLocation() {
+		return isParentLocation;
+	}
+
+	public void setParentLocation(boolean isParentLocation) {
+		this.isParentLocation = isParentLocation;
+	}
 	
 	public double getX() {
 		return x;
@@ -407,35 +417,9 @@ public class NewsFilterRow implements Comparable<Object>{
 				Log.log("buildFilters filterRow.filterId=" + filterRow.filterId + " filterRow.name=" + filterRow.name + " filterRow.priority=" + filterRow.priority
 						 + " filterRow.date.getDay()=" + filterRow.date.getDay() + " filterRow.date.getMonth() + 1=" + (filterRow.date.getMonth() + 1) 
 						 + " filterRow.date.getYear() + 1900=" + (filterRow.date.getYear() + 1900));
-			String day = String.valueOf(filterRow.date.getDate());
-			String month = String.valueOf(filterRow.date.getMonth() + 1);
-			String year = String.valueOf(filterRow.date.getYear() + 1900);			
-
-		//	incrementDateFilterMapPriority(filterMap, filter, year);
-		//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + year);
-		//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + day + "/" + year);
-			
-			incrementDateFilterMapPriority(filterMap, filterRow, new Year(filterRow.date.getYear() + 1900), filterRow.name);
-			incrementDateFilterMapPriority(filterMap, filterRow, new Month(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1), filterRow.name);
-			incrementDateFilterMapPriority(filterMap, filterRow, new Day(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1, filterRow.date.getDate()), filterRow.name);
-			
-			if (year.length() == 4 && year.startsWith("200")) {
-				incrementDateFilterMapPriority(filterMap, filterRow, new Decade("2000's Decade"), filterRow.name);
-			}
-			
-			NameFilter filter = null;			
-			if (filterRow.isLocation()) {
-				if (filterRow.isOfficial()) {
-					filter = new OfficialLocation(filterRow.filterId);
-				} else {
-					filter = new LocationByName(filterRow.filterId);
-				}
-			} else {
-				filter = new Topic(filterRow.filterId);
-			}
-			filterRow.setFilter(filter);
-			
-			incrementFilterMapPriority(filterMap, filterRow, filterRow.filterId);
+			addDateFilters(filterMap, filterRow);			
+			addLocationTopicFilters(filterMap, filterRow, filterRow.filterId, false);
+			addLocationTopicFilters(filterMap, filterRow, filterRow.parentId, true);
 		}
 		
 		List<NewsFilterRow> newsFilters = new ArrayList<NewsFilterRow>(filterMap.values());
@@ -447,6 +431,43 @@ public class NewsFilterRow implements Comparable<Object>{
 		return newsFilters;		
 	}
 
+	public static void addLocationTopicFilters(Map<Object, NewsFilterRow> filterMap, NewsFilterRow filterRow, String id, boolean isParent) {
+		NameFilter filter = null;	
+		boolean isLocation = isParent ? filterRow.isParentLocation() : filterRow.isLocation();
+		    Log.log("addLocationTopicFilters id=" + id + " isLocation=" + isLocation + " isLocation()=" + filterRow.isLocation() + " isParentLocation()=" + filterRow.isParentLocation());
+		if (isLocation) {
+			if (filterRow.isOfficial()) {
+				filter = new OfficialLocation(id);
+			} else {
+				filter = new LocationByName(id);
+			}
+		} else {
+			filter = new Topic(id);
+		}
+		filterRow.setFilter(filter);
+		
+		incrementFilterMapPriority(filterMap, filterRow, id);
+	}
+
+	public static void addDateFilters(Map<Object, NewsFilterRow> filterMap,
+			NewsFilterRow filterRow) {
+		String day = String.valueOf(filterRow.date.getDate());
+		String month = String.valueOf(filterRow.date.getMonth() + 1);
+		String year = String.valueOf(filterRow.date.getYear() + 1900);			
+
+//	incrementDateFilterMapPriority(filterMap, filter, year);
+//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + year);
+//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + day + "/" + year);
+		
+		incrementDateFilterMapPriority(filterMap, filterRow, new Year(filterRow.date.getYear() + 1900), filterRow.name);
+		incrementDateFilterMapPriority(filterMap, filterRow, new Month(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1), filterRow.name);
+		incrementDateFilterMapPriority(filterMap, filterRow, new Day(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1, filterRow.date.getDate()), filterRow.name);
+		
+		if (year.length() == 4 && year.startsWith("20")) {
+			incrementDateFilterMapPriority(filterMap, filterRow, new Decade("20" + year.charAt(2) + "0's Decade"), filterRow.name);
+		}
+	}
+
 	public static void incrementDateFilterMapPriority(Map<Object, NewsFilterRow> filterMap,
 			NewsFilterRow filter, OfficialTimeFilter timeFilter, String newsLabel) {	
 		            Log.log("incrementDateFilterMapPriority filter.filterId=" + filter.filterId + " timeFilter=" + timeFilter.getName()); // + " filterKey=" + filterKey);
@@ -456,14 +477,15 @@ public class NewsFilterRow implements Comparable<Object>{
 		incrementFilterMapPriority(filterMap, newNewsFilterRow, timeFilter.getName());
 	}
 	
-	public static void incrementFilterMapPriority(Map<Object, NewsFilterRow> filterMap,
-			NewsFilterRow filter, Object filterKey) {
+	public static void incrementFilterMapPriority(Map<Object, NewsFilterRow> filterMap,	NewsFilterRow filter, Object filterKey) {
 		if (filterMap.get(filterKey) == null) {
+			  Log.log("incrementFilterMapPriority put filterKey=" + filterKey);
 			filterMap.put(filterKey, filter);
 		} else {
+			  Log.log("incrementFilterMapPriority get filterKey=" + filterKey + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
 			filterMap.get(filterKey).priority += filter.priority;
 		}
-		             System.out.println("incrementFilterMapPriority filterKey=" + filterKey + " label=" + filter.getName() + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
+		             Log.log("incrementFilterMapPriority filterKey=" + filterKey + " label=" + filter.getName() + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
 	}
 
 	public NameFilter getFilter() {
