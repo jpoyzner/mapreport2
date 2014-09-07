@@ -1,19 +1,33 @@
 package mapreport.nav;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import com.google.gson.annotations.Expose;
 
 import mapreport.filter.NameFilter;
 import mapreport.front.page.FilterNode;
+import mapreport.util.Log;
 
 public class NavigationList {
-	String name = null;
+	@Expose String name = null;
 	List<NavigationNode> nodeList = new ArrayList<NavigationNode>(5);
 
-	List<NavigationNode> parents = new ArrayList<NavigationNode>(5);
-	List<NavigationNode> siblings = new ArrayList<NavigationNode>(5);
-	List<NavigationNode> children = new ArrayList<NavigationNode>(5);
+	@Expose List<NavigationNode> parents = new ArrayList<NavigationNode>(5);
+	@Expose List<NavigationNode> siblings = new ArrayList<NavigationNode>(5);
+	@Expose List<NavigationNode> children = new ArrayList<NavigationNode>(25);
+	private Map<String, NavigationNode> childrenMap = new HashMap<String, NavigationNode>(25);
 	
+	public Map<String, NavigationNode> getChildrenMap() {
+		return childrenMap;
+	}
+
+	public void setChildrenMap(Map<String, NavigationNode> childrenMap) {
+		this.childrenMap = childrenMap;
+	}
+
 	public NavigationList(String name) {
 		this.name = name;
 	}
@@ -28,8 +42,14 @@ public class NavigationList {
 	}
 	
 	public void addChildFilter (NameFilter filter, FilterNode filterNode) {
-		NavigationNode navNode = new NavigationNode(filterNode, filter);
-		children.add(navNode);
+			Log.log("NavigationList addChildFilter filter=" + filter + " filtergetName3=" + filter.getName());
+			
+	    if (childrenMap.get(filter.getName()) == null) {	
+			NavigationNode navNode = new NavigationNode(filterNode, filter);
+			    Log.log("NavigationList addChildFilter filter=" + filter + " filtergetName=" + filter.getName() + " navNode.metaData.getHeader()=" + navNode.metaData.getHeader());
+			children.add(navNode);
+			childrenMap.put(filter.getName(), navNode);
+	    }
 	}
 	
 	public void addParentFilter (NameFilter filter, FilterNode filterNode) {

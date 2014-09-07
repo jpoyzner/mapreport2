@@ -18,6 +18,9 @@ public class NavigationListSerializer implements JsonSerializer<NavigationList> 
 	    
   	    final JsonElement jsonNodeList = context.serialize(navigationList.nodeList);
 	    jsonObject.add("nodeList", jsonNodeList);
+
+	  //  jsonObject.remove("nodeList");
+	  //  jsonObject.remove("childrenMap");
 	    
 	    return jsonObject;  
 	}

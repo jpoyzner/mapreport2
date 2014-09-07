@@ -71,7 +71,7 @@ public class PagePresentation {
 			Map<String, NameFilter> childFilters) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
-	                      Log.log("PagePresentation filter=" + filter + " filterName=" + filterName  + " filter.getName()=" + filter.getName() );
+	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
 	                      
                 if (filter instanceof LocationByName) {       
   	            	navLocations.addChildFilter(filter, pageFilters); 
@@ -84,6 +84,10 @@ public class PagePresentation {
 	         //              Log.log("NavigationPath navNode=" + navNode + " navNode.pageFilters=" + navNode.pageFilters);
 			//	addNode (navNode);  
 		}
+
+        navLocations.setChildrenMap(null);
+        navTopics.setChildrenMap(null);
+        navDates.setChildrenMap(null);
 	}
 
 	private void addParentNodes(FilterNode pageFilters, List<NewsFilterRow> parents) throws SQLException {

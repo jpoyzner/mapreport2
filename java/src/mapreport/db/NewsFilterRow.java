@@ -477,9 +477,10 @@ public class NewsFilterRow implements Comparable<Object>{
 		incrementFilterMapPriority(filterMap, newNewsFilterRow, timeFilter.getName());
 	}
 	
-	public static void incrementFilterMapPriority(Map<Object, NewsFilterRow> filterMap,	NewsFilterRow filter, Object filterKey) {
+	public static void incrementFilterMapPriority(Map<Object, NewsFilterRow> filterMap,	NewsFilterRow filter, String filterKey) {
 		if (filterMap.get(filterKey) == null) {
 			  Log.log("incrementFilterMapPriority put filterKey=" + filterKey);
+			filter.setFilterId(filterKey);  
 			filterMap.put(filterKey, filter);
 		} else {
 			  Log.log("incrementFilterMapPriority get filterKey=" + filterKey + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
