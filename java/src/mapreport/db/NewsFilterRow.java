@@ -451,21 +451,12 @@ public class NewsFilterRow implements Comparable<Object>{
 
 	public static void addDateFilters(Map<Object, NewsFilterRow> filterMap,
 			NewsFilterRow filterRow) {
-		String day = String.valueOf(filterRow.date.getDate());
-		String month = String.valueOf(filterRow.date.getMonth() + 1);
-		String year = String.valueOf(filterRow.date.getYear() + 1900);			
-
-//	incrementDateFilterMapPriority(filterMap, filter, year);
-//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + year);
-//	incrementDateFilterMapPriority(filterMap, filter, month + "/" + day + "/" + year);
-		
 		incrementDateFilterMapPriority(filterMap, filterRow, new Year(filterRow.date.getYear() + 1900), filterRow.name);
 		incrementDateFilterMapPriority(filterMap, filterRow, new Month(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1), filterRow.name);
-		incrementDateFilterMapPriority(filterMap, filterRow, new Day(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1, filterRow.date.getDate()), filterRow.name);
-		
-		if (year.length() == 4 && year.startsWith("20")) {
-			incrementDateFilterMapPriority(filterMap, filterRow, new Decade("20" + year.charAt(2) + "0's Decade"), filterRow.name);
-		}
+		incrementDateFilterMapPriority(filterMap, filterRow, new Day(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1, filterRow.date.getDate()), filterRow.name);		
+		incrementDateFilterMapPriority(filterMap, filterRow, new Decade((filterRow.date.getYear() + 1900) / 10 * 10), filterRow.name);
+		   //   Log.log("addDateFilters filterRow.date.getYear()=" + (filterRow.date.getYear()  + 1900) + " decade=" + ((filterRow.date.getYear() + 1900) / 10 * 10) 
+		   //       + " 2006=" + (2006) / 10 * 10);
 	}
 
 	public static void incrementDateFilterMapPriority(Map<Object, NewsFilterRow> filterMap,
