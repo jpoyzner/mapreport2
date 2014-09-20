@@ -12,11 +12,11 @@ public class Decade extends Year {
 	}
 	
 	public Decade(int year) {
-		super(String.valueOf(year) + "'s");		
+		super(String.valueOf(year) + "s");		
 		this.year = year;
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 9, 11, 31);
-		setName(String.valueOf(year) + "'s");
+		setName(String.valueOf(year) + "s");
 		parent = new AllTime();	
 		buildTimeSQL(); 
 	}
