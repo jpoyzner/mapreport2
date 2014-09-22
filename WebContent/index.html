@@ -50,7 +50,7 @@
 				latitude="<%= article.get('y') %>"
 				icon="<%= article.get('icon') %>">
 
-				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('shortLabel') %></a>
+				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %>: <%= article.get('label') %></a>
 			</google-map-marker>
 		<% }); %>
 	</script>
@@ -78,7 +78,7 @@
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
 					<img src="images/ukraine.gif"></img>
-					<a href="<%= article.get('url') %>" target="_blank"><p><%= article.get('label') %></p></a>
+					<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %>: <%= article.get('label') %></a>
 				</div>
 			<% }); %>
 		</div>
