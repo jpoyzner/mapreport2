@@ -28,6 +28,14 @@ public class News {
 	List<LocationByName> locationList;
 	List<LocationByName> topicList;
 	
+	public LocationByName getPrimaryLocation() {
+		return primaryLocation;
+	}
+
+	public void setPrimaryLocation(LocationByName primaryLocation) {
+		this.primaryLocation = primaryLocation;
+	}
+	
 	public double getX() {
 		return x;
 	}

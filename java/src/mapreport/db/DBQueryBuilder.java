@@ -40,12 +40,13 @@ public class DBQueryBuilder {
   int limit = 2;
   
   static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
-	 ", nf.priority as nfPriority" + 
+	 ", nf.priority as nfPriority" +  ",	 nf.isPrimary as isPrimary, n.addressText as addressText," +
 	 ", \n nl.topCoord as bottomCoord, nl.bottomCoord as topCoord, nl.leftCoord , nl.rightCoord, nl.isOfficial, nl.newsId, nl.label, nl.priority as nPriority" + 
 	 ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation \n " + 
 	 ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
 
   static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, fp.isLocation as isPLocation, ff.level as pLevel, nf.priority as nfPriority, " + 
+		  "	 nf.isPrimary as isPrimary, n.addressText as addressText," +
 			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " + 
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
@@ -173,17 +174,17 @@ public class DBQueryBuilder {
 		*/     		
 	    	// Json by URL by Java objects
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
-	//    nameFilters.add(new DBFilter("Fire"));
+	 //   nameFilters.add(new DBFilter("Fire"));
 	//    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 		 //   nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
-		    nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
+	//	    nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	    json = buildJson(null, nameFilters, 100);
-	  //  json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
+	 //   json = buildJson(null, nameFilters, 100);
+	    json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}
 
@@ -220,13 +221,13 @@ public class DBQueryBuilder {
 			  
 			List<NewsFilterRow> rows = queryBuilder.runQuery();
 	
-			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilter(rows);
+			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
 			List<News> newsList = NewsFilterRow.buildNews(rows);
 			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);
 			
-			Map<String, NameFilter> nodes = NameFilter.buildIdFilters(filters, parents);
+			Map<String, NameFilter> childFilters = NameFilter.buildChildFilters(filters, parents);
 				
-			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, nodes, parents) ;
+			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, childFilters, parents) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
@@ -412,13 +413,20 @@ public class DBQueryBuilder {
 		  String url = res.getString("url");
 		  String video = res.getString("video");
 		  String image = res.getString("image");
-		  String addressText = res.getString("addressText");
+		//  String addressText = res.getString("addressText");
 		  String shortLabel = res.getString("shortLabel");
 		  String description = res.getString("description");
-
+		  
 		  double x = res.getDouble("addressX");
 		  double y = res.getDouble("addressY");
+		  
+		  //  isPrimary, n.addressText as addressText
+		  boolean isPrimary = res.getBoolean("isPrimary");
+		  String addressText = res.getString("addressText");
 
+		  row.isPrimary = isPrimary;
+		  row.setAddressText(addressText);
+		  
 		  row.setX(x);
 		  row.setY(y);
 		  row.setDate(date);
@@ -445,7 +453,7 @@ public class DBQueryBuilder {
 		  
 		  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
 			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation  +  " isParentLocation=" + isParentLocation 
-			  +  " nPriority=" + nPriority  );
+			  +  " nPriority=" + nPriority  +  " isPrimary=" + isPrimary  +  " addressText=" + addressText  );
 		  return row;
 	}
 	

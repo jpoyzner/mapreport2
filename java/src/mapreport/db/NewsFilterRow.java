@@ -56,6 +56,17 @@ public class NewsFilterRow implements Comparable<Object>{
 	double x = 0;
 	double y = 0;
 	
+	public boolean isPrimary() {
+		return isPrimary;
+	}
+
+	public void setPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
+	}
+
+	boolean isPrimary = false;
+	//String addressText = null;
+	
 	public boolean isParentLocation() {
 		return isParentLocation;
 	}
@@ -356,7 +367,7 @@ public class NewsFilterRow implements Comparable<Object>{
 		    		+ " newsFilterPriority=" + newsFilterPriority + " filterPriority=" + filterPriority + " priority=" + priority);
 	}
 	
-	public static List<NewsFilterRow> buildNewsFilter(List<NewsFilterRow> srcFilters) {
+	public static List<NewsFilterRow> buildNewsFilterPriority(List<NewsFilterRow> srcFilters) {
 		System.out.println("buildNewsFilter srcFilters.size()=" + srcFilters.size());
 	Map<Object, Integer> newsMap = new HashMap<Object, Integer>();
 	
@@ -384,25 +395,35 @@ public class NewsFilterRow implements Comparable<Object>{
 			News news = new News();
 			String labelTime = filter.getName() + filter.getDate();
 		
-		if (labelTimes.contains(labelTime)) {
-		//	System.out.println("buildNews already contains news.getLabel()=" + news.getLabel());
-			continue;
-		} 
+			if (labelTimes.contains(labelTime)) {
+			//	System.out.println("buildNews already contains news.getLabel()=" + news.getLabel());
+				continue;
+			} 
+			
+			labelTimes.add(labelTime);
+			news.setDateTime(filter.getDate());
+			news.setDescription(filter.getDescription());
+			news.setId(filter.getNewsId());
+			news.setImage(filter.getImage());
+			news.setLabel(filter.getName());
+			news.setNewsText(filter.getNewsText());
+			news.setShortLabel(filter.getShortLabel());
+			news.setUrl(filter.getUrl());
+			news.setVideo(filter.getVideo());
+			news.setPriority(filter.getNewsPriority());
+			news.setX(filter.getX());
+			news.setY(filter.getY());
+			news.setAddress(filter.getAddressText());
+			
+			if (filter.isPrimary) {
+				LocationByName primaryLocation = new LocationByName(filter.name);
+				Log.log(" NewsFilterRow buildNews primaryLocation:" + filter.getNewsId());
+				news.setPrimaryLocation(primaryLocation);
+			}
+			
+			newsList.add(news);
 		
-		labelTimes.add(labelTime);
-		news.setDateTime(filter.getDate());
-		news.setDescription(filter.getDescription());
-		news.setId(filter.getNewsId());
-		news.setImage(filter.getImage());
-		news.setLabel(filter.getName());
-		news.setNewsText(filter.getNewsText());
-		news.setShortLabel(filter.getShortLabel());
-		news.setUrl(filter.getUrl());
-		news.setVideo(filter.getVideo());
-		news.setPriority(filter.getNewsPriority());
-		news.setX(filter.getX());
-		news.setY(filter.getY());
-		newsList.add(news);
+		
 			System.out.println("buildNews add(news) news.getLabel()=" + news.getLabel());
 	}
 	
@@ -422,31 +443,48 @@ public class NewsFilterRow implements Comparable<Object>{
 			addLocationTopicFilters(filterMap, filterRow, filterRow.parentId, true);
 		}
 		
+	//	Log.log("buildFilters San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+		
 		List<NewsFilterRow> newsFilters = new ArrayList<NewsFilterRow>(filterMap.values());
 		Collections.sort(newsFilters);
 		
-		for (NewsFilterRow filter : newsFilters) {
-			 System.out.println("buildFilters filter.filterId=" + filter.filterId + " filter.priority=" + filter.priority);
+		for (NewsFilterRow newsFilter : newsFilters) {
+			 Log.log("buildFilters filter.filterId=" + newsFilter.filterId  + " newsFilter.filter.Name()=" + newsFilter.getFilter().getName()
+					 + " filter.name=" + newsFilter.name + " filter.priority=" + newsFilter.priority);
 		}
 		return newsFilters;		
 	}
 
 	public static void addLocationTopicFilters(Map<Object, NewsFilterRow> filterMap, NewsFilterRow filterRow, String id, boolean isParent) {
-		NameFilter filter = null;	
-		boolean isLocation = isParent ? filterRow.isParentLocation() : filterRow.isLocation();
-		    Log.log("addLocationTopicFilters id=" + id + " isLocation=" + isLocation + " isLocation()=" + filterRow.isLocation() + " isParentLocation()=" + filterRow.isParentLocation());
-		if (isLocation) {
-			if (filterRow.isOfficial()) {
-				filter = new OfficialLocation(id);
+		if (filterRow.getFilter() == null) {		
+			NameFilter filter = null;	
+			boolean isLocation = isParent ? filterRow.isParentLocation() : filterRow.isLocation();
+			    Log.log("addLocationTopicFilters id=" + id + " isLocation=" + isLocation + " isLocation()=" + filterRow.isLocation() + " isParentLocation()=" + filterRow.isParentLocation());
+			if (isLocation) {
+				if (filterRow.isOfficial()) {
+					filter = new OfficialLocation(id);
+				} else {
+					filter = new LocationByName(id);
+				}
 			} else {
-				filter = new LocationByName(id);
+				filter = new Topic(id);
 			}
-		} else {
-			filter = new Topic(id);
+			filter.setName(id);
+			
+	   //     Log.log("addLocationTopicFilters befbef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
+	  //      if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters befbef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+	
+			filterRow.setFilter(filter);
 		}
-		filterRow.setFilter(filter);
-		
+
+        Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
+        if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+
 		incrementFilterMapPriority(filterMap, filterRow, id);
+             Log.log("addLocationTopicFilters end id=" + id + " filterMap.get(id).getFilter().getName()=" +  filterMap.get(id).getFilter().getName() + " getFilter.name=" + filterRow.getFilter().getName()); // + " name=" + filter.getName());
+
+       //      Log.log("addLocationTopicFilters San Jose Downtown=" + filterMap.get("San Jose Downtown"));
+      //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
 	}
 
 	public static void addDateFilters(Map<Object, NewsFilterRow> filterMap,
@@ -469,6 +507,9 @@ public class NewsFilterRow implements Comparable<Object>{
 	}
 	
 	public static void incrementFilterMapPriority(Map<Object, NewsFilterRow> filterMap,	NewsFilterRow filter, String filterKey) {
+	 //     Log.log("addLocationTopicFilters incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
+	 //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+
 		if (filterMap.get(filterKey) == null) {
 			  Log.log("incrementFilterMapPriority put filterKey=" + filterKey);
 			filter.setFilterId(filterKey);  
@@ -477,7 +518,11 @@ public class NewsFilterRow implements Comparable<Object>{
 			  Log.log("incrementFilterMapPriority get filterKey=" + filterKey + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
 			filterMap.get(filterKey).priority += filter.priority;
 		}
-		             Log.log("incrementFilterMapPriority filterKey=" + filterKey + " label=" + filter.getName() + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
+		             Log.log("incrementFilterMapPriority filterKey=" + filterKey + " getFilter().getName()=" + filter.getFilter().getName() + " label=" + filter.getName() 
+		            		 + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
+		 //  	      Log.log("addLocationTopicFilters end incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
+		//	        if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+
 	}
 
 	public NameFilter getFilter() {

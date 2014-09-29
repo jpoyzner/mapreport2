@@ -81,7 +81,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		parentList.add(new NameFilter(parent.getParentId(), parent.getLevel()));
 	}
 	
-	public static Map<String, NameFilter> buildIdFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
+	public static Map<String, NameFilter> buildChildFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
            System.out.println("buildIdFilters list.size()=" +list.size());
 
 		Map<String, NameFilter> filters = new HashMap<String, NameFilter>(list.size());
