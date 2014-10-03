@@ -175,7 +175,7 @@ public class DBQueryBuilder {
 	    	// Json by URL by Java objects
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
 	 //   nameFilters.add(new DBFilter("Fire"));
-	//    nameFilters.add(new DBFilter("San Jose"));
+	    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
 		 //   nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -183,8 +183,8 @@ public class DBQueryBuilder {
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	 //   json = buildJson(null, nameFilters, 100);
-	    json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
+	    json = buildJson(null, nameFilters, 100);
+	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}
 

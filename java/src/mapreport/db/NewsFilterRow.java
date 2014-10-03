@@ -416,8 +416,8 @@ public class NewsFilterRow implements Comparable<Object>{
 			news.setAddress(filter.getAddressText());
 			
 			if (filter.isPrimary) {
-				LocationByName primaryLocation = new LocationByName(filter.name);
-				Log.log(" NewsFilterRow buildNews primaryLocation:" + filter.getNewsId());
+				LocationByName primaryLocation = new LocationByName(filter.getFilterId());
+				Log.log(" NewsFilterRow buildNews filter.getFilterId():" + filter.getFilterId() + " filter.filterName:" + filter.filterName + " filter.name:" + filter.name);
 				news.setPrimaryLocation(primaryLocation);
 			}
 			

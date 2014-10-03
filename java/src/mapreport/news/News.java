@@ -6,6 +6,7 @@ import java.util.List;
 import com.google.gson.annotations.Expose;
 
 import mapreport.filter.loc.LocationByName;
+import mapreport.util.Log;
 
 public class News {
 	
@@ -20,9 +21,18 @@ public class News {
 	int id = 0;
 	@Expose int priority = 0;
 	String address;
-	
+	String location;
 	double x = 0;
 	double y = 0;
+	
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
+	}
+
 	
 	LocationByName primaryLocation;
 	List<LocationByName> locationList;
@@ -34,6 +44,8 @@ public class News {
 
 	public void setPrimaryLocation(LocationByName primaryLocation) {
 		this.primaryLocation = primaryLocation;
+		location = primaryLocation.getName();
+		Log.log("setPrimaryLocation: " + location);
 	}
 	
 	public double getX() {

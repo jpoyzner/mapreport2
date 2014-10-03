@@ -18,6 +18,7 @@ public class NewsPresentation extends News {
 		address = news.getAddress();
 		x = news.getX();
 		y = news.getY();
+		location = news.getLocation();
 	}
 
 	PageMetaData locationColumn;
@@ -48,6 +49,12 @@ public class NewsPresentation extends News {
 		sb.append(priority);
 		sb.append(", address=");
 		sb.append(address);
+		sb.append(", x=");
+		sb.append(x);
+		sb.append(", y=");
+		sb.append(y);
+		sb.append(", location=");
+		sb.append(location);
 		sb.append("]");
 		return sb.toString();
 	}
