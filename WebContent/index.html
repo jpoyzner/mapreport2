@@ -50,7 +50,7 @@
 				latitude="<%= article.get('y') %>"
 				icon="<%= article.get('icon') %>">
 
-				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %>: <%= article.get('label') %></a>
+				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %> : <%= article.get('label') %> : <%= article.get('address') %> : <%= article.get('location') %></a>
 			</google-map-marker>
 		<% }); %>
 	</script>
