@@ -200,7 +200,7 @@ public class DBQueryBuilder {
 		return json;
 	}
 
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) { 
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {  
 		String json = null;
 		
 		try {
