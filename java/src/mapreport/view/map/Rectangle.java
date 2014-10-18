@@ -51,6 +51,14 @@ public class Rectangle {
 		init(xCenter, yCenter, xSpan, ySpan);
 	}
 
+	public static Rectangle getRectangle(Options options) {
+		Rectangle ret = null;
+		if ((options.getxCoord() != null && options.getyCoord() != null && options.getxSpan() != null && options.getySpan() != null)) {
+			ret = new Rectangle(options);
+		}
+		return ret;
+	}
+
 	private double getValue(DBWhereOption option) {
 		double ret = 0;
 		if (option != null) {

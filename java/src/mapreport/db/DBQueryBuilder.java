@@ -187,6 +187,7 @@ public class DBQueryBuilder {
 	}
 
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
+		         Log.log("buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
 		pageURL.parseParams();
@@ -194,8 +195,12 @@ public class DBQueryBuilder {
 
 		Set<NameFilter> nameFilters = pageURL.getFilters();
 
-		Rectangle rect = new Rectangle(options);
-		int size = Integer.parseInt(options.getParam("size"));
+		Rectangle rect = Rectangle.getRectangle(options);
+		int size = 100;
+		
+		if (options.getParam("size") != null) {
+			size = Integer.parseInt(options.getParam("size"));
+		}
     	String json = buildJson(rect, nameFilters, size);
 		return json;
 	}

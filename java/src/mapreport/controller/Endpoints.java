@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import mapreport.db.DBQueryBuilder;
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class Endpoints {
@@ -40,6 +41,7 @@ public class Endpoints {
 	}
 	
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
+    	Log.log("api(HttpServletRequest request)");
 		return DBQueryBuilder.buildJson(getFullURL(request)).toString();
 	}
 	

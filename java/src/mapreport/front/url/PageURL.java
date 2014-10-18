@@ -47,7 +47,8 @@ public class PageURL {
         for (int i = 0; i < pathparts.length; i++) {
             String partPath =  pathparts[i];   
         		System.out.println("PageUrl parseParams() partPath = " + partPath);     
-            if (!partPath.trim().isEmpty() && !partPath.equals("news")) {	
+            if (!partPath.trim().isEmpty() && !partPath.equals("news") && !partPath.equals("api") 
+            		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport")) {	
             	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath);            	
             	if (timeFilter != null) {
             		       Log.log("buildParams timeFilter != null timeFilter:" + timeFilter);
@@ -78,7 +79,11 @@ public class PageURL {
 	
 	public void parseUrlParameters(String url)
 	        throws UnsupportedEncodingException {
+		     Log.log("parseUrlParameters url:" + url);
 	   // Map<String, String> params = new HashMap<String, String>();
+		if (url == null) {
+			return;
+		}
 	    String[] urlParts = url.split("\\?");
 	                System.out.println("PageURL buildUrlParameters urlParts.length:" + urlParts.length);
 	    if (urlParts.length > 1) {

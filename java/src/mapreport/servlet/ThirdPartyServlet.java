@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mapreport.controller.Endpoints;
+import mapreport.util.Log;
 
 @WebServlet("/api/*")
 public class ThirdPartyServlet extends HttpServlet {
@@ -19,6 +20,7 @@ public class ThirdPartyServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
 		
         try {
+        	Log.log("doGet");
             response.getWriter().write(Endpoints.api(request));
         } catch (IOException e) {
            throw new IOException("IOException in api populateWithJSON", e);
