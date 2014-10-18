@@ -1,5 +1,7 @@
 package mapreport.controller;
 
+import java.io.UnsupportedEncodingException;
+import java.net.MalformedURLException;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -35,5 +37,16 @@ public class Endpoints {
 		}
 		
 		return DBQueryBuilder.buildJson(rectangle, nameFilters, 100).toString();
+	}
+	
+	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
+		return DBQueryBuilder.buildJson(getFullURL(request)).toString();
+	}
+	
+	private static String getFullURL(HttpServletRequest request) {
+	    StringBuffer requestURL = request.getRequestURL();
+	    String queryString = request.getQueryString();
+
+	    return queryString == null ? requestURL.toString() : requestURL.append('?').append(queryString).toString();
 	}
 }

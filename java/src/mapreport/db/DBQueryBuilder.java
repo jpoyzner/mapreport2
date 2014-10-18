@@ -20,9 +20,7 @@ import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
-import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
-import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
@@ -188,8 +186,7 @@ public class DBQueryBuilder {
         	Log.log("end main");
 	}
 
-	@SuppressWarnings("unused")
-	private static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
+	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
 		pageURL.parseParams();
