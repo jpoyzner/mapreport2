@@ -11,7 +11,7 @@ public class DBFilter extends NameFilter {
 	final static String SECOND_SELECT_SQL = " \n , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.pLevel as pLevel2, f2.nfPriority as nfPriority2 \n ";
 	final static String SECOND_FROM_SQL_START = ", \n ( select n.newsId, f.priority as filterPriority,  f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority," + ""
 			+ "	 nf.isPrimary as isPrimary, n.addressText as addressText \n "
-			+ "from news n, filter f, filter fp, newsFilter nf , filterfilter ff \n "
+			+ "from news n, filter f, filter fp, newsfilter nf , filterfilter ff \n "
 			+ "where n.newsid = nf.newsid \n "
 			+ "and nf.filterid = f.filterid \n "
 			+ "and nf.filterid = ff.childfilterid \n "
