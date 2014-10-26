@@ -20,7 +20,7 @@ public class ThirdPartyServlet extends HttpServlet {
         response.setHeader("Cache-Control", "no-cache");
 		
         try {
-        	Log.log("doGet");
+        	Log.log("ThirdPartyServlet doGet");
             response.getWriter().write(Endpoints.api(request));
         } catch (IOException e) {
            throw new IOException("IOException in api populateWithJSON", e);

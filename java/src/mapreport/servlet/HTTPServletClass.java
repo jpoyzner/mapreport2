@@ -9,12 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import mapreport.controller.Endpoints;
+import mapreport.util.Log;
 
-@WebServlet("/news")
+@WebServlet("/news/*")
 public class HTTPServletClass extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    	Log.log("HTTPServletClass doGet");
 		response.setContentType("text/x-json;charset=UTF-8");           
         response.setHeader("Cache-Control", "no-cache");
 		
