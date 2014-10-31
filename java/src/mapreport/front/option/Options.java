@@ -33,10 +33,17 @@ public class Options {
 	final String IS_SHOW_IMAGES_OPTION = "isShowImages";
 	final String ROW_DIMENSION_OPTION = "rowDimension";
 	final String COL_DIMENSION_OPTION = "colDimension";
+	
 	final String X_OPTION = "lat";
 	final String Y_OPTION = "long";
 	final String X_SPAN = "latspan";
 	final String Y_SPAN = "longspan";
+	
+	final String LEFT_OPTION = "left";
+	final String RIGHT_OPTION = "right";
+	final String TOP_OPTION = "top";
+	final String BOTTOM_OPTION = "bottom";
+	
 	final String ZOOM_OPTION = "zoom";
 	final String VIEW_TYPE_OPTION = "view";
 	final String IS_SHOW_FUTURE_OPTION = "isShowFuture";
@@ -58,10 +65,17 @@ public class Options {
 			case IS_SHOW_IMAGES_OPTION: isShowImages = new BooleanDBWhereOption(value);	break;
 			case ROW_DIMENSION_OPTION: rowDimension = new DimensionOption(value);	break;
 			case COL_DIMENSION_OPTION: colDimension = new DimensionOption(value);	break;
+			
 			case X_OPTION: xCoord = new DBWhereOption(value);	break;
 			case Y_OPTION: yCoord = new DBWhereOption(value);	break;
 			case X_SPAN: xSpan = new DBWhereOption(value);	break;
 			case Y_SPAN: ySpan = new DBWhereOption(value);	break;
+			
+			case TOP_OPTION: top = new DBWhereOption(value);	break;
+			case BOTTOM_OPTION: bottom = new DBWhereOption(value);	break;			
+			case LEFT_OPTION: left = new DBWhereOption(value);	break;
+			case RIGHT_OPTION: right = new DBWhereOption(value);	break;		
+			
 			case ZOOM_OPTION: zoom = new DBWhereOption(value);	break;
 			case VIEW_TYPE_OPTION: viewType = new DBWhereOption(value);	break;
 			case IS_SHOW_FUTURE_OPTION: isShowFuture = new BooleanDBWhereOption(value);	break;
@@ -71,7 +85,7 @@ public class Options {
 			case MORE_NEWS_OPTION: isMoreNews = new BooleanDBWhereOption(value);	break;
 			case PAGE_NUM_OPTION: pageNum = new DBWhereOption(value);	break;
 			default: 
-				System.out.println("Options addParam UNKNOWN! buildUrlParameters name:" + name + " value:" + value);
+				System.out.println("Options addParam UNKNOWN! name:" + name + " value:" + value);
 				break;
 		}
 	}
@@ -108,6 +122,43 @@ public class Options {
 	DBWhereOption yCoord;
 	DBWhereOption xSpan;
 	DBWhereOption ySpan;
+	
+	public DBWhereOption getLeft() {
+		return left;
+	}
+
+	public void setLeft(DBWhereOption left) {
+		this.left = left;
+	}
+
+	public DBWhereOption getRight() {
+		return right;
+	}
+
+	public void setRight(DBWhereOption right) {
+		this.right = right;
+	}
+
+	public DBWhereOption getTop() {
+		return top;
+	}
+
+	public void setTop(DBWhereOption top) {
+		this.top = top;
+	}
+
+	public DBWhereOption getBottom() {
+		return bottom;
+	}
+
+	public void setBottom(DBWhereOption bottom) {
+		this.bottom = bottom;
+	}
+
+	DBWhereOption left;
+	DBWhereOption right;
+	DBWhereOption top;
+	DBWhereOption bottom;
 	
 	DBWhereOption zoom;
 	

@@ -1,7 +1,7 @@
 define(['underscore', 'backbone'],
 function() {
 	return Backbone.Collection.extend({
-		model: Backbone.Model.extend({defaults: {icon: 'images/ukraine.gif'}}), //TODO: NEED REAL DEFAULT ICON
+		model: Backbone.Model.extend({defaults: {icon: 'http://www.mapreport.com/images/common/list2.gif'}}), //TODO: NEED REAL DEFAULT ICON
 		initialize: function() {
 			this.fetches = 0;
 			

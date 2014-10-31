@@ -77,7 +77,7 @@
 		<div id="mr-report">
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
-					<img src="images/ukraine.gif"></img>
+					<img src="http://www.mapreport.com/images/common/list2.gif"></img>
 					<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %>: <%= article.get('label') %></a>
 				</div>
 			<% }); %>

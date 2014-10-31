@@ -43,17 +43,24 @@ public class Rectangle {
 	}
 	
 	public Rectangle(Options options) {
-		xCenter = getValue(options.getxCoord());
-		yCenter = getValue(options.getyCoord());
-		xSpan = getValue(options.getxSpan());
-		ySpan = getValue(options.getySpan());
-		         System.out.println("Rectangle xCenter=" + xCenter + "yCenter=" + yCenter + "xSpan=" + xSpan + "ySpan=" + ySpan); 
+		left = getValue(options.getLeft());
+		right = getValue(options.getRight());
+		top = getValue(options.getTop());
+		bottom = getValue(options.getBottom());
+		
+		this.xCenter = (this.left + this.right) / 2;
+		this.yCenter = (this.top + this.bottom) / 2;
+		this.xSpan = Math.abs(this.left - this.right);
+		this.ySpan = Math.abs(this.top - this.bottom);
+
+		         System.out.println("Rectangle xCenter=" + xCenter + " yCenter=" + yCenter + " xSpan=" + xSpan + " ySpan=" + ySpan 
+		        		 + "  left=" + left + " right=" + right + " top =" + top + " bottom=" + bottom); 
 		init(xCenter, yCenter, xSpan, ySpan);
 	}
 
 	public static Rectangle getRectangle(Options options) {
 		Rectangle ret = null;
-		if ((options.getxCoord() != null && options.getyCoord() != null && options.getxSpan() != null && options.getySpan() != null)) {
+		if ((options.getLeft() != null && options.getRight() != null && options.getTop() != null && options.getBottom() != null)) {
 			ret = new Rectangle(options);
 		}
 		return ret;
