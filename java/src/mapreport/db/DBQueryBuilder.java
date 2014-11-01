@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import mapreport.controller.Controller;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
@@ -35,6 +36,14 @@ import mapreport.view.map.Rectangle;
 
 public class DBQueryBuilder {	
   FilterNode filterNode = new FilterNode();   
+  public FilterNode getFilterNode() {
+		return filterNode;
+  }
+	
+	public void setFilterNode(FilterNode filterNode) {
+		this.filterNode = filterNode;
+  }
+
   int limit = 2;
   
   static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
@@ -56,7 +65,7 @@ public class DBQueryBuilder {
   static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterid = nf.filterid  and nl.newsid = nf.newsid   and f.filterid = nf.filterid";
   static final String WHERE_EXTERNAL = "\n where  f.filterid = nf.filterid  and nf.newsid = n.newsid and f.filterid = ff.childFilterId  and fp.filterid = ff.parentFilterId ";
   
-  void addFilter(Filter filter) {
+  public void addFilter(Filter filter) {
 	  	Log.log("DBQueryBuilder addFilter filter=" + filter);
 	  filterNode.add(filter);
 	  // just for logging
@@ -181,129 +190,12 @@ public class DBQueryBuilder {
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	    json = buildJson(null, nameFilters, 100);
+	    json = Controller.buildJson(null, nameFilters, 100);
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}
 
-	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
-		         Log.log("buildJson url=" + url);
-		PageURL pageURL = new PageURL(url);
-		pageURL.parseUrlParameters(url);
-		pageURL.parseParams();
-		Options options = pageURL.getOptions();
 
-		Set<NameFilter> nameFilters = pageURL.getFilters();
-
-		Rectangle rect = Rectangle.getRectangle(options);
-		int size = 100;
-		
-		if (options.getParam("size") != null) {
-			size = Integer.parseInt(options.getParam("size"));
-		}
-    	String json = buildJson(rect, nameFilters, size);
-		return json;
-	}
-
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {  
-		String json = null;
-		
-		try {
-			// LocationByCoords coordFilter;
-			DBQueryBuilder queryBuilder = new DBQueryBuilder(size);
-
-				Log.log("buildJson rect=" + rect + " nameFilters=" + nameFilters + " size=" + size);
-
-			List<NewsFilterRow> parents = buildParents(rect, nameFilters,	queryBuilder);
-			
-				Log.log("queryBuilder.filterNode.getFilterList().size()=" + queryBuilder.filterNode.getFilterList().size());
-				
-			queryBuilder.setWhereSQL(queryBuilder.filterNode.getWhereSQL());
-			queryBuilder.setOrderBySQL(new StringBuilder(queryBuilder.filterNode.getOrderSQL())); 
-			  
-			List<NewsFilterRow> rows = queryBuilder.runQuery();
-	
-			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
-			List<News> newsList = NewsFilterRow.buildNews(rows);
-			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);
-			
-			Map<String, NameFilter> childFilters = NameFilter.buildChildFilters(filters, parents);
-				
-			PagePresentation page = new PagePresentation (queryBuilder.filterNode, newsFilters, newsList, filters, childFilters, parents) ;
-			   Log.log("buildJson page.getView()=" + page.getView());
-			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
-			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
-			int newsListsize = page.getView().getNewsList().getNewses().size();
-			   Log.log("end main newsListsize=" + newsListsize);
-			   Log.log ("page.getNavigationPath=" + page.getNavigationPath());     
-		
-			   // just for test
-			  // if (true) throw new Exception("test exception"); 
-			   
-			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
-		    Log.log("buildJson end json=" + json);
-		} catch (Exception e) {		
-			   Log.log ("catch (Exception e) e.getMessage()" + e.getMessage());	
-			e.printStackTrace();
-			   Log.log ("printStackTrace");	
-			json = new JsonError(e.getMessage(), e).getText();
-			   Log.log ("buildJson ends");	
-		}
-		return json;
-	}
-
-	public static List<NewsFilterRow> buildParents(Rectangle rect,
-			Set<NameFilter> nameFilters, DBQueryBuilder queryBuilder)
-			throws SQLException {
-		LocationByCoords coordFilter;
-		if (rect != null && rect.getxSpan() > 0) {
-			          Log.log("queryBuilder buildJson rect.getxSpan() > 0");
-			coordFilter = new LocationByCoords (rect);
-			queryBuilder.addFilter(coordFilter);
-		}		
-		
-		List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
-		
-		if (nameFilters != null) {
-			List<String> filterIds = new ArrayList<String>(nameFilters.size());
-			for (NameFilter filter: nameFilters) {
-				filterIds.add(filter.getName());
-			}
-				
-			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
-			
-			if (filterIds.size() > 0) {
-				parents = filterDBQueryBuilder.runQuery(filterIds);
-			}
-			
-			for (NameFilter filter: nameFilters) {
-				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
-				
-				if (filter instanceof TimeFilter) {
-					queryBuilder.addFilter(filter);  
-				} else {
-					boolean isLocation = true;
-					for (NewsFilterRow parentNewsFilterRow : parents) {
-						       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.getFilterName=" + parentNewsFilterRow.getFilterName() + " filter.getName()=" + filter.getName());
-						if (parentNewsFilterRow.filterName.equals(filter.getName())) {
-							isLocation = parentNewsFilterRow.isFilterLocation;
-						       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.filterId.equals(filter.getName()) isLocation=" + isLocation);
-							break;
-						}
-					}
-					
-					NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
-			    	queryBuilder.addFilter(newFilter);   //  adding named filters
-				}
-			}
-		}
-		
-		if (queryBuilder.filterNode.getFilterList().size() == 0 || queryBuilder.filterNode.getTimeFilter() == null) {   // no filters added, so just global latest
-			     Log.log("queryBuilder buildJson ading Latest");
-			queryBuilder.addFilter(new Latest());  
-		}
-		return parents;
-	}
 	
 	public List<NewsFilterRow> runQuery() throws SQLException {
 		begin();

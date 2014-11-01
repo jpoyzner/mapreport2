@@ -38,14 +38,14 @@ public class Endpoints {
 			//nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 		}
 		
-		return DBQueryBuilder.buildJson(getFullURL(request)).toString();
+		return Controller.buildJson(getFullURL(request)).toString();
 		//return DBQueryBuilder.buildJson(rectangle, nameFilters, 100).toString();
 
 	}
 	
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
     	Log.log("api(HttpServletRequest request)");
-		return DBQueryBuilder.buildJson(getFullURL(request)).toString();
+		return Controller.buildJson(getFullURL(request)).toString();
 	}
 	
 	private static String getFullURL(HttpServletRequest request) {
