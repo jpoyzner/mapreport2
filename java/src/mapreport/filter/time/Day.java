@@ -39,7 +39,7 @@ public class Day extends OfficialTimeFilter {
 	
 	@Override
 	public int bindQuery(PreparedStatement pst, int col)  throws SQLException{				
-		System.out.println("Day bindQuery ");
+		Log.log("Day bindQuery ");
 		return col;
 	}
 	

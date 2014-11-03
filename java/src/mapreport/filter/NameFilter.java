@@ -82,7 +82,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	public static Map<String, NameFilter> buildChildFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
-           System.out.println("buildIdFilters list.size()=" +list.size());
+		Log.log("buildIdFilters list.size()=" +list.size());
 
 		Map<String, NameFilter> filters = new HashMap<String, NameFilter>(list.size());
 		
@@ -108,7 +108,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	}
 	
 	static void addNewsFilter(Map<String, NameFilter> filters, NewsFilterRow newsFilter) {
-		        System.out.println("addNewsFilter filter.id=" + newsFilter.getFilterId()); 
+		Log.log("addNewsFilter filter.id=" + newsFilter.getFilterId()); 
 		NameFilter filter = filters.get(newsFilter.getFilterId());
 		
 		if (filter == null) {
@@ -117,7 +117,7 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		}
 		filter.addParent(newsFilter);
 		filters.put(newsFilter.getFilterId(), filter);
-		         System.out.println("addNewsFilter filter=" + filter + " filter.name=" + filter.getName() 
+		Log.log("addNewsFilter filter=" + filter + " filter.name=" + filter.getName() 
 		        		 + " newsFilter.name=" + newsFilter.getName()
 		        		 + " newsFilter.FilterId=" + newsFilter.getFilterId()
 		        		 + " newsFilter.priority=" + newsFilter.getPriority()); // + " filter.getPriority()=" + filter.);

@@ -3,6 +3,8 @@ package mapreport.front.option;
 import java.util.HashMap;
 import java.util.Map;
 
+import mapreport.util.Log;
+
 public class Options {
 	/*
 	 * 	sortDirection time, time desc, importance, topic, location
@@ -85,7 +87,7 @@ public class Options {
 			case MORE_NEWS_OPTION: isMoreNews = new BooleanDBWhereOption(value);	break;
 			case PAGE_NUM_OPTION: pageNum = new DBWhereOption(value);	break;
 			default: 
-				System.out.println("Options addParam UNKNOWN! name:" + name + " value:" + value);
+				Log.info("Options addParam UNKNOWN! name:" + name + " value:" + value);
 				break;
 		}
 	}

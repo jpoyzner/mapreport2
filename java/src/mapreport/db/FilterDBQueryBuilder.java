@@ -64,7 +64,7 @@ public class FilterDBQueryBuilder {
 		sqlBuff.append(") \n order by ff.level, ff.childFilterId, p.filterId");
 		sql = sqlBuff.toString();
 
-	       Log.log("FilterDBQueryBuilder buildSql sql=" + sql);
+	       Log.info("FilterDBQueryBuilder buildSql sql=" + sql);
 		return sql;
 	}
 	
@@ -94,11 +94,11 @@ public class FilterDBQueryBuilder {
 	
 	public List<NewsFilterRow> runQuery(List<String> filterIds) throws SQLException {
 		begin();
-   	    	System.out.println("FilterDBQueryBuilder start executeQuery");
+		Log.info("FilterDBQueryBuilder start executeQuery");
    	    buildSql(filterIds);
    	    prepareStmt();
 		ResultSet resultSet = pst.executeQuery();
-	    	System.out.println("FilterDBQueryBuilder start processResultSet");		
+		Log.info("FilterDBQueryBuilder start processResultSet");		
 	    List<NewsFilterRow> rows = processResultSet(resultSet);
 	    return rows;
 	}

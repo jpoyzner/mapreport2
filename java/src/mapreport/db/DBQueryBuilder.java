@@ -91,7 +91,7 @@ public class DBQueryBuilder {
   
   static {
       try {      	
-      	 System.out.println("DBQueryBuilder starts");      	 
+      	 Log.info("DBQueryBuilder starts");      	 
 		 Class.forName("com.mysql.jdbc.Driver");
 		 
 		} catch (ClassNotFoundException e) {
@@ -149,16 +149,16 @@ public class DBQueryBuilder {
 		
 		this.sql = sql.toString();
 
-	       System.out.println("buildSql selectSQL=" + selectSQL);
-	       System.out.println("buildSql fromSQL=" + fromSQL);
-	       System.out.println("buildSql whereSQL=" + whereSQL);
-	       System.out.println("buildSql orderBySQL=" + orderBySQL);
-	       System.out.println("\n\n buildSql sql=" + sql);
+	       Log.log("buildSql selectSQL=" + selectSQL);
+	       Log.log("buildSql fromSQL=" + fromSQL);
+	       Log.log("buildSql whereSQL=" + whereSQL);
+	       Log.log("buildSql orderBySQL=" + orderBySQL);
+	       Log.info("\n\n buildSql sql=" + sql);
 		return this.sql;
 	}
 
     public static void main (String args[]) {
-    	System.out.println("start main");
+    	Log.info("start main");
     
     	@SuppressWarnings("unused")
 		String json = null;
@@ -190,7 +190,7 @@ public class DBQueryBuilder {
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	    json = Controller.buildJson(null, nameFilters, 100);
+	    json = Controller.buildJson(null, nameFilters, 200);
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}
@@ -345,7 +345,7 @@ public class DBQueryBuilder {
 		  row.setParentLevel(pLevel);
 		  row.setParentLocation(isParentLocation);
 		  
-		  System.out.println("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
+		  Log.log("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
 			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation  +  " isParentLocation=" + isParentLocation 
 			  +  " nPriority=" + nPriority  +  " isPrimary=" + isPrimary  +  " addressText=" + addressText  );
 		  return row;
@@ -371,7 +371,7 @@ public class DBQueryBuilder {
     	        } catch (SQLException ex) {
     	          //  Logger lgr = Logger.getLogger(Test.class.getName());
     	           // lgr.log(Level.SEVERE, ex.getMessage(), ex);
-    	            System.out.println(ex.getMessage());
+    	        	Log.info(ex.getMessage());
     	            ex.printStackTrace(System.out);
     	        }
     	    }	}

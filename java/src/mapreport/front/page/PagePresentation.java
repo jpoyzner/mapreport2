@@ -48,7 +48,7 @@ public class PagePresentation {
 		Map<String, NameFilter> childFilters,
 		List<NewsFilterRow> parents) throws SQLException {    
 		
-			System.out.println("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
+		    Log.info("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
 			for (NewsFilterRow filter : filters) {
 				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());

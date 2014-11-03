@@ -82,7 +82,7 @@ public class Controller {
 	}
 	
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
-	        Log.log("buildJson url=" + url);
+	        Log.info("buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
 		pageURL.parseParams();
@@ -91,7 +91,7 @@ public class Controller {
 		Set<NameFilter> nameFilters = pageURL.getFilters();
 		
 		Rectangle rect = Rectangle.getRectangle(options);
-		int size = 100;
+		int size = 200;
 		
 		if (options.getParam("size") != null) {
 			size = Integer.parseInt(options.getParam("size"));
@@ -136,7 +136,7 @@ public class Controller {
 			  // if (true) throw new Exception("test exception"); 
 			   
 			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
-		   Log.log("buildJson end json=" + json);
+		   Log.info("buildJson end json=" + json);
 		} catch (Exception e) {		
 			   Log.log ("catch (Exception e) e.getMessage()" + e.getMessage());	
 			e.printStackTrace();

@@ -41,12 +41,12 @@ public class PageURL {
 	
 	public void parseParams() throws UnsupportedEncodingException {
         String path = url.getPath();
-             System.out.println("buildParams path = " + path);
+        Log.info("buildParams path = " + path);
         String[] pathparts = path.split("/");
         
         for (int i = 0; i < pathparts.length; i++) {
             String partPath =  pathparts[i];   
-        		System.out.println("PageUrl parseParams() partPath = " + partPath);     
+            Log.info("PageUrl parseParams() partPath = " + partPath);     
             if (!partPath.trim().isEmpty() && !partPath.equals("news") && !partPath.equals("api") 
             		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport")) {	
             	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath);            	

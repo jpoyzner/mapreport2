@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import mapreport.filter.Filter;
+import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class LocationByCoords extends Filter implements Location {
@@ -36,7 +37,7 @@ public class LocationByCoords extends Filter implements Location {
 	 
 	@Override
 	public int bindQuery(PreparedStatement pst, int col) throws SQLException {
-				System.out.println("LocationByCoords bindQuery " + rect.toString());
+		Log.log("LocationByCoords bindQuery " + rect.toString());
 				
 				pst.setDouble(++col, rect.getBottom() * 1000000);	
 				pst.setDouble(++col, rect.getTop() * 1000000);	

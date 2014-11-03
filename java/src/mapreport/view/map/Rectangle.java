@@ -53,7 +53,7 @@ public class Rectangle {
 		this.xSpan = Math.abs(this.left - this.right);
 		this.ySpan = Math.abs(this.top - this.bottom);
 
-		         System.out.println("Rectangle xCenter=" + xCenter + " yCenter=" + yCenter + " xSpan=" + xSpan + " ySpan=" + ySpan 
+		Log.log("Rectangle xCenter=" + xCenter + " yCenter=" + yCenter + " xSpan=" + xSpan + " ySpan=" + ySpan 
 		        		 + "  left=" + left + " right=" + right + " top =" + top + " bottom=" + bottom); 
 		init(xCenter, yCenter, xSpan, ySpan);
 	}
@@ -70,7 +70,7 @@ public class Rectangle {
 		double ret = 0;
 		if (option != null) {
 			String value = option.getValue();
-			  System.out.println("Rectangle getValue value=" + value);
+			Log.log("Rectangle getValue value=" + value);
 			ret = new Double(value);
 		}
 		return ret;

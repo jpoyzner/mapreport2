@@ -153,14 +153,14 @@ public class FilterNode {
     }
     */
 	public void add(Filter filter) {   
-		        System.out.println("FilterNode add filter:" + filter + " filter:" + filter.getName());    
+		Log.info("FilterNode add filter:" + filter + " filter:" + filter.getName());    
 		if (filter instanceof LocationByCoords) {
 			LocationByCoords locationByCoords = (LocationByCoords)filter;
-			          System.out.println("FilterNode add locationByCoords");    
+			Log.log("FilterNode add locationByCoords");    
 			addFilterType(locationByCoords);     
 		} else if (filter instanceof TimeFilter) {
 			TimeFilter timeFilter = (TimeFilter)filter;
-	          System.out.println("FilterNode add TimeFilter");   
+			Log.log("FilterNode add TimeFilter");   
 	          addFilterType(timeFilter);
 	 
 		} else if (filter instanceof Topic) {
@@ -286,14 +286,14 @@ public class FilterNode {
 	}
 	
 	public void limitFilter(NameFilter limitFilter) {
-	    System.out.println("FilterNode limitFilter this.toString()=" + this.toString());
-	    System.out.println("FilterNode limitFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
+		Log.log("FilterNode limitFilter this.toString()=" + this.toString());
+		Log.log("FilterNode limitFilter.getName()=" + limitFilter.getName() + " limitFilter=" + limitFilter);
 		limitFilter.limitFilter(this);
 	}
 
 	public void upFilter(NameFilter upFilter) {
-	    System.out.println("FilterNode upFilter this.toString()=" + this.toString());
-	    System.out.println("FilterNode upFilter.getName()=" + upFilter.getName() + " limitFilter=" + upFilter);
+		Log.log("FilterNode upFilter this.toString()=" + this.toString());
+		Log.log("FilterNode upFilter.getName()=" + upFilter.getName() + " limitFilter=" + upFilter);
 		upFilter.upFilter(this);
 	}
 
@@ -311,7 +311,7 @@ public class FilterNode {
 		    
 			if (filter instanceof DBFilter) {
 					String filterName = ((DBFilter) filter).getName();
-					         System.out.println("FilterNode getWhereSQL filter.getName()=" + filterName);
+					Log.log("FilterNode getWhereSQL filter.getName()=" + filterName);
 					if (filterName == null || filterName.equals("news") || filterName.isEmpty()) {
 						continue;
 					}

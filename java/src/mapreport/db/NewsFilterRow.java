@@ -363,12 +363,12 @@ public class NewsFilterRow implements Comparable<Object>{
 	public void calculatePriority(int newsNm) {
 			//priority = 100 * newsPriority * newsFilterPriority * filterPriority * (int)(new Date().getTime() - date.getTime()) / newsNm;
 			priority = newsPriority * newsFilterPriority * filterPriority;
-		        System.out.println("calculatePriority newsPriority=" + newsPriority 
+			Log.log("calculatePriority newsPriority=" + newsPriority 
 		    		+ " newsFilterPriority=" + newsFilterPriority + " filterPriority=" + filterPriority + " priority=" + priority);
 	}
 	
 	public static List<NewsFilterRow> buildNewsFilterPriority(List<NewsFilterRow> srcFilters) {
-		System.out.println("buildNewsFilter srcFilters.size()=" + srcFilters.size());
+		Log.log("buildNewsFilter srcFilters.size()=" + srcFilters.size());
 	Map<Object, Integer> newsMap = new HashMap<Object, Integer>();
 	
 	for (NewsFilterRow filter : srcFilters) {
@@ -387,7 +387,7 @@ public class NewsFilterRow implements Comparable<Object>{
 }
 
 	public static List<News> buildNews(List<NewsFilterRow> srcFilters) {
-			System.out.println("buildNews srcFilters.size()=" + srcFilters.size());
+		Log.log("buildNews srcFilters.size()=" + srcFilters.size());
 		List<News> newsList = new ArrayList<News>(srcFilters.size());
 		Set<String> labelTimes = new HashSet<String>(srcFilters.size());  
 		
@@ -424,7 +424,7 @@ public class NewsFilterRow implements Comparable<Object>{
 			newsList.add(news);
 		
 		
-			System.out.println("buildNews add(news) news.getLabel()=" + news.getLabel());
+			Log.log("buildNews add(news) news.getLabel()=" + news.getLabel());
 	}
 	
 	return newsList;		
@@ -433,7 +433,7 @@ public class NewsFilterRow implements Comparable<Object>{
 	@SuppressWarnings({ "unused", "deprecation" })
 	public static List<NewsFilterRow> buildFilters(List<NewsFilterRow> srcFilters) {		
 		Map<Object, NewsFilterRow> filterMap = new HashMap<Object, NewsFilterRow>();
-		          System.out.println("buildFilters srcFilters.size()=" + srcFilters.size());
+		Log.info("buildFilters srcFilters.size()=" + srcFilters.size());
 		for (NewsFilterRow filterRow : srcFilters) {
 				Log.log("buildFilters filterRow.filterId=" + filterRow.filterId + " filterRow.name=" + filterRow.name + " filterRow.priority=" + filterRow.priority
 						 + " filterRow.date.getDay()=" + filterRow.date.getDay() + " filterRow.date.getMonth() + 1=" + (filterRow.date.getMonth() + 1) 
