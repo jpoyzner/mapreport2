@@ -34,7 +34,7 @@ import mapreport.util.JsonError;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
-public class DBQueryBuilder {	
+public class DBQueryBuilder extends DBBase{	
   FilterNode filterNode = new FilterNode();   
   public FilterNode getFilterNode() {
 		return filterNode;
@@ -81,24 +81,7 @@ public class DBQueryBuilder {
 	  orderBySQL.append(filter.getOrderBySQL());
   }
 	
-  private static PreparedStatement pst = null;
-  private static ResultSet resultSet = null;  
-	  
-  static String url = "jdbc:mysql://localhost:3306/new_schema2"; //testdb";
-  static String user = "root";
-  static String password = "hadera";
-  static Connection con;
-  
-  static {
-      try {      	
-      	 Log.info("DBQueryBuilder starts");      	 
-		 Class.forName("com.mysql.jdbc.Driver");
-		 
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace(System.out);
-		} 
-  }
+
 	
 	private String sql = null;
 
