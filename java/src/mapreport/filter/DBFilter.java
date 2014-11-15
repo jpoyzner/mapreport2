@@ -24,7 +24,7 @@ public class DBFilter extends NameFilter {
 
 	public DBFilter(String name) {
 		super(name);
-		 System.out.println("DBFilter 2 name = " + name);
+		Log.log("DBFilter 2 name = " + name);
 	}
 	
 	

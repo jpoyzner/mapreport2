@@ -415,14 +415,16 @@ public class NewsFilterRow implements Comparable<Object>{
 			news.setY(filter.getY());
 			news.setAddress(filter.getAddressText());
 			
+			Log.info(" NewsFilterRow buildNews isPrimary=" + filter.isPrimary + " getFilterId():" + filter.getFilterId() 
+					+ " filterName:" + filter.filterName + " label:" + filter.name 
+					+ " filterPriority:" + filter.filterPriority + " newsFilterPriority:" + filter.newsFilterPriority + " priority:" + filter.filterPriority * filter.newsFilterPriority);
+			
 			if (filter.isPrimary) {
 				LocationByName primaryLocation = new LocationByName(filter.getFilterId());
-				Log.log(" NewsFilterRow buildNews filter.getFilterId():" + filter.getFilterId() + " filter.filterName:" + filter.filterName + " filter.name:" + filter.name);
 				news.setPrimaryLocation(primaryLocation);
 			}
 			
-			newsList.add(news);
-		
+			newsList.add(news);		
 		
 			Log.log("buildNews add(news) news.getLabel()=" + news.getLabel());
 	}
