@@ -12,8 +12,9 @@ public class NewsList {
 	
 	public NewsList(List<News> newses, FilterNode filters) {
 		this.newses = new ArrayList<NewsPresentation>(newses.size());
-		for (News news : newses) {
-			this.newses.add(new NewsPresentation(news, filters));
+		for (int cntr = 0; cntr < newses.size(); cntr++) {
+			News news = newses.get(cntr);
+			this.newses.add(new NewsPresentation(news, filters, Integer.toString(cntr + 1)));
 		}
 	}
 

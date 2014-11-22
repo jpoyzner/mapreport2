@@ -48,7 +48,7 @@
 			<google-map-marker
 				longitude="<%= article.get('x') %>"
 				latitude="<%= article.get('y') %>"
-				icon="<%= article.get('icon') %>">
+				label="3"
 
 				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %> : <%= article.get('label') %> : <%= article.get('address') %> : <%= article.get('location') %></a>
 			</google-map-marker>
@@ -78,7 +78,7 @@
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: white">
 					<img src="http://www.mapreport.com/images/common/list5.gif"></img>
-					<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %>: <%= article.get('label') %></a>
+					<a href="<%= article.get('url') %>" target="_blank"><%= article.get('mapLabel') %>: <%= article.get('dateTime') %>: <%= article.get('label') %></a>
 				</div>
 			<% }); %>
 		</div>
