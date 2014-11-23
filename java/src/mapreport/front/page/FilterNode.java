@@ -39,7 +39,7 @@ public class FilterNode {
 
 	String header = "";
 	String description = "";
-	String orderSQL = "\n order by n.dateTime desc, nfPriority / nPriority desc ";
+	String orderSQL = "\n order by n.dateTime desc, nfPriority / nPriority desc, nf.isPrimary desc ";
 	String name = "";
 	
 	public String getOrderSQL() {

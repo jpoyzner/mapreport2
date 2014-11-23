@@ -22,6 +22,7 @@ import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.Latest;
+import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
@@ -164,11 +165,11 @@ public class DBQueryBuilder extends DBBase{
 		*/     		
 	    	// Json by URL by Java objects
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
-	 //   nameFilters.add(new DBFilter("Fire"));
-	    nameFilters.add(new DBFilter("San Jose"));
+	    nameFilters.add(new DBFilter("Fire"));
+	//    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
-		 //   nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+	//	    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 	//	    nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));

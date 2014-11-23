@@ -9,7 +9,7 @@ public class Latest extends TimeFilter {
 
 	public Latest() {
 		super("Latest");
-		setOrderBySQL(new StringBuilder("\n order by n.dateTime desc, n.priority "));
+		setOrderBySQL(new StringBuilder("\n order by n.dateTime desc, n.priority, nf.isPrimary desc "));
 	//	begin = new GregorianCalendar();
 	//	begin.add(Calendar.DAY_OF_MONTH, -30);
 	//	begin.add(Calendar.DAY_OF_MONTH, -300);    // TEMPORARY, since no latest data
