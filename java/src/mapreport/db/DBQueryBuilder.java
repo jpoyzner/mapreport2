@@ -136,7 +136,7 @@ public class DBQueryBuilder extends DBBase{
 	       Log.log("buildSql fromSQL=" + fromSQL);
 	       Log.log("buildSql whereSQL=" + whereSQL);
 	       Log.log("buildSql orderBySQL=" + orderBySQL);
-	       Log.info("\n\n buildSql sql=" + sql);
+	       Log.info("\n\n buildSql() sql=" + sql);
 		return this.sql;
 	}
 
@@ -187,6 +187,7 @@ public class DBQueryBuilder extends DBBase{
 		Log.log("start bindFilters");	
 		bindFilters();
 		Log.log("start executeQuery");
+		Log.info("DBQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");		
 	    List<NewsFilterRow> rows = processResultSet(resultSet);
@@ -377,6 +378,7 @@ public class DBQueryBuilder extends DBBase{
 	
 	public ResultSet executeQuery() {
 		try {
+			Log.info("DBQueryBuilder pst=\n" + pst.toString());
 			resultSet = pst.executeQuery();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

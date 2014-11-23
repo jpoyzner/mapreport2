@@ -97,6 +97,7 @@ public class FilterDBQueryBuilder {
 		Log.info("FilterDBQueryBuilder start executeQuery");
    	    buildSql(filterIds);
    	    prepareStmt();
+		Log.info("FilterDBQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
 	    List<NewsFilterRow> rows = processResultSet(resultSet);
