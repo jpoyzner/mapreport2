@@ -27,6 +27,8 @@ import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class Controller {
+	
+	//TODO: should rename this class to some internal manager, and move out of this package
 
 	public static List<NewsFilterRow> buildParents(Rectangle rect,
 			Set<NameFilter> nameFilters, DBQueryBuilder queryBuilder)
