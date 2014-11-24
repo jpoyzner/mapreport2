@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import mapreport.controller.Controller;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
@@ -30,6 +29,7 @@ import mapreport.front.page.FilterNode;
 import mapreport.front.page.PagePresentation;
 import mapreport.front.url.PageURL;
 import mapreport.news.News;
+import mapreport.resp.ResponseBuilder;
 import mapreport.util.JSONHandler;
 import mapreport.util.JsonError;
 import mapreport.util.Log;
@@ -174,7 +174,7 @@ public class DBQueryBuilder extends DBBase{
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 	  //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12"));
-	    json = Controller.buildJson(null, nameFilters, 200);
+	    json = ResponseBuilder.buildJson(null, nameFilters, 200);
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}

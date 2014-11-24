@@ -1,4 +1,4 @@
-package mapreport.controller;
+package mapreport.resp;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
@@ -26,7 +26,7 @@ import mapreport.util.JsonError;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
-public class Controller {
+public class ResponseBuilder {
 	
 	//TODO: should rename this class to some internal manager, and move out of this package
 

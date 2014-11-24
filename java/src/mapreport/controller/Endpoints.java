@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import mapreport.db.DBQueryBuilder;
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
@@ -38,14 +39,15 @@ public class Endpoints {
 			//nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 		}
 		
-		return Controller.buildJson(getFullURL(request)).toString();
+		//return ResponseBuilder.buildJson(getFullURL(request)).toString();
+		return ResponseBuilder.buildJson(rectangle, nameFilters, 200).toString();
 		//return DBQueryBuilder.buildJson(rectangle, nameFilters, 100).toString();
 
 	}
 	
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
     	Log.log("api(HttpServletRequest request)");
-		return Controller.buildJson(getFullURL(request)).toString();
+		return ResponseBuilder.buildJson(getFullURL(request)).toString();
 	}
 	
 	private static String getFullURL(HttpServletRequest request) {
