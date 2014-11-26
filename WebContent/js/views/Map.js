@@ -21,7 +21,7 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			}, this));
 
 			//this.listenTo(options.news, 'request', this.refresh);
-			this.listenTo(options.news, 'sync', this.populateMarkers);
+			this.listenTo(this.news, 'sync', this.populateMarkers);
 		},
 		loadNewsByCoords: function(event) {
 			this.map.removeAttr('fitToMarkers');

@@ -7,8 +7,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import mapreport.db.DBQueryBuilder;
-import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
 import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
@@ -35,7 +33,7 @@ public class Endpoints {
 		Set<NameFilter> nameFilters = null;
 		if (rectangle == null) {
 			nameFilters = new HashSet<NameFilter>(1);
-			nameFilters.add(new DBFilter("California"));
+			//nameFilters.add(new DBFilter("California"));
 			//nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 		}
 		

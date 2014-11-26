@@ -17,7 +17,13 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				return;
 			}
 			
-			this.bucket.html(Templates['mr-options-template'](this.news));
+			var topics = _.map(this.news.topics.models, function(topic) {
+				return [topic.get('node'), topic.get('node')];
+			});
+			
+			console.log(JSON.stringify(topics).replace(/\"/g, '\''));
+			
+			this.bucket.html(Templates['mr-options-template'](this.news.topics));
 			
 			$('.mr-option').click(function(e) {
 				if ($(e.target).is('input-options')) {

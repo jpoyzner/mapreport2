@@ -1,5 +1,4 @@
-define(['underscore', 'backbone'],
-function() {
+define(['collections/topics', 'underscore', 'backbone'], function(TopicsModel) {
 	return Backbone.Collection.extend({
 		model: Backbone.Model.extend({defaults: {icon: 'http://www.mapreport.com/images/common/list5.gif'}}), //TODO: NEED REAL DEFAULT ICON
 		initialize: function() {
@@ -17,6 +16,8 @@ function() {
 //			if (response.errors) {
 //				return response;
 //			}
+			
+			this.topics = new TopicsModel(response.topics.children);
 			
 			return response.news;
 		},

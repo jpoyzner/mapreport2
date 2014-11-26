@@ -61,7 +61,10 @@
 		<div id="mr-options">
 			<div class="mr-option mr-topic-option">
 				<span>TOPIC: </span>
-				<input-options options="[['Crime', 'crime'], ['Sports', 'sports']]" value="sports"></input-options>
+				<% var topics = _.map(models, function(topic) {
+					return [topic.get('node'), topic.get('node')];
+				}); %>
+				<input-options options="<%= JSON.stringify(topics).replace(/\"/g, '\'') %>" value="sports"></input-options>
 			</div>
 			<div class="mr-option mr-location-option">
 				<span>LOCATION: </span>
