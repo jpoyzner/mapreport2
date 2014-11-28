@@ -17,9 +17,11 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				return;
 			}
 			
-			this.bucket.html(Templates['mr-options-template'](this.news.topics));
+			this.bucket.html(Templates['mr-options-template'](this.news));
 			
-			$('.mr-option').click(function(e) {
+			var menus = $('.mr-option');
+			
+			menus.click(function(e) {
 				if ($(e.target).is('input-options')) {
 					return;
 				}
@@ -28,8 +30,20 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				var e1 = document.createEvent("MouseEvents");
 				e1.initMouseEvent("mousedown", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 				$(this).find('input-options')[0].dispatchEvent(e1);	
-			}).find('input-options').on('action-fired', _.bind(function(event) {
+			});
+			
+			$(menus[0]).find('input-options').on('action-fired', _.bind(function(event) {
 				this.news.topic = event.target.value_;
+				this.news.fetch();
+			}, this));
+			
+			$(menus[1]).find('input-options').on('action-fired', _.bind(function(event) {
+				this.news.location = event.target.value_;
+				this.news.fetch();
+			}, this));
+			
+			$(menus[2]).find('input-options').on('action-fired', _.bind(function(event) {
+				this.news.date = event.target.value_;
 				this.news.fetch();
 			}, this));
 		}

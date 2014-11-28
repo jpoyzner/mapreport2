@@ -1,4 +1,5 @@
-define(['collections/topics', 'utils/buildurl', 'underscore', 'backbone'], function(TopicsModel, BuildURL) {
+define(['collections/topics', 'collections/locations', 'collections/dates', 'utils/buildurl', 'underscore', 'backbone'],
+function(TopicsCollection, LocationsCollection, DatesCollection, BuildURL) {
 	return Backbone.Collection.extend({
 		model: Backbone.Model.extend({defaults: {icon: 'http://www.mapreport.com/images/common/list5.gif'}}), //TODO: NEED REAL DEFAULT ICON
 		initialize: function() {
@@ -17,7 +18,19 @@ define(['collections/topics', 'utils/buildurl', 'underscore', 'backbone'], funct
 //				return response;
 //			}
 			
-			this.topics = new TopicsModel(response.topics.children);
+			if (response.topics) {
+				this.topics = new TopicsCollection(response.topics.children);
+			}
+			
+			if (response.locations) {
+				this.locations = new LocationsCollection(response.locations.children);
+			}
+			
+			if (response.dates) {
+				this.dates = new DatesCollection(response.dates.children);
+			}
+			
+			console.log(response.SQL);
 			
 			return response.news;
 		},
@@ -34,6 +47,14 @@ define(['collections/topics', 'utils/buildurl', 'underscore', 'backbone'], funct
 			
 			if (this.topic) {
 				params.push("topic=" + encodeURI(this.topic));
+			}
+			
+			if (this.location) {
+				params.push("location=" + encodeURI(this.location));
+			}
+			
+			if (this.date) {
+				params.push("date=" + encodeURI(this.date));
 			}
 			
 			return BuildURL('news', params);

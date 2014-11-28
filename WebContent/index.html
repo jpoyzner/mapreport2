@@ -61,18 +61,24 @@
 		<div id="mr-options">
 			<div class="mr-option mr-topic-option">
 				<span>TOPIC: </span>
-				<% var topics = _.map(models, function(topic) {
+				<% var topicsList = _.map(topics.models, function(topic) {
 					return [topic.get('node'), topic.get('node')];
 				}); %>
-				<input-options options="<%= JSON.stringify(topics).replace(/\"/g, '\'') %>" value="sports"></input-options>
+				<input-options options="<%= JSON.stringify(topicsList).replace(/\"/g, '\'') %>" value="All Topics"></input-options>
 			</div>
 			<div class="mr-option mr-location-option">
 				<span>LOCATION: </span>
-				<input-options options="[['Bay Area', 'bayarea'], ['Los Angeles', 'la']]" value="bayarea"></input-options>
+				<% var locationsList = _.map(locations.models, function(location) {
+					return [location.get('node'), location.get('node')];
+				}); %>
+				<input-options options="<%= JSON.stringify(locationsList).replace(/\"/g, '\'') %>" value="World"></input-options>
 			</div>
 			<div class="mr-option mr-time-option">
 				<span>TIME: </span>
-				<input-options options="[['ANY', 'any'], ['2014', '2014']]" value="2014"></input-options>
+				<% var datesList = _.map(dates.models, function(date) {
+					return [date.get('node'), date.get('node')];
+				}); %>
+				<input-options options="<%= JSON.stringify(datesList).replace(/\"/g, '\'') %>" value="All Dates"></input-options>
 			</div>
 		</div>
 	</script>
