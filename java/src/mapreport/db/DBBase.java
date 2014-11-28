@@ -7,7 +7,15 @@ import java.sql.ResultSet;
 import mapreport.util.Log;
 
 public class DBBase {
-	  protected static PreparedStatement pst = null;
+	  protected PreparedStatement pst = null;
+	  public PreparedStatement getPst() {
+		return pst;
+	  }
+	
+	  public void setPst(PreparedStatement pst) {
+			this.pst = pst;
+	  }
+	
 	  protected static ResultSet resultSet = null;  
 		  
 	  static String url = "jdbc:mysql://localhost:3306/new_schema2"; //testdb";

@@ -1,9 +1,12 @@
 package mapreport.front.page;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+//import com.mysql.jdbc.PreparedStatement;
 
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
@@ -38,8 +41,17 @@ public class PagePresentation {
 	NavigationList navTopics = new NavigationList("Topics");
 	NavigationList navDates = new NavigationList("Dates");
 	
-	String googleAnalytics;
+	String googleAnalytics;	
+	PreparedStatement pst;
 	
+	public PreparedStatement getPst() {
+		return pst;
+	}
+
+	public void setPst(PreparedStatement pst) {
+		this.pst = pst;
+	}
+
 	public PagePresentation (
 		FilterNode pageFilters,
 		List<NewsFilterRow> newsFilters,
