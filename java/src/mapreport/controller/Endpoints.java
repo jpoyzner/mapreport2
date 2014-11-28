@@ -7,7 +7,10 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.topic.Topic;
 import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
@@ -15,7 +18,8 @@ import mapreport.view.map.Rectangle;
 public class Endpoints {
 	public static final String news(HttpServletRequest request)  throws MalformedURLException, UnsupportedEncodingException{
     	Log.log("Endpoints news");
-		Rectangle rectangle = null;
+		
+    	Rectangle rectangle = null;
 		String left = request.getParameter("left");
 		String right = request.getParameter("right");
 		String top = request.getParameter("top");
@@ -30,24 +34,33 @@ public class Endpoints {
 						Double.valueOf(bottom)));
 		}
 		
-		Set<NameFilter> nameFilters = null;
-		if (rectangle == null) {
-			nameFilters = new HashSet<NameFilter>(1);
-			//nameFilters.add(new DBFilter("California"));
-			//nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+		Set<NameFilter> nameFilters = new HashSet<NameFilter>();
+		
+		String topic = request.getParameter("topic");
+		if (topic != null) {
+			nameFilters.add(new Topic(topic));
 		}
 		
-		//return ResponseBuilder.buildJson(getFullURL(request)).toString();
-		return ResponseBuilder.buildJson(rectangle, nameFilters, 200).toString();
-		//return DBQueryBuilder.buildJson(rectangle, nameFilters, 100).toString();
-
+		String location = request.getParameter("location");
+		if (location != null) {
+			nameFilters.add(new DBFilter(location));
+		}
+		
+		String date = request.getParameter("date");
+		if (date != null) {
+			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
+		}
+		
+		return ResponseBuilder.buildJson(rectangle, nameFilters, 100).toString();
 	}
 	
+	//TODO: extract all params here and pass into functional classes
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
     	Log.log("api(HttpServletRequest request)");
 		return ResponseBuilder.buildJson(getFullURL(request)).toString();
 	}
 	
+	//TODO: remove
 	private static String getFullURL(HttpServletRequest request) {
 	    StringBuffer requestURL = request.getRequestURL();
 	    String queryString = request.getQueryString();

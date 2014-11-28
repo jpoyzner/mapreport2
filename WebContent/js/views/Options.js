@@ -17,12 +17,6 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				return;
 			}
 			
-			var topics = _.map(this.news.topics.models, function(topic) {
-				return [topic.get('node'), topic.get('node')];
-			});
-			
-			console.log(JSON.stringify(topics).replace(/\"/g, '\''));
-			
 			this.bucket.html(Templates['mr-options-template'](this.news.topics));
 			
 			$('.mr-option').click(function(e) {
@@ -34,7 +28,8 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				var e1 = document.createEvent("MouseEvents");
 				e1.initMouseEvent("mousedown", true, true, window, 1, 0, 0, 0, 0, false, false, false, false, 0, null);
 				$(this).find('input-options')[0].dispatchEvent(e1);	
-			}).find('input-options').on('input-changed', _.bind(function() {
+			}).find('input-options').on('action-fired', _.bind(function(event) {
+				this.news.topic = event.target.value_;
 				this.news.fetch();
 			}, this));
 		}

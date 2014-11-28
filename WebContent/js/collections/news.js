@@ -1,4 +1,4 @@
-define(['collections/topics', 'underscore', 'backbone'], function(TopicsModel) {
+define(['collections/topics', 'utils/buildurl', 'underscore', 'backbone'], function(TopicsModel, BuildURL) {
 	return Backbone.Collection.extend({
 		model: Backbone.Model.extend({defaults: {icon: 'http://www.mapreport.com/images/common/list5.gif'}}), //TODO: NEED REAL DEFAULT ICON
 		initialize: function() {
@@ -22,13 +22,21 @@ define(['collections/topics', 'underscore', 'backbone'], function(TopicsModel) {
 			return response.news;
 		},
 		url: function() {
-            return "news"
-            	+ (this.mapBounds ?
-            		"?left=" + this.mapBounds.left
-            			+ "&right=" + this.mapBounds.right
-            			+ "&top=" + this.mapBounds.top
-            			+ "&bottom=" + this.mapBounds.bottom
-            		: "");
+			var params = [];
+			
+			if (this.mapBounds) {
+				params.push(
+					"left=" + this.mapBounds.left,
+            		"right=" + this.mapBounds.right,
+            		"top=" + this.mapBounds.top,
+            		"bottom=" + this.mapBounds.bottom);
+			}
+			
+			if (this.topic) {
+				params.push("topic=" + encodeURI(this.topic));
+			}
+			
+			return BuildURL('news', params);
         }
 	});
 });

@@ -39,9 +39,9 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 //		},
 		populateMarkers: function() {
 			if (!this.news.fetches) {
-				if (this.news.length) {
+				//if (this.news.length) {
 					this.map[0].clear();
-				}
+				//}
 				
 				this.map.html(Templates['mr-map-markers-template']({
 					news: this.news,
