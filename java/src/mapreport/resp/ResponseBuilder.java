@@ -130,6 +130,7 @@ public class ResponseBuilder {
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
+			page.setPst(queryBuilder.getPst());
 			int newsListsize = page.getView().getNewsList().getNewses().size();
 			   Log.log("end main newsListsize=" + newsListsize);
 			   Log.log ("page.getNavigationPath=" + page.getNavigationPath());     
