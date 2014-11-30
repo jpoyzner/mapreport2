@@ -330,10 +330,12 @@ public class FilterNode {
 		}
 		Log.log("FilterNode getWhereSQL filterIds=" + filterIds + " anyIdFilter=" + anyIdFilter);
 		
-		if (anyIdFilter) {           // and fp.name IN ('Angola') 
-			whereSQL.append(" and fp.name IN (");		
+		if (anyIdFilter) {           // and (fp.name IN ('Bush' ) or  f.name IN ('Bush' )) 
+			whereSQL.append(" and (fp.name IN (");		
 			whereSQL.append(filterIds);
-			whereSQL.append(" ) ");	
+			whereSQL.append("  ) or  f.name IN ( ");		
+			whereSQL.append(filterIds);
+			whereSQL.append("   )) ");
 		}
 
 		
