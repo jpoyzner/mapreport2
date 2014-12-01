@@ -45,7 +45,9 @@ public class ResponseBuilder {
 		if (nameFilters != null) {
 			List<String> filterIds = new ArrayList<String>(nameFilters.size());
 			for (NameFilter filter: nameFilters) {
-				filterIds.add(filter.getName());
+				if (filter != null && filter.getName() != null) {
+					filterIds.add(filter.getName());
+				}
 			}
 				
 			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
@@ -55,11 +57,14 @@ public class ResponseBuilder {
 			}
 			
 			for (NameFilter filter: nameFilters) {
-				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
+				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
+				if (filter != null && filter.getName() != null) {
+					Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
+				}
 				
 				if (filter instanceof TimeFilter) {
 					queryBuilder.addFilter(filter);  
-				} else {
+				} else if (filter != null && filter.getName() != null) {
 					boolean isLocation = true;
 					for (NewsFilterRow parentNewsFilterRow : parents) {
 						       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.getFilterName=" + parentNewsFilterRow.getFilterName() + " filter.getName()=" + filter.getName());
