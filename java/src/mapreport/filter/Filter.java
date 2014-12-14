@@ -11,15 +11,24 @@ import mapreport.util.Log;
   
 public abstract class Filter {
 
+	int priority;
+	
 	private StringBuilder selectSQL = new StringBuilder("");
 	private StringBuilder fromSQL = new StringBuilder("");
 	protected StringBuilder whereSQL = new StringBuilder("");
 	protected StringBuilder orderBySQL = new StringBuilder("");
 	
 	Dimension dimension;
-	int priority;
 	//  treeNode ????
 	
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
+
 	String link = "";
 
 	@Expose String name = null;
@@ -39,14 +48,6 @@ public abstract class Filter {
 
 	public void setLink(String link) {
 		this.link = link;
-	}
-
-	public int getPriority() {
-		return priority;
-	}
-
-	public void setPriority(int priority) {
-		this.priority = priority;
 	}
 
 	public Dimension getDimension() {

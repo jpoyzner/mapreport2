@@ -1,12 +1,14 @@
 package mapreport.nav;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.google.gson.annotations.Expose;
 
+import mapreport.db.NewsFilterRow;
 import mapreport.filter.NameFilter;
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
@@ -51,6 +53,23 @@ public class NavigationList {
 			children.add(navNode);
 			childrenMap.put(filter.getName(), navNode);
 	    }
+	}
+	
+	public void sort() {
+		Collections.sort(children);
+		for (NavigationNode node : children) {
+			// node.getPageFilters().
+			Log.log("sort header=" + node.metaData.getHeader() + " priority=" + node.priority);
+		}
+	}
+	
+	public void limitChildren() {		
+		//for (int i = 20; i < children.size(); i++) {
+			// NavigationNode node = children.get(i);
+	//		children.remove(i);
+	//	}
+		children = children.subList(0, 20);
+
 	}
 	
 	public void addParentFilter (NameFilter filter, FilterNode filterNode) {

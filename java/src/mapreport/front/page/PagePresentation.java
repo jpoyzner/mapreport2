@@ -100,6 +100,14 @@ public class PagePresentation {
         navLocations.setChildrenMap(null);
         navTopics.setChildrenMap(null);
         navDates.setChildrenMap(null);
+
+        navLocations.sort();
+        navTopics.sort();
+        navDates.sort();
+        
+        navLocations.limitChildren();
+        navTopics.limitChildren();
+        navDates.limitChildren();        
 	}
 
 	private void addParentNodes(FilterNode pageFilters, List<NewsFilterRow> parents) throws SQLException {

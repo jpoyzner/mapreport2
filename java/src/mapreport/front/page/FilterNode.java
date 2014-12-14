@@ -28,7 +28,7 @@ public class FilterNode {
 	
 	String link = "";
 	int dbFilterNo = 0;
-	
+
 	public List<Filter> getFilterList() {
 		return filterList;
 	}

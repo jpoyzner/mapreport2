@@ -22,7 +22,8 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	String filterFilterTable = null;
 	Map<String, NameFilter> parents = new HashMap<String, NameFilter>();
 	List<NameFilter> parentList = new ArrayList<NameFilter>();
-	
+
+
 	public List<NameFilter> getParentList() {
 		return parentList;
 	}
@@ -84,23 +85,23 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	public static Map<String, NameFilter> buildChildFilters(List<NewsFilterRow> list, List<NewsFilterRow> parents) { 
 		Log.log("buildIdFilters list.size()=" +list.size());
 
-		Map<String, NameFilter> filters = new HashMap<String, NameFilter>(list.size());
+		Map<String, NameFilter> filterMap = new HashMap<String, NameFilter>(list.size());
 		
 		for (NewsFilterRow newsFilter : list) {
-			addNewsFilter(filters, newsFilter);
+			addNewsFilter(filterMap, newsFilter);
 			addParentFilter(parents, newsFilter);
 		}
 		
 		// for debug
-		Set<String> keySet = filters.keySet();		
+		Set<String> keySet = filterMap.keySet();		
 		for (String filterName : keySet) {
-			NameFilter filter = filters.get(filterName);
-				Log.log("buildIdFilters filter=" + filter + " filterName=" + filterName + " filter.getName()=" + filter.getName() + " filter.level=" + filter.level
+			NameFilter filter = filterMap.get(filterName);
+				Log.info("buildIdFilters filter=" + filter + " filterName=" + filterName + " priority=" + filter.priority + " filter.getName()=" + filter.getName() + " filter.level=" + filter.level
 					// + " filter.getDisplayParent=" + filter.
 					 );
 		}		
 		
-		return filters;
+		return filterMap;
 	}
 	
 	static void addParentFilter(List<NewsFilterRow> parents, NewsFilterRow newsFilter) {
@@ -116,8 +117,9 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 			filter = newsFilter.getFilter();
 		}
 		filter.addParent(newsFilter);
+		filter.setPriority(newsFilter.getPriority());
 		filters.put(newsFilter.getFilterId(), filter);
-		Log.log("addNewsFilter filter=" + filter + " filter.name=" + filter.getName() 
+		Log.log("addNewsFilter filter=" + filter + " filter.name=" + filter.getName()  + " filter.getPriority=" + filter.getPriority() 
 		        		 + " newsFilter.name=" + newsFilter.getName()
 		        		 + " newsFilter.FilterId=" + newsFilter.getFilterId()
 		        		 + " newsFilter.priority=" + newsFilter.getPriority()); // + " filter.getPriority()=" + filter.);

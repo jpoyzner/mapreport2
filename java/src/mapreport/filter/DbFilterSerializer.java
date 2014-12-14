@@ -9,7 +9,7 @@ import com.google.gson.JsonSerializer;
 
 public class DbFilterSerializer implements JsonSerializer<NameFilter> {
 
-	@Override
+	@Override 
 	public JsonElement serialize(NameFilter filter, final Type typeOfSrc, final JsonSerializationContext context) {
 	    final JsonObject jsonObject = new JsonObject();
      //   jsonObject.addProperty("title", "titleaaaa");

@@ -23,12 +23,12 @@ import mapreport.util.Log;
 
 public class NewsFilterRow implements Comparable<Object>{
 
+	int filterPriority = 0;
 	private NameFilter filter = null;	
 
 	int newsPriority = 0;  
 	int priority = 0;
 	int newsFilterPriority = 0;
-	int filterPriority = 0;
 	int newsId = 0;
 	String filterId = null;
 	Date date = null;
@@ -254,11 +254,11 @@ public class NewsFilterRow implements Comparable<Object>{
 	String name = "";
 	
 	public int getPriority() {
-		return newsPriority;
+		return priority;
 	}
 
 	public void setPriority(int priority) {
-		this.newsPriority = priority;
+		this.priority = priority;
 	}
 
 	public String getName() {
@@ -283,20 +283,8 @@ public class NewsFilterRow implements Comparable<Object>{
 	
 	public NewsFilterRow() {
 	}
-
-	public NewsFilterRow(int newsPriority, String name, int newsFilterPriority, int filterPriority, Date date, int newsId, String parentId
-			, int level) {
-		this.newsPriority = newsPriority;
-		this.name = name;
-		this.newsFilterPriority = newsFilterPriority;
-		this.filterPriority = filterPriority;
-		this.newsId = newsId;
-		this.date = date;
-		this.parentId = parentId;
-		this.level = level;
-	}
 	
-	public NewsFilterRow(int newsPriority, String name, int newsFilterPriority, int filterPriority, int newsId, String parentId, int level) {
+	public NewsFilterRow(int newsPriority, String name, int newsFilterPriority, int filterPriority, int newsId, String parentId, int level, int priority) {
 		this.newsPriority = newsPriority;
 		this.name = name;
 		this.newsFilterPriority = newsFilterPriority;
@@ -304,6 +292,7 @@ public class NewsFilterRow implements Comparable<Object>{
 		this.newsId = newsId;
 		this.parentId = parentId;
 		this.level = level;
+		this.priority = priority;
 	}
 	
 	/*
@@ -437,12 +426,21 @@ public class NewsFilterRow implements Comparable<Object>{
 		Map<Object, NewsFilterRow> filterMap = new HashMap<Object, NewsFilterRow>();
 		Log.info("buildFilters srcFilters.size()=" + srcFilters.size());
 		for (NewsFilterRow filterRow : srcFilters) {
-				Log.log("buildFilters filterRow.filterId=" + filterRow.filterId + " filterRow.name=" + filterRow.name + " filterRow.priority=" + filterRow.priority
+				Log.info("buildFilters filterRow.filterId=" + filterRow.filterId + " filterRow.name=" + filterRow.name + " parentId=" + filterRow.parentId
+						+ " filterRow.priority=" + filterRow.priority
 						 + " filterRow.date.getDay()=" + filterRow.date.getDay() + " filterRow.date.getMonth() + 1=" + (filterRow.date.getMonth() + 1) 
 						 + " filterRow.date.getYear() + 1900=" + (filterRow.date.getYear() + 1900));
 			addDateFilters(filterMap, filterRow);			
 			addLocationTopicFilters(filterMap, filterRow, filterRow.filterId, false);
-			addLocationTopicFilters(filterMap, filterRow, filterRow.parentId, true);
+			
+			NewsFilterRow parentFilterRow = new NewsFilterRow(filterRow.newsPriority, filterRow.name, filterRow.newsFilterPriority, 
+					filterRow.filterPriority, filterRow.newsId, filterRow.parentId, filterRow.level, 0);
+			parentFilterRow.setFilterId(filterRow.parentId);
+			parentFilterRow.setLocation(filterRow.isLocation);
+			parentFilterRow.setParentLocation(filterRow.isParentLocation);
+			parentFilterRow.setOfficial(filterRow.isOfficial);
+			
+			addLocationTopicFilters(filterMap, parentFilterRow, filterRow.parentId, true);
 		}
 		
 	//	Log.log("buildFilters San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
@@ -451,7 +449,7 @@ public class NewsFilterRow implements Comparable<Object>{
 		Collections.sort(newsFilters);
 		
 		for (NewsFilterRow newsFilter : newsFilters) {
-			 Log.log("buildFilters filter.filterId=" + newsFilter.filterId  + " newsFilter.filter.Name()=" + newsFilter.getFilter().getName()
+			 Log.info("buildFilters filter.filterId=" + newsFilter.filterId  + " newsFilter.filter.Name()=" + newsFilter.getFilter().getName()
 					 + " filter.name=" + newsFilter.name + " filter.priority=" + newsFilter.priority);
 		}
 		return newsFilters;		
@@ -461,7 +459,7 @@ public class NewsFilterRow implements Comparable<Object>{
 		if (filterRow.getFilter() == null) {		
 			NameFilter filter = null;	
 			boolean isLocation = isParent ? filterRow.isParentLocation() : filterRow.isLocation();
-			    Log.log("addLocationTopicFilters id=" + id + " isLocation=" + isLocation + " isLocation()=" + filterRow.isLocation() + " isParentLocation()=" + filterRow.isParentLocation());
+			    Log.info("addLocationTopicFilters id=" + id + " isLocation=" + isLocation + " isLocation()=" + filterRow.isLocation() + " isParentLocation()=" + filterRow.isParentLocation());
 			if (isLocation) {
 				if (filterRow.isOfficial()) {
 					filter = new OfficialLocation(id);
@@ -472,6 +470,7 @@ public class NewsFilterRow implements Comparable<Object>{
 				filter = new Topic(id);
 			}
 			filter.setName(id);
+			filter.setPriority(filterRow.filterPriority);
 			
 	   //     Log.log("addLocationTopicFilters befbef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 	  //      if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters befbef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
@@ -513,18 +512,36 @@ public class NewsFilterRow implements Comparable<Object>{
 	 //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
 
 		if (filterMap.get(filterKey) == null) {
-			  Log.log("incrementFilterMapPriority put filterKey=" + filterKey);
 			filter.setFilterId(filterKey);  
+			filter.priority = 0;
 			filterMap.put(filterKey, filter);
+			  Log.info("incrementFilterMapPriority put filterKey=" + filterKey );
 		} else {
-			  Log.log("incrementFilterMapPriority get filterKey=" + filterKey + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
-			filterMap.get(filterKey).priority += filter.priority;
+			  Log.info("incrementFilterMapPriority get filterKey=" + filterKey  + filterMap.get(filterKey).priority);
+		//	int oldPr = filterMap.get(filterKey).priority; 
+		//	int resPr = calculatePriority(oldPr, filter.priority);
+			double oldPriority = filterMap.get(filterKey).priority;
+			double reversePr = filter.priority == 0 ? 1000 : 1000 / filter.priority;
+			double newPriority = Math.pow(reversePr, 1.0/5) + oldPriority;
+			filterMap.get(filterKey).setPriority((int)newPriority);
+			         Log.info("incrementFilterMapPriority  oldPriority=" + oldPriority
+			        		 + " filter.priority=" + filter.priority + " reversePr=" + reversePr + " newPriority=" + newPriority);
 		}
-		             Log.log("incrementFilterMapPriority filterKey=" + filterKey + " getFilter().getName()=" + filter.getFilter().getName() + " label=" + filter.getName() 
+		             Log.info("incrementFilterMapPriority filterKey=" + filterKey + " getFilter().getName()=" + filter.getFilter().getName() + " label=" + filter.getName() 
 		            		 + " filterMap.get(filterKey).priority=" + filterMap.get(filterKey).priority);
 		 //  	      Log.log("addLocationTopicFilters end incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 		//	        if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
 
+	}
+	
+	public static int calculatePriority(int oldPr, int newPr) {
+		double min = java.lang.Math.min(oldPr, newPr);
+		double max = java.lang.Math.max(oldPr, newPr);
+		double sum = oldPr + newPr;
+		double ratio = max == 0 ? 2 : sum / max;
+		double res = ratio == 0 ? 0 : min / ratio;
+		    Log.info("calculatePriority oldPr=" + oldPr + " newPr=" + newPr + " min=" + min  + " max=" + max  + " sum=" + sum + " ratio=" + ratio + " res=" + res);
+		return (int)res;
 	}
 
 	public NameFilter getFilter() {

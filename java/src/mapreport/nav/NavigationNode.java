@@ -8,8 +8,19 @@ import mapreport.util.Log;
 
 enum nodeType {CHILD, CURRENT, SIBLING, PARENT};
 
-public class NavigationNode {
+public class NavigationNode implements Comparable{
 	FilterNode pageFilters;
+	PageMetaData metaData;
+	MainNews mainNews;	
+	int priority = 0;
+	
+	public int getPriority() {
+		return priority;
+	}
+
+	public void setPriority(int priority) {
+		this.priority = priority;
+	}
 	
 	public FilterNode getPageFilters() {
 		return pageFilters;
@@ -39,12 +50,17 @@ public class NavigationNode {
 		} else if (type == nodeType.CURRENT) {
 			// this.pageFilters.limitFilter(filter);
 		} 
-		           Log.log("NavigationNode  this.pageFilters.getLink()=" + this.pageFilters.getLink());
 		metaData = new PageMetaData(pageFilters);
 		metaData.setHeader(filter.getName());
+		priority = filter.getPriority();
+                 Log.log("NavigationNode filter.getName()=" + filter.getName() + " priority=" + priority + " pageFilters.getLink()=" + this.pageFilters.getLink());
 	}
 
-	PageMetaData metaData;
 
-	MainNews mainNews;
+
+	@Override
+	public int compareTo(Object arg0) {
+		int diff = ((NavigationNode)arg0).getPriority() - this.getPriority() ;
+		return diff;
+	}
 }
