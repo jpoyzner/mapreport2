@@ -64,12 +64,9 @@ public class NavigationList {
 	}
 	
 	public void limitChildren() {		
-		//for (int i = 20; i < children.size(); i++) {
-			// NavigationNode node = children.get(i);
-	//		children.remove(i);
-	//	}
-		children = children.subList(0, 20);
-
+		if (children.size() > 20) {
+			children = children.subList(0, 20);
+		}
 	}
 	
 	public void addParentFilter (NameFilter filter, FilterNode filterNode) {
