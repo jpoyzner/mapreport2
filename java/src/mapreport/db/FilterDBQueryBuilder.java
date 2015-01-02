@@ -26,14 +26,14 @@ public class FilterDBQueryBuilder {
 	/*
 	 * select  f.priority as filterPriority, f.name as fName, fp.name as pName, fp.isLocation as isPLocation, ff.level as pLevel -- ,
  from  filter f, filter fp, newsfilter nf, filterfilter ff, news n  
- where  f.filterId = nf.filterId  and nf.newsid = n.newsid and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId 
+ where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId 
  and n.newsId  in (115, 856,... )
  order by n.priority, n.dateTime, nf.isPrimary;
 	 */
 	private static String sqlBegin = "select f.filterId, f.name, f.label, f.image, f.isLocation, f.name as filterName, ff.level, " + 
 			"\n  f.priority as filterPriority,  nf.priority as newsFilterPriority,  ff.priority as filterFilterPriority " + 
 			"\n from filter f, filter fp, newsfilter nf, filterfilter ff, news n  " + 
-		"\n where f.filterId = nf.filterId  and nf.newsid = n.newsid and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
+		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
 	
 	private static String sqlEnd = ") \n  order by n.priority, nf.priority, f.priority, n.dateTime, nf.isPrimary \n limit 1000";
