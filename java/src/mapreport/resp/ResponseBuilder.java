@@ -100,7 +100,7 @@ public class ResponseBuilder {
 
 	
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
-	        Log.info("buildJson url=" + url);
+	        Log.info("ResponseBuilder buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
 		pageURL.parseUrlParameters(url);
 		pageURL.parseParams();
@@ -115,6 +115,7 @@ public class ResponseBuilder {
 			size = Integer.parseInt(options.getParam("size"));
 		}
 		String json = buildJson(rect, nameFilters, size);
+		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
 	
