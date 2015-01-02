@@ -16,7 +16,15 @@ public abstract class Filter {
 	String link = "";
 	String image = "";
 	@Expose String name = null;
-	
+	boolean isAllFilter = false;
+
+	public boolean isAllFilter() {
+		return isAllFilter;
+	}
+
+	public void setAllFilter(boolean isAllFilter) {
+		this.isAllFilter = isAllFilter;
+	}
 	public String getImage() {
 		return image;
 	}

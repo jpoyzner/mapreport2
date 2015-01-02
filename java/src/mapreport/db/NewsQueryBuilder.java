@@ -60,13 +60,16 @@ public class NewsQueryBuilder extends DBBase {
 					+ " getName=" + dBFilter.getName() + " getDbFilterCntr="
 					+ dBFilter.getDbFilterCntr());
 		}
-		selectSQL.append(filter.getSelectSQL());
-		fromSQL.append(filter.getFromSQL());
-		Log.log("NewsQueryBuilder addFilter fromSQL=" + fromSQL);
-		whereSQL.append(filter.getWhereSQL());
-		Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()="
-				+ filter.getWhereSQL());
-		orderBySQL.append(filter.getOrderBySQL());
+		
+		if (!filter.isAllFilter()) {
+			selectSQL.append(filter.getSelectSQL());
+			fromSQL.append(filter.getFromSQL());
+			Log.log("NewsQueryBuilder addFilter fromSQL=" + fromSQL);
+			whereSQL.append(filter.getWhereSQL());
+			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()="
+					+ filter.getWhereSQL());
+			orderBySQL.append(filter.getOrderBySQL());
+		}
 	}
 
 	public NewsQueryBuilder(int limit) {

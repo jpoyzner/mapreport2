@@ -15,10 +15,13 @@ import mapreport.db.NewsQueryBuilder;
 import mapreport.db.URLFilterQueryBuilder;
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
+import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.TimeFilter;
+import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
 import mapreport.front.page.PagePresentation;
@@ -92,9 +95,10 @@ public class ResponseBuilder {
 		}
 		
 		if (queryBuilder.getFilterNode().getFilterList().size() == 0 || queryBuilder.getFilterNode().getTimeFilter() == null) {   // no filters added, so just global latest
-			     Log.log("Controller buildJson ading Latest");
-			queryBuilder.addFilter(new Latest());  
+		     Log.log("Controller buildJson ading Latest");
+		     queryBuilder.addFilter(new Latest());  
 		}
+	
 		return;
 	}
 

@@ -8,6 +8,7 @@ import java.util.Map;
 
 //import com.mysql.jdbc.PreparedStatement;
 
+
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
@@ -15,6 +16,7 @@ import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByName;
+import mapreport.filter.time.AllTime;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
@@ -63,7 +65,8 @@ public class PagePresentation {
 		//		 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
 		//	}			  
 		
-	//	addParentNodes(pageFilters, parents); 			
+	//	addParentNodes(pageFilters, parents); 	
+
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -94,17 +97,21 @@ public class PagePresentation {
 			//	addNode (navNode);  
 		}
 
-        navLocations.setChildrenMap(null);
-        navTopics.setChildrenMap(null);
-        navDates.setChildrenMap(null);
-
+		navLocations.addChildFilter(new Global(), pageFilters);
+		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
+		navDates.addChildFilter(new AllTopics(AllTime.ALL_TIME_NAME), pageFilters);
+        
         navLocations.sort();
         navTopics.sort();
         navDates.sort();
         
         navLocations.limitChildren();
         navTopics.limitChildren();
-        navDates.limitChildren();        
+        navDates.limitChildren();    
+        
+        navLocations.setChildrenMap(null);
+        navTopics.setChildrenMap(null);
+        navDates.setChildrenMap(null);
 	}
 
 	private void addParentNodes(FilterNode pageFilters, List<NewsFilterRow> parents) throws SQLException {

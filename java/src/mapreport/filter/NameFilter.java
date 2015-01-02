@@ -23,7 +23,6 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 	Map<String, NameFilter> parents = new HashMap<String, NameFilter>();
 	List<NameFilter> parentList = new ArrayList<NameFilter>();
 
-
 	public List<NameFilter> getParentList() {
 		return parentList;
 	}

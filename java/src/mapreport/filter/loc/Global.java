@@ -5,9 +5,23 @@ import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
 public class Global extends OfficialLocation {
+    final static public String GLOBAL = "Global";
 
 	public Global(String name) {
 		super(name);
+		setAllFilter(true);
+		setPriority(1000000);
+	}
+	
+	public Global() {
+		super(GLOBAL);
+		setAllFilter(true);
+		setPriority(1000000);
+	}
+	
+	@Override
+	public void limitFilter(FilterNode filterNode) {
+		upFilter(filterNode);
 	}
 	
 	@Override
