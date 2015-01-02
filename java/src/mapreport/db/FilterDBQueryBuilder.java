@@ -12,6 +12,10 @@ import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
+import mapreport.filter.time.Day;
+import mapreport.filter.time.Decade;
+import mapreport.filter.time.Month;
+import mapreport.filter.time.Year;
 import mapreport.filter.topic.Topic;
 import mapreport.news.News;
 import mapreport.util.Log;
@@ -125,14 +129,28 @@ public class FilterDBQueryBuilder {
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
 		List <NameFilter> rows = processResultSet(resultSet);
+		rows = addTimeFilters(rows, newsMap);
 	    return rows;
+	}
+	
+	public List <NameFilter> addTimeFilters(List <NameFilter> dbFilters, Map<Integer, News> newsMap) throws SQLException {
+		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
+		for (News news : newsMap.values()) {
+			incrementFilterMapPriority(filterMapResult, new Year(news.getDateTime().getYear() + 1900));
+			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth() + 1));
+			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth() + 1, news.getDateTime().getDate()));		
+			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10));
+		}
+		Log.info("addTimeFilters filterMapResult.size() = " + filterMapResult.size());
+		dbFilters.addAll(filterMapResult.values());
+	    return dbFilters;
 	}
 	
 	public static Map<String, NameFilter> incrementFilterMapPriority(List <NameFilter> filterMapSrc) {
 		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
 		
-		for (NameFilter entry : filterMapSrc) {
-			    incrementFilterMapPriority(filterMapResult, entry);
+		for (NameFilter filter : filterMapSrc) {
+			incrementFilterMapPriority(filterMapResult, filter);
 		}
 			
 		for (Map.Entry<String, NameFilter> entry : filterMapResult.entrySet()) {
@@ -147,7 +165,8 @@ public class FilterDBQueryBuilder {
 		result = (int)Math.pow(result, 1.0/5);
 		return result;
 	}
-		public static void incrementFilterMapPriority(Map<String, NameFilter> filterMap, NameFilter filter) {
+	
+	public static void incrementFilterMapPriority(Map<String, NameFilter> filterMap, NameFilter filter) {
 			 //     Log.log("addLocationTopicFilters incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 			 //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
 				String filterName = filter.getName();
@@ -172,5 +191,5 @@ public class FilterDBQueryBuilder {
 				            		 + " filterMap.get(filterKey).priority=" + filterMap.get(filterName).getPriority());
 				 //  	      Log.log("addLocationTopicFilters end incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 				//	        if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
-			}
+	}
 }

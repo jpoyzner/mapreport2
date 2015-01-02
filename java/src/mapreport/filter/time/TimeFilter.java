@@ -68,12 +68,12 @@ public class TimeFilter extends NameFilter {
 			 }
 		}
 		
-		if (filterNode.getTimeFilter() == null || filterNode.getTimeFilter() instanceof Latest || this.getParents().get(filterNode.getTimeFilter().getName()) != null) {
-			           Log.log("TimeFilter limitFilter limiting!");
-			    filterNode.getFilterList().remove(filterNode.getTimeFilter());
-				filterNode.setTimeFilter(this);
-				filterNode.getFilterList().add(this);
-		}
+	//	if (filterNode.getTimeFilter() == null || filterNode.getTimeFilter() instanceof Latest || this.getParents().get(filterNode.getTimeFilter().getName()) != null) {
+			           Log.info("TimeFilter limitFilter limiting!");
+	    filterNode.getFilterList().remove(filterNode.getTimeFilter());
+		filterNode.setTimeFilter(this);
+		filterNode.getFilterList().add(this);
+	//	}
 	}
 	
 	@Override
