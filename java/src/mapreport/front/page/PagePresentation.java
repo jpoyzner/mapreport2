@@ -54,19 +54,16 @@ public class PagePresentation {
 
 	public PagePresentation (
 		FilterNode pageFilters,
-		List<NewsFilterRow> newsFilters,
-		List<News> newsList,
-		List<NewsFilterRow> filters,	
-		Map<String, NameFilter> childFilters,
-		List<NewsFilterRow> parents) throws SQLException {    
+		List<News> newsList,	
+		Map<String, NameFilter> childFilters) throws SQLException {    
 		
 		    Log.info("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
 			
-			for (NewsFilterRow filter : filters) {
-				 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
-			}			  
+		//	for (NewsFilterRow filter : filters) {
+		//		 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
+		//	}			  
 		
-		addParentNodes(pageFilters, parents); 			
+	//	addParentNodes(pageFilters, parents); 			
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -83,7 +80,7 @@ public class PagePresentation {
 			Map<String, NameFilter> childFilters) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
-	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
+	                      Log.info("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
 	                      
                 if (filter instanceof LocationByName) {       
   	            	navLocations.addChildFilter(filter, pageFilters); 

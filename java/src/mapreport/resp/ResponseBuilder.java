@@ -11,6 +11,9 @@ import java.util.Set;
 import mapreport.db.DBQueryBuilder;
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
+import mapreport.db.NewsQueryBuilder;
+import mapreport.db.URLFilterQueryBuilder;
+import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
@@ -27,11 +30,10 @@ import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class ResponseBuilder {
-	
-	//TODO: should rename this class to some internal manager, and move out of this package
+	static int NEWS_LIMIT = 20;	
 
-	public static List<NewsFilterRow> buildParents(Rectangle rect,
-			Set<NameFilter> nameFilters, DBQueryBuilder queryBuilder)
+	public static void addFiltersToQueryBuilder(Rectangle rect,
+			Set<NameFilter> nameFilters, NewsQueryBuilder queryBuilder)
 			throws SQLException {
 		LocationByCoords coordFilter;
 		if (rect != null && rect.getxSpan() > 0) {
@@ -40,21 +42,23 @@ public class ResponseBuilder {
 			queryBuilder.addFilter(coordFilter);
 		}		
 		
-		List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
+	//	List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
 		
 		if (nameFilters != null) {
-			List<String> filterIds = new ArrayList<String>(nameFilters.size());
-			for (NameFilter filter: nameFilters) {
-				if (filter != null && filter.getName() != null) {
-					filterIds.add(filter.getName());
-				}
-			}
+		//	List<String> filterIds = new ArrayList<String>(nameFilters.size());
+		//	for (NameFilter filter: nameFilters) {
+		//		if (filter != null && filter.getName() != null) {
+		//			filterIds.add(filter.getName());
+		//		}
+		//	}
 				
-			FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
+		//	FilterDBQueryBuilder filterDBQueryBuilder = new FilterDBQueryBuilder();
 			
-			if (filterIds.size() > 0) {
-				parents = filterDBQueryBuilder.runQuery(filterIds);
-			}
+		//	if (filterIds.size() > 0) {
+		//		parents = filterDBQueryBuilder.runQuery(filterIds);
+		//	}
+			
+			Map <String, NameFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters);
 			
 			for (NameFilter filter: nameFilters) {
 				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
@@ -65,7 +69,8 @@ public class ResponseBuilder {
 				if (filter instanceof TimeFilter) {
 					queryBuilder.addFilter(filter);  
 				} else if (filter != null && filter.getName() != null) {
-					boolean isLocation = true;
+					// boolean isLocation = true;
+					/*
 					for (NewsFilterRow parentNewsFilterRow : parents) {
 						       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.getFilterName=" + parentNewsFilterRow.getFilterName() + " filter.getName()=" + filter.getName());
 						if (parentNewsFilterRow.getFilterName().equals(filter.getName())) {
@@ -73,10 +78,15 @@ public class ResponseBuilder {
 						       Log.log("before queryBuilder.addFilter(filter) parentNewsFilterRow.filterId.equals(filter.getName()) isLocation=" + isLocation);
 							break;
 						}
-					}
+					}*/
 					
-					NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
-			    	queryBuilder.addFilter(newFilter);   //  adding named filters
+					// NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
+					NameFilter newFilter = filterMap.get(filter.getName());
+					if (newFilter == null) {
+						Log.info(" CAN''T FIND FILTER: " + filter.getName());
+					} else {
+						queryBuilder.addFilter(newFilter);   //  adding named filters
+					}
 				}
 			}
 		}
@@ -85,8 +95,9 @@ public class ResponseBuilder {
 			     Log.log("Controller buildJson ading Latest");
 			queryBuilder.addFilter(new Latest());  
 		}
-		return parents;
+		return;
 	}
+
 	
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 	        Log.info("buildJson url=" + url);
@@ -112,38 +123,60 @@ public class ResponseBuilder {
 		
 		try {
 			// LocationByCoords coordFilter;
-			DBQueryBuilder queryBuilder = new DBQueryBuilder(size);
-		
-				Log.log("buildJson rect=" + rect + " nameFilters=" + nameFilters + " size=" + size);
-		
-			List<NewsFilterRow> parents = buildParents(rect, nameFilters,	queryBuilder);
+			boolean isDBFilterExists = false;
+			if (nameFilters != null) {
+				for (NameFilter filter: nameFilters) {
+					if (filter instanceof DBFilter) {
+						isDBFilterExists = true;
+						break;
+					}
+				}
+			}
 			
-				Log.log("queryBuilder.filterNode.getFilterList().size()=" + queryBuilder.getFilterNode().getFilterList().size());
+			if (!isDBFilterExists) size *= 5;
+
+			NewsQueryBuilder newsBuilder = new NewsQueryBuilder(size);
+		
+				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
+		
+			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
+			
+				Log.log("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
-			queryBuilder.setWhereSQL(queryBuilder.getFilterNode().getWhereSQL());
-			queryBuilder.setOrderBySQL(new StringBuilder(queryBuilder.getFilterNode().getOrderSQL())); 
+			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
+			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<NewsFilterRow> rows = queryBuilder.runQuery();
+			List<News> newsList = newsBuilder.runQuery();
 		
-			List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
-			List<News> newsList = NewsFilterRow.buildNews(rows);
-			List<NewsFilterRow> filters = NewsFilterRow.buildFilters(newsFilters);
 			
-			Map<String, NameFilter> childFilters = NameFilter.buildChildFilters(filters, parents);
-				
-			PagePresentation page = new PagePresentation (queryBuilder.getFilterNode(), newsFilters, newsList, filters, childFilters, parents) ;
+			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
+			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);
+			
+
+			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
+			List <NameFilter> dbFilters = filterBuilder.runQuery(newsMap);
+			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
+			
+		//	Map<String, NameFilter> childFilters = NameFilter.buildChildFilters(filters, parents);
+			newsList = NewsQueryBuilder.buildNewsList(newsMap); 
+			
+			if (newsList.size() > NEWS_LIMIT + 1) {
+				newsList = newsList.subList(0, NEWS_LIMIT);
+			}
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, dbFiltersResult) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
-			page.setPst(queryBuilder.getPst());
+			page.setPst(newsBuilder.getPst());
 			int newsListsize = page.getView().getNewsList().getNewses().size();
 			   Log.log("end main newsListsize=" + newsListsize);
 			   Log.log ("page.getNavigationPath=" + page.getNavigationPath());     
-		
+
 			   // just for test
 			  // if (true) throw new Exception("test exception"); 
 			   
 			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
+		
 		   Log.info("buildJson end json=" + json);
 		} catch (Exception e) {		
 			   Log.log ("catch (Exception e) e.getMessage()" + e.getMessage());	

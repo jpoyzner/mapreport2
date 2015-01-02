@@ -46,8 +46,6 @@ public class NameFilter extends Filter implements ExclusionStrategy  {
 		this.parents = parents;
 	}
 
-	int level;
-
 	public NameFilter(String name) {
 		// this.name = name.replace(' ', '_').replace(',', '_').replace('\'', '_').replace('&', '_');
 		this.name = name;

@@ -32,10 +32,10 @@ public class Topic extends DBFilter{
 		          Log.log("Topic limitFilter filterNode.getTopicFilter()=" + filterNode.getTopicFilter()
 		        		  + "  filterNode=" + filterNode);
 
-		if (filterNode.getTopicFilter() == null || this.getParents().get(filterNode.getTopicFilter().getName()) != null) {
+	//	if (filterNode.getTopicFilter() == null || this.getParents().get(filterNode.getTopicFilter().getName()) != null) {
 					Log.log("Topic limitFilter setTopicFilter");
 			updateFilterNode(filterNode);
-		}
+	//	}
 	}		
 	
 	@Override

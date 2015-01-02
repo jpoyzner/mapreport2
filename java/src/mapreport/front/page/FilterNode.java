@@ -39,7 +39,7 @@ public class FilterNode {
 
 	String header = "";
 	String description = "";
-	String orderSQL = "\n order by n.dateTime desc, nfPriority / nPriority desc, nf.isPrimary desc ";
+	String orderSQL = "\n order by n.dateTime desc, nPriority ";
 	String name = "";
 	
 	public String getOrderSQL() {
@@ -73,10 +73,13 @@ public class FilterNode {
 	public String getLink() {
 		link = "";
 		if (getLocationFilter() != null){
-	    //	  Log.log("getLink()  locationFilter().getLink()=" + getLocationFilter().getLink());
+	    	  Log.log("getLink()  locationFilter().getLink()=" + getLocationFilter().getLink());
+	    }
+		if (getTopicFilter() != null){
+	    	  Log.log("getLink() topicFilter().getLink()=" + getTopicFilter().getLink());
 	    }
 		if (getTimeFilter() != null){
-	    	//  Log.log("getLink()  timeFilter().getLink()=" + getTimeFilter().getLink());
+	    	  Log.log("getLink()  timeFilter().getLink()=" + getTimeFilter().getLink());
 	    }
 		    Log.log("FilterNode getLink() filterList.size()=" + filterList.size());
 		for (Filter filter: filterList) {
@@ -89,7 +92,7 @@ public class FilterNode {
 				}
 			}
 		}
-		 //    Log.log("FilterNode getLink() link=" + link);
+		     Log.log("FilterNode getLink() link=" + link);
 		return link;
 	}
 
@@ -98,14 +101,14 @@ public class FilterNode {
 	}
 
 	public FilterNode(FilterNode oldFilterNode) {
-		           Log.log("FilterNode(FilterNode oldFilterNode)");
+        	Log.info("FilterNode(FilterNode oldFilterNode) oldFilterNode=" + oldFilterNode.toString() + "  getLink()=" + getLink());
 		addFilterType(oldFilterNode.getLocationFilter());
 		addFilterType(oldFilterNode.getLocationFilter2());
 		addFilterType(oldFilterNode.getTopicFilter());
 		addFilterType(oldFilterNode.getTopicFilter2());
 		addFilterType(oldFilterNode.getTimeFilter());
 		addFilterType(oldFilterNode.getCoordFilter());
-                    Log.log("FilterNode(FilterNode oldFilterNode) end toString()=" + toString() + "  getLink()=" + getLink());
+                    Log.info("FilterNode(FilterNode oldFilterNode) new toString()=" + toString() + "  getLink()=" + getLink());
 	}
 	
 	public FilterNode() {
@@ -165,7 +168,7 @@ public class FilterNode {
 	 
 		} else if (filter instanceof Topic) {
 			Topic topic = (Topic)filter;
-	          System.out.println("FilterNode add Topic");   
+			  Log.log("FilterNode add Topic");   
 	          addFilterType(topic);
 		} else if (filter instanceof LocationByName) {
 			LocationByName locationByName = (LocationByName)filter;

@@ -28,11 +28,11 @@ public class LocationByName extends DBFilter  implements Location {
 		}*/
         
 		
-		if (filterNode.getLocationFilter() == null || this.getParents().get(filterNode.getLocationFilter().getName()) != null) {
+//		if (filterNode.getLocationFilter() == null || this.getParents().get(filterNode.getLocationFilter().getName()) != null) {
 			updateFilterNode(filterNode);
 				 Log.log("LocationByName limitFilter LIMITED  filterNode.getLocationFilter()=" + filterNode.getLocationFilter() + 
 						 "  getName()=" + filterNode.getLocationFilter().getName() + "  getLink()=" + filterNode.getLocationFilter().getLink());
-		}
+//		}
 		
 	}	
 	

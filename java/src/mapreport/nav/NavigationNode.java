@@ -61,6 +61,7 @@ public class NavigationNode implements Comparable{
 	@Override
 	public int compareTo(Object arg0) {
 		int diff = ((NavigationNode)arg0).getPriority() - this.getPriority() ;
+	//	int diff =  this.getPriority() - ((NavigationNode)arg0).getPriority();
 		return diff;
 	}
 }

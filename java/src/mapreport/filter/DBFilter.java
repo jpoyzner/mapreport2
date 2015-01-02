@@ -13,9 +13,9 @@ public class DBFilter extends NameFilter {
 			+ "	 nf.isPrimary as isPrimary, n.addressText as addressText \n "
 			+ "from news n, filter f, filter fp, newsfilter nf , filterfilter ff \n "
 			+ "where n.newsid = nf.newsid \n "
-			+ "and nf.filterid = f.filterid \n "
-			+ "and nf.filterid = ff.childfilterid \n "
-			+ "and fp.filterid = ff.parentfilterid \n "
+			+ "and nf.filterId = f.filterId \n "
+			+ "and nf.filterId = ff.childfilterId \n "
+			+ "and fp.filterId = ff.parentfilterId \n "
 			+ "and  fp.name = '"; // Africa') f2"
 	final static String SECOND_FROM_SQL_END = "') f2 \n ";
 	

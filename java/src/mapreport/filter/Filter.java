@@ -12,6 +12,27 @@ import mapreport.util.Log;
 public abstract class Filter {
 
 	int priority;
+	int level;
+	String link = "";
+	String image = "";
+	@Expose String name = null;
+	
+	public String getImage() {
+		return image;
+	}
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
+	}
+
 	
 	private StringBuilder selectSQL = new StringBuilder("");
 	private StringBuilder fromSQL = new StringBuilder("");
@@ -29,9 +50,6 @@ public abstract class Filter {
 		this.priority = priority;
 	}
 
-	String link = "";
-
-	@Expose String name = null;
 	  
 	public String getName() {
 		return name;

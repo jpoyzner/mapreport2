@@ -8,7 +8,7 @@ import com.google.gson.annotations.Expose;
 import mapreport.filter.loc.LocationByName;
 import mapreport.util.Log;
 
-public class News {
+public class News implements Comparable{
 	
 	@Expose String label = null;
 	@Expose String url = null;
@@ -24,7 +24,25 @@ public class News {
 	String location;
 	double x = 0;
 	double y = 0;
+	int newsId = 0;
+	int newsFilterPriority = 0;
 	
+	public int getNewsFilterPriority() {
+		return newsFilterPriority;
+	}
+
+	public void setNewsFilterPriority(int newsFilterPriority) {
+		this.newsFilterPriority = newsFilterPriority;
+	}
+
+	public int getNewsId() {
+		return newsId;
+	}
+
+	public void setNewsId(int newsId) {
+		this.newsId = newsId;
+	}
+
 	public String getLocation() {
 		return location;
 	}
@@ -132,5 +150,11 @@ public class News {
 	}
 	public void setPriority(int priority) {
 		this.priority = priority;
+	}
+
+	@Override
+	public int compareTo(Object compNews) {
+		int diff = priority - ((News)compNews).priority;
+		return diff;
 	}
 }

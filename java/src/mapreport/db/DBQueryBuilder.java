@@ -1,8 +1,5 @@
 package mapreport.db;
 
-import java.io.UnsupportedEncodingException;
-import java.net.MalformedURLException;
-import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,28 +9,14 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
-import mapreport.filter.loc.LocationByCoords;
-import mapreport.filter.loc.LocationByName;
-import mapreport.filter.time.Latest;
-import mapreport.filter.time.OfficialTimeFilter;
-import mapreport.filter.time.TimeFilter;
-import mapreport.filter.topic.Topic;
-import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
-import mapreport.front.page.PagePresentation;
-import mapreport.front.url.PageURL;
-import mapreport.news.News;
 import mapreport.resp.ResponseBuilder;
-import mapreport.util.JSONHandler;
-import mapreport.util.JsonError;
 import mapreport.util.Log;
-import mapreport.view.map.Rectangle;
 
 public class DBQueryBuilder extends DBBase{	
   FilterNode filterNode = new FilterNode();   
@@ -45,9 +28,7 @@ public class DBQueryBuilder extends DBBase{
 		this.filterNode = filterNode;
   }
 
-  int limit = 2;
-  
-  static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
+   static final String SELECT_EXTERNAL_COORD_FILTER = "select  f.priority as filterPriority, nl.dateTime, f.name as fName" + 
 	 ", nf.priority as nfPriority" +  ",	 nf.isPrimary as isPrimary, n.addressText as addressText," +
 	 ", \n nl.topCoord as bottomCoord, nl.bottomCoord as topCoord, nl.leftCoord , nl.rightCoord, nl.isOfficial, nl.newsId, nl.label, nl.priority as nPriority" + 
 	 ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation \n " + 
@@ -55,7 +36,7 @@ public class DBQueryBuilder extends DBBase{
 
   static final String SELECT_EXTERNAL = "select  f.priority as filterPriority, n.dateTime, f.name as fName, fp.name as pName, fp.isLocation as isPLocation, ff.level as pLevel, nf.priority as nfPriority, " + 
 		  "	 nf.isPrimary as isPrimary, n.addressText as addressText," +
-			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " + 
+			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, " + 
 			 " \n f.isLocation, n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
 
@@ -63,8 +44,8 @@ public class DBQueryBuilder extends DBBase{
   static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
   static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
   static final String FROM_EXTERNAL_END = "";
-  static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterid = nf.filterid  and nl.newsid = nf.newsid   and f.filterid = nf.filterid";
-  static final String WHERE_EXTERNAL = "\n where  f.filterid = nf.filterid  and nf.newsid = n.newsid and f.filterid = ff.childFilterId  and fp.filterid = ff.parentFilterId ";
+  static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and nl.newsid = nf.newsid   and f.filterId = nf.filterId";
+  static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsid = n.newsid and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
   
   public void addFilter(Filter filter) {
 	  	Log.log("DBQueryBuilder addFilter filter=" + filter);
@@ -82,24 +63,19 @@ public class DBQueryBuilder extends DBBase{
 	  orderBySQL.append(filter.getOrderBySQL());
   }
 	
-
-	
-	private String sql = null;
-
-	private StringBuilder selectSQL = new StringBuilder("");
-	
- //   from filter f, location l, news n, newsfilter nf
-	// "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
-	private StringBuilder fromSQL = new StringBuilder("\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
-	private StringBuilder whereSQL = new StringBuilder(" f.filterid = l.filterid " + 
-       " and n.newsid = nf.newsid " + 
-       "  and f.filterid = nf.filterid " + 
-       "  and nf.isPrimary = 1");
-	
-	private StringBuilder orderBySQL = new StringBuilder("");
-	
 	public DBQueryBuilder(int limit) {
 		this.limit = limit;
+
+		selectSQL = new StringBuilder("");
+		
+		fromSQL = new StringBuilder("\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
+		whereSQL = new StringBuilder(" f.filterId = l.filterId " + 
+	       " and n.newsid = nf.newsid " + 
+	       "  and f.filterId = nf.filterId " + 
+	       "  and nf.isPrimary = 1");
+		
+		orderBySQL = new StringBuilder("");
+		
 	}
 	
 	public String buildSql() {
@@ -165,7 +141,7 @@ public class DBQueryBuilder extends DBBase{
 		*/     		
 	    	// Json by URL by Java objects
 	    Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);  
-	  //  nameFilters.add(new DBFilter("Fire"));
+	    nameFilters.add(new DBFilter("Fire"));
 	//    nameFilters.add(new DBFilter("San Jose"));
 	    
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
@@ -179,73 +155,12 @@ public class DBQueryBuilder extends DBBase{
         	Log.log("end main");
 	}
 
-
-	
-	public List<NewsFilterRow> runQuery() throws SQLException {
-		begin();
-		Log.log("start startBindQuery");
-		startBindQuery();	
-		Log.log("start bindFilters");	
-		bindFilters();
-		Log.log("start executeQuery");
-		Log.info("DBQueryBuilder runQuery() pst=\n" + pst.toString());
-		ResultSet resultSet = pst.executeQuery();
-		Log.log("start processResultSet");		
-	    List<NewsFilterRow> rows = processResultSet(resultSet);
-	    return rows;
-	}
-	
-	void startBindQuery() throws SQLException {
-
-	}
 	
 	void bindFilters() throws SQLException {
 		filterNode.bindFilters(pst);
 	}
-		
-	public PreparedStatement begin(){
-        buildConnection();        
 
-		buildSql();
-		pst = prepareStmt();
-		
-        // select  f.priority as filterPriority, 
-        // f.name as fName, n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, 
-        
-		Log.log("DBQueryBuilder con=" + con);
-        return pst;
-	}
 
-	public static void buildConnection() {
-		try {
-			con = DriverManager.getConnection(url, user, password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-		
-	
-	public PreparedStatement prepareStmt() {
-		try {
-			pst = con.prepareStatement(sql);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return pst;
-	}
-	
-	public static boolean hasColumn(ResultSet rs, String columnName) throws SQLException {
-	    ResultSetMetaData rsmd = rs.getMetaData();
-	    int columns = rsmd.getColumnCount();
-	    for (int x = 1; x <= columns; x++) {
-	        if (columnName.equals(rsmd.getColumnName(x))) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
 	
 	public List<NewsFilterRow> processResultSet(ResultSet res) throws SQLException{ 
 		List<NewsFilterRow> rows = new ArrayList<NewsFilterRow>(100);
@@ -335,103 +250,18 @@ public class DBQueryBuilder extends DBBase{
 			  +  " nPriority=" + nPriority  +  " isPrimary=" + isPrimary  +  " addressText=" + addressText  );
 		  return row;
 	}
-	
-	public void end(){
-    	try{
-            pst.executeUpdate();
-            
-    	    } catch (SQLException e) {
-    			// TODO Auto-generated catch block
-    			e.printStackTrace();
-    		} finally {
-    	
-    	        try {
-    	            if (pst != null) {
-    	                pst.close();
-    	            }
-    	            if (con != null) {
-    	                con.close();
-    	            }
-    	
-    	        } catch (SQLException ex) {
-    	          //  Logger lgr = Logger.getLogger(Test.class.getName());
-    	           // lgr.log(Level.SEVERE, ex.getMessage(), ex);
-    	        	Log.info(ex.getMessage());
-    	            ex.printStackTrace(System.out);
-    	        }
-    	    }	}
-	
-	public static StringBuilder addComaSQL(StringBuilder sql, String toAddSQL) {
-		if (sql.length() > 0) {
-			sql.append(", ");			
-		}
-		sql.append(toAddSQL);
-		return sql;
-	}
-	
-	public StringBuilder addWhereSQL(String toAddSQL) {
-		if (whereSQL.length() > 0) {
-			whereSQL.append(" and ");			
-		}
-		whereSQL.append(toAddSQL);
-		return whereSQL;
-	}
-	
-	public ResultSet executeQuery() {
-		try {
-			Log.info("DBQueryBuilder pst=\n" + pst.toString());
-			resultSet = pst.executeQuery();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return resultSet;
-	}
-	
-	public StringBuilder addOrderSQL(String toAddSQL) {
-		return addComaSQL(orderBySQL, toAddSQL);
-	}
-	
-	public StringBuilder addFromSQL(String toAddSQL) {
-		return addComaSQL(fromSQL, toAddSQL);
-	}
-	
-	public StringBuilder addSelectSQL(String toAddSQL) {
-		return addComaSQL(selectSQL, toAddSQL);
-	}
-	
-	public String getSql() {
-		return sql;
-	}
-
-	public void setSql(String sql) {
-		this.sql = sql;
-	}
-	
-	public StringBuilder getSelectSQL() {
-		return selectSQL;
-	}
-	public void setSelectSQL(StringBuilder selectSQL) {
-		this.selectSQL = selectSQL;
-	}
-
-	public StringBuilder getFromSQL() {
-		return fromSQL;
-	}
-	public void setFromSQL(StringBuilder fromSQL) {
-		this.fromSQL = fromSQL;
-	}
-	public StringBuilder getWhereSQL() {
-		return whereSQL;
-	}
-	public void setWhereSQL(StringBuilder whereSQL) {
-		this.whereSQL = whereSQL;
-	}
-	public StringBuilder getOrderBySQL() {
-		return orderBySQL;
-	}
-	public void setOrderBySQL(StringBuilder orderBySQL) {
-		this.orderBySQL = orderBySQL;
-	}
+	  public List<NewsFilterRow> runQuery() throws SQLException {
+			begin();
+			Log.log("start startBindQuery");
+			startBindQuery();	
+			Log.log("start bindFilters");	
+			bindFilters();
+			Log.log("start executeQuery");
+			Log.info("DBQueryBuilder runQuery() pst=\n" + pst.toString());
+			ResultSet resultSet = pst.executeQuery();
+			Log.log("start processResultSet");		
+		    List<NewsFilterRow> rows = processResultSet(resultSet);
+		    return rows;
+	  }
 
 }
