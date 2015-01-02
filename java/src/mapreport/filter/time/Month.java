@@ -12,8 +12,8 @@ public class Month extends OfficialTimeFilter {
 		super(name);
 		// TODO Auto-generated constructor stub
 
-		begin = new GregorianCalendar(year, month, 1);
-		end = new GregorianCalendar(year, month, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
+		begin = new GregorianCalendar(year, month - 1, 1);
+		end = new GregorianCalendar(year, month - 1, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
 	}
 
 	public Month(int year, int month) {
@@ -21,11 +21,11 @@ public class Month extends OfficialTimeFilter {
 		this.year = year;		
 		this.month = month;
 		
-		begin = new GregorianCalendar(year, month, 1);
-		end = new GregorianCalendar(year, month, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
+		begin = new GregorianCalendar(year, month - 1, 1);
+		end = new GregorianCalendar(year, month - 1, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
 		
 		setName(String.valueOf(year) + "-" + (month < 10 ? "0" : "") + String.valueOf(month));		
-		           Log.log("Month year=" + year + " month=" + month + " name=" + getName());
+		           Log.info("Month year=" + year + " month=" + month + " name=" + getName());
 
 		parent = new Year(year);		
 		buildTimeSQL(); 	           
