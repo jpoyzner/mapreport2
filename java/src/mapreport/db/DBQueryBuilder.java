@@ -44,8 +44,8 @@ public class DBQueryBuilder extends DBBase{
   static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
   static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
   static final String FROM_EXTERNAL_END = "";
-  static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and nl.newsid = nf.newsid   and f.filterId = nf.filterId";
-  static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsid = n.newsid and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
+  static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and nl.newsId = nf.newsId   and f.filterId = nf.filterId";
+  static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
   
   public void addFilter(Filter filter) {
 	  	Log.log("DBQueryBuilder addFilter filter=" + filter);
@@ -70,7 +70,7 @@ public class DBQueryBuilder extends DBBase{
 		
 		fromSQL = new StringBuilder("\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
 		whereSQL = new StringBuilder(" f.filterId = l.filterId " + 
-	       " and n.newsid = nf.newsid " + 
+	       " and n.newsId = nf.newsId " + 
 	       "  and f.filterId = nf.filterId " + 
 	       "  and nf.isPrimary = 1");
 		
