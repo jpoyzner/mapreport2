@@ -36,7 +36,7 @@ public class FilterDBQueryBuilder {
 		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
 	
-	private static String sqlEnd = ") \n  order by n.priority, nf.priority, f.priority, n.dateTime, nf.isPrimary \n limit 1000";
+	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 1000";
 	
 	public List <NameFilter> processResultSet(ResultSet res) throws SQLException{ 
 		List <NameFilter> rows = new ArrayList<NameFilter>(1000);
