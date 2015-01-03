@@ -12,7 +12,8 @@ public class Decade extends Year {
 	}
 	
 	public Decade(int year) {
-		super(String.valueOf(year) + "s");		
+		super(String.valueOf(year) + "s");	
+		setPriority(600);	
 		this.year = year;
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 9, 11, 31);

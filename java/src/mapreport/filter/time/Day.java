@@ -21,6 +21,7 @@ public class Day extends OfficialTimeFilter {
 		this.year = year;		
 		this.month = month;	
 		this.day = day;		
+		setPriority(30);	
 // 2011-12-03
 		setName(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));	
 
