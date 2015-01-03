@@ -99,7 +99,7 @@ public class PagePresentation {
 
 		navLocations.addChildFilter(new Global(), pageFilters);
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
-		navDates.addChildFilter(new AllTopics(AllTime.ALL_TIME_NAME), pageFilters);
+		navDates.addChildFilter(new AllTime(), pageFilters);
         
         navLocations.sort();
         navTopics.sort();
