@@ -49,8 +49,8 @@ function(TopicsCollection, LocationsCollection, DatesCollection, BuildURL) {
 				params.push("topic=" + encodeURI(this.topic));
 			}
 			
-			if (this.location) {
-				params.push("location=" + encodeURI(this.location));
+			if (this.loc) {
+				params.push("location=" + encodeURI(this.loc));
 			}
 			
 			if (this.date) {
