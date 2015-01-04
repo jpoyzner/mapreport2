@@ -186,6 +186,7 @@ public class NewsQueryBuilder extends DBBase {
 		row.setY(y);
 		row.setDateTime(date);
 		row.setLabel(label);
+		row.setId(Integer.parseInt(newsId));
 		row.setNewsId(Integer.parseInt(newsId));
 		row.setPriority(Integer.parseInt(nPriority));
 		row.setNewsFilterPriority(Integer.parseInt(nfPriority));
