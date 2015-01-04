@@ -124,6 +124,7 @@ public class OfficialTimeFilter extends TimeFilter {
 	public OfficialTimeFilter(String name) {
 		super(name);
 		buildName();
+		setPriority(100);
 		// TODO Auto-generated constructor stub
 	}
 	

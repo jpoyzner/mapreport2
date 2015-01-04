@@ -31,7 +31,8 @@ public class FilterDBQueryBuilder {
  order by n.priority, n.dateTime, nf.isPrimary;
 	 */
 	private static String sqlBegin = "select f.filterId, f.name, f.label, f.image, f.isLocation, f.name as filterName, ff.level, " + 
-			"\n  f.priority as filterPriority,  nf.priority as newsFilterPriority,  ff.priority as filterFilterPriority " + 
+			"\n  f.priority as filterPriority,  nf.priority as newsFilterPriority,  ff.priority as filterFilterPriority, " + 
+			"\n  fp.filterId as parentId, fp.name as parentName, fp.label as parentLabel, fp.image as parentImage, fp.isLocation as parentLocation" + 
 			"\n from filter f, filter fp, newsfilter nf, filterfilter ff, news n  " + 
 		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
@@ -56,14 +57,26 @@ public class FilterDBQueryBuilder {
 			String filterId = res.getString("filterId");
 			String label = res.getString("label");
 			String image = res.getString("image");
-		//	String filterName = res.getString("filterName");
 			  
 			row.setLevel(level);
 			row.setName(fName);
-		//	row.setFilterId(filterId);
-			row.setImage(image);
-		//	row.setFilterName(filterName);
-			  
+			row.setImage(image);		  
+	
+			rows.add(row);			
+
+			boolean isParentLocation = res.getBoolean("parentLocation");
+			String fParentName = res.getString("parentName");
+			NameFilter rowParent = isParentLocation ? new LocationByName(fParentName) : new Topic(fParentName);
+			rowParent.setPriority(priority);
+			String filterParentId = res.getString("parentId");
+			String labelParent = res.getString("parentLabel");
+			String imageParent = res.getString("parentImage");			  
+			rowParent.setLevel(level);
+			rowParent.setName(fParentName);
+			rowParent.setImage(imageParent);	
+			
+			rows.add(rowParent);
+			
 			  Log.log("FilterDBQueryBuilder processResultSet "
 					  +  " priority=" + priority 
 					  +  " newsFilterPriority=" + newsFilterPriority 
@@ -71,8 +84,10 @@ public class FilterDBQueryBuilder {
 					  +  " filterPriority=" + filterPriority +
 					  " label=" + label +  " level=" + level  +  " filterId=" + filterId 
 					  +  " fName=" + fName   
-					  +  " isLocation=" + isLocation   +  " image=" + image  );		
-			rows.add(row);
+					  +  " isLocation=" + isLocation   +  " image=" + image  +
+					  " labelParent=" + labelParent +  " filterParentId=" + filterParentId 
+					  +  " fParentName=" + fParentName   
+					  +  " isParentLocation=" + isParentLocation   +  " imageParent=" + imageParent  );	
 		}
 		
 		return rows;

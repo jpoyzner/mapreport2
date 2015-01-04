@@ -20,6 +20,7 @@ public class Year extends OfficialTimeFilter {
 			Log.log("Year year=" + year + " name=" + getName() + " begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString());
 		parent = new Decade((year - 5) / 10 * 10);	
 		buildTimeSQL(); 
+		setPriority(400);	
 	}
 	
 
