@@ -144,7 +144,6 @@ public class FilterDBQueryBuilder {
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
 		List <NameFilter> rows = processResultSet(resultSet);
-		rows = addTimeFilters(rows, newsMap);
 	    return rows;
 	}
 	
