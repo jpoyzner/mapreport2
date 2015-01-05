@@ -616,10 +616,11 @@ Fired when the Maps API has fully loaded.
 
         // For one marker, don't alter zoom, just center it.
         if (this.markers.length > 1) {
-          this.map.fitBounds(latLngBounds);
+          this.map.fitBounds(latLngBounds); 
         }
 
         this.map.setCenter(latLngBounds.getCenter());
+        //this.map.setZoom(this.map.getZoom() + 1);
       }
     }
 

@@ -1,9 +1,10 @@
-define(['collections/topics', 'collections/locations', 'collections/dates', 'utils/buildurl', 'underscore', 'backbone'],
-function(TopicsCollection, LocationsCollection, DatesCollection, BuildURL) {
+define(['collections/topics', 'collections/locations', 'collections/dates', 'models/story', 'utils/buildurl', 'underscore', 'backbone'],
+function(TopicsCollection, LocationsCollection, DatesCollection, StoryModel, BuildURL) {
 	return Backbone.Collection.extend({
-		model: Backbone.Model.extend({defaults: {icon: 'http://www.mapreport.com/images/common/list5.gif'}}), //TODO: NEED REAL DEFAULT ICON
+		model: StoryModel,
 		initialize: function() {
 			this.fetches = 0;
+			this.optionsChanged = 2;
 			
 			this.on('request', _.bind(function() {
 				this.fetches++;

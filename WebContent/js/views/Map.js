@@ -20,34 +20,35 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				window.google.maps.event.addListener(event.target.map, 'zoom_changed', _.after(3, boundLoadFunc));
 			}, this));
 
-			//this.listenTo(options.news, 'request', this.refresh);
 			this.listenTo(this.news, 'sync', this.populateMarkers);
 		},
 		loadNewsByCoords: function(event) {
-			this.map.removeAttr('fitToMarkers');
-		    var bounds = event.target.map.getBounds();
+			if (this.news.optionsChanged/* && this.map.attr('fitToMarkers') !== undefined*/) {
+				this.news.optionsChanged--;
+				return;
+			}
+
+			var bounds = event.target.map.getBounds();
 		    var ne = bounds.getNorthEast();
 		    var sw = bounds.getSouthWest();
 			this.news.fetching = true;
 		    this.news.mapBounds = {left: sw.lng(), right: ne.lng(), top: ne.lat(), bottom: sw.lat()};
+		    this.news.loc = undefined;
+		    
+		    this.map.removeAttr('fitToMarkers');
 		    this.news.fetch();
 		},
-//		refresh: function() {
-//			if (this.news.length) {
-//				this.map[0].clear();
-//			}
-//		},
 		populateMarkers: function() {
-			if (!this.news.fetches) {
-				//if (this.news.length) {
-					this.map[0].clear();
-				//}
-				
-				this.map.html(Templates['mr-map-markers-template']({
-					news: this.news,
-					latitude: this.latitude,
-					longitude: this.longitude}));
+			if (this.news.fetches) {
+				return;
 			}
+			
+			if (this.news.optionsChanged) {
+				this.map.attr('fitToMarkers', '');
+			}
+			
+			this.map[0].clear();
+			this.map.html(Templates['mr-map-markers-template']({news: this.news, latitude: this.latitude, longitude: this.longitude}));
 		}
 	});
 });
