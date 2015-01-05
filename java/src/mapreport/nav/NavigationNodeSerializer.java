@@ -14,6 +14,7 @@ public class NavigationNodeSerializer  implements JsonSerializer<NavigationNode>
 	public JsonElement serialize(NavigationNode navigationNode, final Type typeOfSrc, final JsonSerializationContext context) {
 	    final JsonObject jsonObject = new JsonObject();
    	    final JsonElement jsonMetaData = context.serialize(navigationNode.metaData.getHeader());
+   	    // final JsonElement jsonMetaData = context.serialize(URLEncoder.encode(navigationNode.metaData.getHeader()));
 	    jsonObject.add("node", jsonMetaData);   	
 
 		    Log.log ("NavigationNodeSerializer navigationNode=" + navigationNode);

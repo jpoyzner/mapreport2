@@ -51,11 +51,11 @@ public class PageURL {
             		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport")) {	
             	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath);            	
             	if (timeFilter != null) {
-            		       Log.log("buildParams timeFilter != null timeFilter:" + timeFilter);
+            		       Log.info("buildParams timeFilter != null timeFilter:" + timeFilter);
 		        	filters.add(timeFilter);
             	} else  {
 		        	DBFilter dbFilter = new DBFilter(partPath);
-	                     Log.log("buildParams timeFilter == null dbFilter:" + dbFilter);
+	                     Log.info("buildParams timeFilter == null dbFilter.getName:" + dbFilter.getName());
 		        	filters.add(dbFilter);
             	}
             }

@@ -143,6 +143,12 @@ public class ResponseBuilder {
 			NewsQueryBuilder newsBuilder = new NewsQueryBuilder(size);
 		
 				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
+				if (nameFilters != null) {
+					for (NameFilter filter: nameFilters) {
+						Log.info("buildJson NameFilter: " + filter.getName());
+					}
+				}
+
 		
 			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
 			

@@ -1,5 +1,6 @@
 package mapreport.front.page;
 
+import java.net.URLEncoder;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -85,7 +86,7 @@ public class FilterNode {
 		for (Filter filter: filterList) {
 			       //    Log.log("FilterNode getLink() filter=" + filter);
 			if (filter != null) {
-				String filterLink = filter.getLink();
+				String filterLink = URLEncoder.encode(filter.getLink());
 			//	        Log.log("FilterNode getLink() filterLink=" + filterLink);
 				if (filterLink != null && !filterLink.isEmpty()) {     
 					link += filterLink + '/';

@@ -17,7 +17,7 @@ import mapreport.view.map.Rectangle;
 
 public class Endpoints {
 	public static final String news(HttpServletRequest request)  throws MalformedURLException, UnsupportedEncodingException{
-    	Log.log("Endpoints news");
+    	Log.info("Endpoints news");
 		
     	Rectangle rectangle = null;
 		String left = request.getParameter("left");
@@ -49,8 +49,8 @@ public class Endpoints {
 		String date = request.getParameter("date");
 		if (date != null) {
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
-		}
-		
+		} 
+		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date);
 		return ResponseBuilder.buildJson(rectangle, nameFilters, 100).toString();
 	}
 	
