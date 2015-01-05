@@ -52,19 +52,19 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			
 			$(menus[0]).find('input-options').on('action-fired', _.bind(function(event) {
 				this.news.topic = event.target.value_;
-				this.news.optionsChanged = 2;
+				this.news.optionsChanging();
 				this.news.fetch();
 			}, this));
 			
 			$(menus[1]).find('input-options').on('action-fired', _.bind(function(event) {
 				this.news.loc = event.target.value_;
-				this.news.optionsChanged = 2;
+				this.news.optionsChanging();
 				this.news.fetch();
 			}, this));
 			
 			$(menus[2]).find('input-options').on('action-fired', _.bind(function(event) {
 				this.news.date = event.target.value_;
-				this.news.optionsChanged = 2;
+				this.news.optionsChanging();
 				this.news.fetch();
 			}, this));
 		}

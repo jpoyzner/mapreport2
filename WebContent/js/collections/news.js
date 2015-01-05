@@ -4,7 +4,6 @@ function(TopicsCollection, LocationsCollection, DatesCollection, StoryModel, Bui
 		model: StoryModel,
 		initialize: function() {
 			this.fetches = 0;
-			this.optionsChanged = 2;
 			
 			this.on('request', _.bind(function() {
 				this.fetches++;
@@ -59,6 +58,9 @@ function(TopicsCollection, LocationsCollection, DatesCollection, StoryModel, Bui
 			}
 			
 			return BuildURL('news', params);
+        },
+        optionsChanging: function() {
+        	this.optionMapUpdates = 3;
         }
 	});
 });
