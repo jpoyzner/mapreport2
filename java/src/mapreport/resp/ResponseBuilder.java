@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -167,14 +168,21 @@ public class ResponseBuilder {
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
 			List <NameFilter> dbFilters = filterBuilder.runQuery(newsMap);
 			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
+
+			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());
+			List <NameFilter> allHintList = filterBuilder.addTimeFilters(filterList, newsMap);
 			
-		//	Map<String, NameFilter> childFilters = NameFilter.buildChildFilters(filters, parents);
+			Map<String, NameFilter> allHintMap = new HashMap<String, NameFilter>(111); 
+			for (NameFilter filter : allHintList) {
+				allHintMap.put(filter.getName(), filter);
+			}
+			
 			newsList = NewsQueryBuilder.buildNewsList(newsMap); 
 			
 			if (newsList.size() > NEWS_LIMIT + 1) {
 				newsList = newsList.subList(0, NEWS_LIMIT);
 			}
-			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, dbFiltersResult) ;
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
