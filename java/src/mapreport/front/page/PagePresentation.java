@@ -83,7 +83,7 @@ public class PagePresentation {
 			Map<String, NameFilter> childFilters) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
-	                      Log.info("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
+	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
 	                      
                 if (filter instanceof LocationByName) {       
   	            	navLocations.addChildFilter(filter, pageFilters); 

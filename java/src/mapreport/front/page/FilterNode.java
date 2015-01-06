@@ -102,14 +102,14 @@ public class FilterNode {
 	}
 
 	public FilterNode(FilterNode oldFilterNode) {
-        	Log.info("FilterNode(FilterNode oldFilterNode) oldFilterNode=" + oldFilterNode.toString() + "  getLink()=" + getLink());
+        	Log.log("FilterNode(FilterNode oldFilterNode) oldFilterNode=" + oldFilterNode.toString() + "  getLink()=" + getLink());
 		addFilterType(oldFilterNode.getLocationFilter());
 		addFilterType(oldFilterNode.getLocationFilter2());
 		addFilterType(oldFilterNode.getTopicFilter());
 		addFilterType(oldFilterNode.getTopicFilter2());
 		addFilterType(oldFilterNode.getTimeFilter());
 		addFilterType(oldFilterNode.getCoordFilter());
-                    Log.info("FilterNode(FilterNode oldFilterNode) new toString()=" + toString() + "  getLink()=" + getLink());
+                    Log.log("FilterNode(FilterNode oldFilterNode) new toString()=" + toString() + "  getLink()=" + getLink());
 	}
 	
 	public FilterNode() {

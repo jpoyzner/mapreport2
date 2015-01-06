@@ -48,7 +48,7 @@ public class NavigationList {
 			
 	    if (childrenMap.get(filter.getName()) == null) {	
 			NavigationNode navNode = new NavigationNode(filterNode, filter);
-			    Log.info("NavigationList addChildFilter filter=" + filter + " filtergetName=" + filter.getName() // + " filtergetName=" + filter.getId() 
+			    Log.log("NavigationList addChildFilter filter=" + filter + " filtergetName=" + filter.getName() // + " filtergetName=" + filter.getId() 
 			    		+ " navNode.metaData.getHeader()=" + navNode.metaData.getHeader());
 			children.add(navNode);
 			childrenMap.put(filter.getName(), navNode);
