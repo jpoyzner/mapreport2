@@ -106,7 +106,7 @@ public class DBBase {
 		}
 	}
 
-	public String buildSql(int nameFiltersNo) {
+	public String buildSql(int nameFiltersNo, boolean isCoordFilter) {
 		return null;
 	}
 
