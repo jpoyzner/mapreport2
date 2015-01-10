@@ -43,11 +43,11 @@ public class NewsQueryBuilder extends DBBase {
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
-	static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, news n , location l \n ";
+	static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, news n \n ";
 	static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
 	static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
 	static final String FROM_EXTERNAL_END = "";
-	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and n.newsId = nf.newsId   and l.filterId = f.filterId ";
+	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and n.newsId = nf.newsId  ";
 	static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
 
 	public void addFilter(Filter filter) {
