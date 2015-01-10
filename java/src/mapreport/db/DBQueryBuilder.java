@@ -250,8 +250,8 @@ public class DBQueryBuilder extends DBBase{
 			  +  " nPriority=" + nPriority  +  " isPrimary=" + isPrimary  +  " addressText=" + addressText  );
 		  return row;
 	}
-	  public List<NewsFilterRow> runQuery() throws SQLException {
-			begin();
+	  public List<NewsFilterRow> runQuery(int nameFiltersNo, boolean isCoordFilter) throws SQLException {
+			begin(nameFiltersNo, isCoordFilter);
 			Log.log("start startBindQuery");
 			startBindQuery();	
 			Log.log("start bindFilters");	

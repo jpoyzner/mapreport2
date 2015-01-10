@@ -106,7 +106,7 @@ public class DBBase {
 		}
 	}
 
-	public String buildSql() {
+	public String buildSql(int nameFiltersNo) {
 		return null;
 	}
 
@@ -132,10 +132,10 @@ public class DBBase {
 		return false;
 	}
 
-	public PreparedStatement begin() {
+	public PreparedStatement begin(int nameFilterNo, boolean isCoordFilter) {
 		buildConnection();
 
-		buildSql();
+		buildSql(nameFilterNo, isCoordFilter);
 		pst = prepareStmt();
 
 		Log.log("DBQueryBuilder con=" + con);

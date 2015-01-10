@@ -158,7 +158,7 @@ public class ResponseBuilder {
 			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<News> newsList = newsBuilder.runQuery();
+			List<News> newsList = newsBuilder.runQuery(nameFilters.size(), rect != null);
 		
 			
 			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
