@@ -128,7 +128,6 @@ public class ResponseBuilder {
 		String json = null;
 		
 		try {
-			// LocationByCoords coordFilter;
 			boolean isDBFilterExists = false;
 			if (nameFilters != null) {
 				for (NameFilter filter: nameFilters) {
@@ -153,7 +152,7 @@ public class ResponseBuilder {
 		
 			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
 			
-				Log.log("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
+				Log.info("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
 			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 

@@ -88,18 +88,19 @@ public class NewsQueryBuilder extends DBBase {
 	}
 
 	public String buildSql(int nameFilterNo, boolean isCoordFilter) {
+		Log.info("NewsQueryBuilder buildSql nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		StringBuilder sql = new StringBuilder();
 		sql.append(SELECT_EXTERNAL);
 		sql.append(selectSQL);
 		
-		if (nameFilterNo == 0 && isCoordFilter) {
+		if (nameFilterNo == 0) {
 			sql.append(FROM_EXTERNAL_COORD_FILTER);
 		} else  {
 			sql.append(fromSQL);
 		}
 		sql.append("\r\n");
 		
-		if (nameFilterNo == 0 && isCoordFilter) {
+		if (nameFilterNo == 0) {
 			sql.append(WHERE_EXTERNAL_COORD_FILTER);
 		} else  {
 			sql.append(WHERE_EXTERNAL);
@@ -142,7 +143,7 @@ public class NewsQueryBuilder extends DBBase {
 		 */
 		// Json by URL by Java objects
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-    //    nameFilters.add(new DBFilter("Fire"));
+     //   nameFilters.add(new DBFilter("Fire"));
 	//	nameFilters.add(new DBFilter("San Jose"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
@@ -151,9 +152,9 @@ public class NewsQueryBuilder extends DBBase {
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-		json = ResponseBuilder.buildJson(null, nameFilters, 200);
-	//	json = ResponseBuilder.buildJson(
-	//			new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
+	//	json = ResponseBuilder.buildJson(null, nameFilters, 200);
+		json = ResponseBuilder.buildJson(
+				new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
 		Log.log("end main");
 	}
 
@@ -214,6 +215,7 @@ public class NewsQueryBuilder extends DBBase {
 	}
 
 	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter) throws SQLException {
+		Log.info("NewsQueryBuilder runQuery nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		begin(nameFilterNo, isCoordFilter);
 		Log.log("start startBindQuery");
 		startBindQuery();

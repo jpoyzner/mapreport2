@@ -10,6 +10,7 @@ import java.util.Set;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.loc.Global;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.front.option.Options;
 import mapreport.front.param.RequestParameter;
@@ -48,7 +49,7 @@ public class PageURL {
             String partPath =  pathparts[i];   
             Log.info("PageUrl parseParams() partPath = " + partPath);     
             if (!partPath.trim().isEmpty() && !partPath.equals("news") && !partPath.equals("api") 
-            		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport")) {	
+            		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport") && !partPath.equals(Global.GLOBAL)) {	
             	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath);            	
             	if (timeFilter != null) {
             		       Log.info("buildParams timeFilter != null timeFilter:" + timeFilter);

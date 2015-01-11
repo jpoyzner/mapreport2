@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.loc.Global;
+import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.resp.ResponseBuilder;
@@ -39,16 +41,19 @@ public class Endpoints {
 		String topic = request.getParameter("topic");
 		if (topic != null) {
 			nameFilters.add(new Topic(topic));
+			Log.info("Endpoints topic added:" + topic);
 		}
 		
 		String location = request.getParameter("location");
-		if (location != null) {
-			nameFilters.add(new DBFilter(location));
+		if (location != null && !location.equals(Global.GLOBAL)) {
+			nameFilters.add(new LocationByName(location));
+			Log.info("Endpoints Location added:" + location);
 		}
 		
 		String date = request.getParameter("date");
 		if (date != null) {
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
+			Log.info("Endpoints date added:" + date);
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date);
 		return ResponseBuilder.buildJson(rectangle, nameFilters, 100).toString();

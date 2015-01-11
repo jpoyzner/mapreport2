@@ -132,7 +132,7 @@ public class Rectangle {
 	}
 	double xSpan;
 	double ySpan;
-	public double getxCenter() {
+	public double getXCenter() {
 		return xCenter;
 	}
 
@@ -140,7 +140,7 @@ public class Rectangle {
 		this.xCenter = xCenter;
 	}
 
-	public double getyCenter() {
+	public double getYCenter() {
 		return yCenter;
 	}
 

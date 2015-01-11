@@ -133,6 +133,8 @@ public class DBBase {
 	}
 
 	public PreparedStatement begin(int nameFilterNo, boolean isCoordFilter) {
+
+		Log.info("DBase begin nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		buildConnection();
 
 		buildSql(nameFilterNo, isCoordFilter);

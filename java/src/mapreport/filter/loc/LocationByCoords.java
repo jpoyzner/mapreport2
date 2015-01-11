@@ -7,10 +7,12 @@ import java.sql.SQLException;
 import com.google.gson.annotations.Expose;
 
 import mapreport.filter.Filter;
+import mapreport.filter.NameFilter;
+import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
-public class LocationByCoords extends Filter implements Location {
+public class LocationByCoords extends NameFilter implements Location {
 	@Expose Rectangle rect;
 	final StringBuilder selectStringBuilder = new StringBuilder(" ");
 	
@@ -20,9 +22,11 @@ public class LocationByCoords extends Filter implements Location {
         "  \n ) ");
 	
 	public LocationByCoords (Rectangle rect) {
+		super("lat=" + rect.getXCenter() + ", long=" + rect.getYCenter());
 		this.rect = rect;		
 		setSelectSQL(selectStringBuilder);		
 		setWhereSQL(whereStringBuilder); 
+		setName("lat=" + rect.getXCenter() + ", long=" + rect.getYCenter());
 	}
 	
 	@Override
@@ -53,7 +57,38 @@ public class LocationByCoords extends Filter implements Location {
 	}
 
 	public StringBuilder getFromSQL() {
-		return new StringBuilder(", location l ");
+		return new StringBuilder(" ");
 	}
 	
+	@Override
+	public void limitFilter(FilterNode filterNode) { 
+		        	Log.log("LocationByCoords limitFilter getName()=" + getName() + " filterNode.getLocationFilter()=" + filterNode.getLocationFilter());
+      
+		        	/*if (filterNode.getLocationFilter() != null) {
+        	Log.log("LocationByName limitFilter this.getParents().size()=" + this.getParents().size()); 
+        	
+        	Iterator<Entry<String, NameFilter>> iter = getParents().entrySet().iterator();
+        	while (iter.hasNext()) {
+        	    Entry<String, NameFilter> entry = iter.next();
+        	}
+        	
+        	Log.log("LocationByName limitFilter filterNode.getLocationFilter().getName()=" + filterNode.getLocationFilter().getName());
+        	Log.log("LocationByName limitFilter this.getParents().get(filterNode.getLocationFilter().getName())=" + this.getParents().get(filterNode.getLocationFilter().getName()));
+		}*/
+        
+		
+//		if (filterNode.getLocationFilter() == null || this.getParents().get(filterNode.getLocationFilter().getName()) != null) {
+			updateFilterNode(filterNode);
+				 Log.log("LocationByCoords limitFilter LIMITED  filterNode.getLocationFilter()=" + filterNode.getLocationFilter() + 
+						 "  getName()=" + filterNode.getLocationFilter().getName() + "  getLink()=" + filterNode.getLocationFilter().getLink());
+//		}
+		
+	}	
+	
+	protected void updateFilterNode(FilterNode filterNode) {
+		filterNode.getFilterList().remove(filterNode.getLocationFilter());
+		filterNode.getFilterList().remove(filterNode.getCoordFilter());
+		filterNode.setCoordFilter(this);
+		filterNode.getFilterList().add(this);
+	}
 }

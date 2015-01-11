@@ -24,6 +24,7 @@ public class Global extends OfficialLocation {
 		upFilter(filterNode);
 	}
 	
+	/*
 	@Override
 	public void upFilter(FilterNode filterNode) {
 		Log.log("Global name=" + getName());
@@ -42,5 +43,6 @@ public class Global extends OfficialLocation {
 
 		Log.log("Global upFilter aft filterNode=" + filterNode);
 	}
+	*/
 
 }

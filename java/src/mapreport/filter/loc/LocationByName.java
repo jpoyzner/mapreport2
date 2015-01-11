@@ -39,6 +39,7 @@ public class LocationByName extends DBFilter  implements Location {
 	@Override
 	protected void updateFilterNode(FilterNode filterNode) {
 		filterNode.getFilterList().remove(filterNode.getLocationFilter());
+		filterNode.getFilterList().remove(filterNode.getCoordFilter());
 		filterNode.setLocationFilter(this);
 		filterNode.getFilterList().add(this);
 	}
