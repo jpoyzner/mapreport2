@@ -1,7 +1,8 @@
-define(['collections/topics', 'collections/locations', 'collections/dates', 'models/story', 'utils/buildurl', 'underscore', 'backbone'],
-function(TopicsCollection, LocationsCollection, DatesCollection, StoryModel, BuildURL) {
+define(['collections/topics', 'collections/locations', 'collections/dates', 'models/article', 'utils/buildurl', 'utils/spiderfy',
+    'underscore', 'backbone'],
+function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy) {
 	return Backbone.Collection.extend({
-		model: StoryModel,
+		model: ArticleModel,
 		initialize: function() {
 			this.fetches = 0;
 			
@@ -30,12 +31,15 @@ function(TopicsCollection, LocationsCollection, DatesCollection, StoryModel, Bui
 				this.dates = new DatesCollection(response.dates.children);
 			}
 			
+			Spiderfy(response.news, this.mapBounds);
+			
 			console.log(response.SQL);
 			
 			return response.news;
 		},
 		url: function() {
-			var params = [];
+			var params;
+			params = []; //to avoid stupid syntax warning;
 			
 			if (this.mapBounds) {
 				params.push(
