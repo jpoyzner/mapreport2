@@ -25,8 +25,11 @@ public class Endpoints {
 		String left = request.getParameter("left");
 		String right = request.getParameter("right");
 		String top = request.getParameter("top");
-		String bottom = request.getParameter("bottom");
-		if (left != null && right != null && top != null && bottom != null) {
+		String bottom = request.getParameter("bottom");		
+
+		String location = request.getParameter("location");
+		
+		if (location == null && left != null && right != null && top != null && bottom != null) {
 			rectangle =
 				new Rectangle(
 					new Rectangle.Bounds(
@@ -44,7 +47,6 @@ public class Endpoints {
 			Log.info("Endpoints topic added:" + topic);
 		}
 		
-		String location = request.getParameter("location");
 		if (location != null && !location.equals(Global.GLOBAL)) {
 			nameFilters.add(new LocationByName(location));
 			Log.info("Endpoints Location added:" + location);
@@ -55,7 +57,7 @@ public class Endpoints {
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
 			Log.info("Endpoints date added:" + date);
 		} 
-		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date);
+		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		return ResponseBuilder.buildJson(rectangle, nameFilters, 100).toString();
 	}
 	

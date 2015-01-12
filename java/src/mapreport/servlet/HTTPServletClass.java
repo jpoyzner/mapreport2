@@ -17,13 +17,14 @@ public class HTTPServletClass extends HttpServlet {
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-    	Log.log("HTTPServletClass doGet");
+    	Log.info("HTTPServletClass doGet");
 		response.setContentType("text/x-json;charset=UTF-8");           
         response.setHeader("Cache-Control", "no-cache");
 		
         try {
             response.getWriter().write(Endpoints.news(request));
         } catch (IOException e) {
+        	Log.info("HTTPServletClass IOException in populateWithJSON" + e);
            throw new IOException("IOException in populateWithJSON", e);
         }    
 	}
