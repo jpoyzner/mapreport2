@@ -1,0 +1,26 @@
+{
+  "name": "mapreport",
+  "version": "0.0.1",
+  "homepage": "https://github.com/jpoyzner/mapreport2",
+  "authors": [
+    "Jeff Poyzner <JeffPoyzner@yahoo.com>"
+  ],
+  "description": "Map Report Dynamic News",
+  "main": "index.html",
+  "keywords": [
+    "mapreport"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "private": true,
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.2",
+    "platform": "Polymer/platform#~0.4.2"
+  }
+}
