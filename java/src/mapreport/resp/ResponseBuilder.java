@@ -145,7 +145,8 @@ public class ResponseBuilder {
 				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
 				if (nameFilters != null) {
 					for (NameFilter filter: nameFilters) {
-						Log.info("buildJson NameFilter: " + filter.getName());
+						Log.info("buildJson NameFilter: " + filter);
+						if (filter != null) Log.info("buildJson NameFilter.getName(): " + filter.getName());
 					}
 				}
 
