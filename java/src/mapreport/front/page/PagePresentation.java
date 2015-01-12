@@ -9,6 +9,7 @@ import java.util.Map;
 //import com.mysql.jdbc.PreparedStatement;
 
 
+
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
@@ -17,6 +18,7 @@ import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.AllTime;
+import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
@@ -100,6 +102,7 @@ public class PagePresentation {
 		navLocations.addChildFilter(new Global(), pageFilters);
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
+		navDates.addChildFilter(new Latest(), pageFilters);
         
         navLocations.sort();
         navTopics.sort();

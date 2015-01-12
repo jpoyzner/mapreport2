@@ -40,8 +40,10 @@ public class OfficialTimeFilter extends TimeFilter {
 			//ret = new Year(date.getYear());
 		} catch (NumberFormatException e) {
 			// e.printStackTrace();
-			 if (dateStr.equals(AllTime.ALL_TIME_NAME)) {
+			if (dateStr.equals(AllTime.ALL_TIME_NAME)) {
 				  ret = new AllTime(); 
+			 } else  if (dateStr.equals(Latest.LATEST)) {
+				  ret = new Latest();  
 			 } else  if (dateStr.equals(Future.FUTURE_NAME)) {
 				  ret = new Future(); 
 			 } else {			

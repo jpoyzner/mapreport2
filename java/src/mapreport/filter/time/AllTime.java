@@ -27,5 +27,10 @@ public class AllTime extends OfficialTimeFilter {
 		filterNode.setTimeFilter(null);
 	}
 
-
+	
+	@Override
+	public String getLink() {
+		Log.log("Filter getLink() Latest");
+		return ALL_TIME_NAME;
+	}
 }
