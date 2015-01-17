@@ -16,8 +16,9 @@ public class DBFilter extends NameFilter {
 			+ "and nf.filterId = f.filterId \n "
 			+ "and nf.filterId = ff.childfilterId \n "
 			+ "and fp.filterId = ff.parentfilterId \n "
-			+ "and  fp.name = '"; // Africa') f2"
-	final static String SECOND_FROM_SQL_END = "') f2 \n ";
+			+ "and (fp.name = '"; // Africa') f2"
+	final static String SECOND_FROM_SQL_MIDDLE = "' or f.name = '";
+	final static String SECOND_FROM_SQL_END = "')) f2 \n ";
 	
 	final static String SECOND_WHERE_SQL = "  and n.newsId = f2.newsId ";
 
@@ -59,6 +60,8 @@ public class DBFilter extends NameFilter {
 			sql = super.getFromSQL();
 		} else {
 			sql = new StringBuilder(SECOND_FROM_SQL_START);
+			sql.append(name);
+			sql.append(SECOND_FROM_SQL_MIDDLE);
 			sql.append(name);
 			sql.append(SECOND_FROM_SQL_END);
 		}
