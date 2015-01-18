@@ -48,7 +48,8 @@ public class NewsQueryBuilder extends DBBase {
 	static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
 	static final String FROM_EXTERNAL_END = "";
 	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and n.newsId = nf.newsId  ";
-	static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
+	static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId " 
+			+ "and f.legacyType <> 'KeywordTimeLineFile' ";
 
 	public void addFilter(Filter filter) {
 		Log.log("NewsQueryBuilder addFilter filter=" + filter);
@@ -143,18 +144,19 @@ public class NewsQueryBuilder extends DBBase {
 		 */
 		// Json by URL by Java objects
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-     //   nameFilters.add(new DBFilter("Fire"));
-	//	nameFilters.add(new DBFilter("San Jose"));
+        nameFilters.add(new DBFilter("Fire"));
+		nameFilters.add(new DBFilter("San Jose"));
+		// nameFilters.add(new DBFilter("France"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
-		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
+	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-	//	json = ResponseBuilder.buildJson(null, nameFilters, 200);
-		json = ResponseBuilder.buildJson(
-				new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
+		json = ResponseBuilder.buildJson(null, nameFilters, 200);
+		// json = ResponseBuilder.buildJson(
+			//	new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
 		Log.log("end main");
 	}
 

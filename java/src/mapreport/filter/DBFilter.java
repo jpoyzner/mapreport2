@@ -16,6 +16,7 @@ public class DBFilter extends NameFilter {
 			+ "and nf.filterId = f.filterId \n "
 			+ "and nf.filterId = ff.childfilterId \n "
 			+ "and fp.filterId = ff.parentfilterId \n "
+			+ "and f.legacyType <> 'KeywordTimeLineFile' \n "
 			+ "and (fp.name = '"; // Africa') f2"
 	final static String SECOND_FROM_SQL_MIDDLE = "' or f.name = '";
 	final static String SECOND_FROM_SQL_END = "')) f2 \n ";
