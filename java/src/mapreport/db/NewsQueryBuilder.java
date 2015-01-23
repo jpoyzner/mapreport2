@@ -144,8 +144,8 @@ public class NewsQueryBuilder extends DBBase {
 		 */
 		// Json by URL by Java objects
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-        nameFilters.add(new DBFilter("Fire"));
-		nameFilters.add(new DBFilter("San Jose"));
+        nameFilters.add(new DBFilter("Pedestrian Accident"));
+		nameFilters.add(new DBFilter("San Francisco Bay Area"));
 		// nameFilters.add(new DBFilter("France"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
