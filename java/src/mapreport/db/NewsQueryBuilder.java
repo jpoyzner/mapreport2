@@ -33,21 +33,21 @@ public class NewsQueryBuilder extends DBBase {
 		this.filterNode = filterNode;
 	}
 
-	static final String SELECT_EXTERNAL_COORD_FILTER = "select  n.addressText as addressText,"
-			+ ", \n nl.topCoord as bottomCoord, nl.bottomCoord as topCoord, nl.leftCoord , nl.rightCoord, nl.isOfficial, nl.newsId, nl.label, nl.priority as nPriority"
-			+ ", \n abs(nl.topCoord - nl.bottomCoord) * abs(nl.leftCoord - nl.rightCoord) / 1000000000 as span, f.isLocation , nf.priority as nfPriority, n.dateTime as dateTime \n "
-			+ ", nl.url as url, nl.video as video, nl.image as image, nl.addressText as addressText, nl.shortLabel as shortLabel, nl.description as description, nl.newsText as newsText ";
+	static final String SELECT_EXTERNAL_COORD_FILTER = "select n.addressText as addressText,"
+			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, "
+			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
+			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
 	static final String SELECT_EXTERNAL = "select n.addressText as addressText,"
 			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, "
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
-	static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, news n \n ";
+	static final String FROM_EXTERNAL_COORD_FILTER = "\n from  news n \n ";
 	static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
 	static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
 	static final String FROM_EXTERNAL_END = "";
-	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and n.newsId = nf.newsId  ";
+	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where 1=1 ";
 	static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId " 
 			+ "and f.legacyType <> 'KeywordTimeLineFile' ";
 
@@ -91,7 +91,13 @@ public class NewsQueryBuilder extends DBBase {
 	public String buildSql(int nameFilterNo, boolean isCoordFilter) {
 		Log.info("NewsQueryBuilder buildSql nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		StringBuilder sql = new StringBuilder();
-		sql.append(SELECT_EXTERNAL);
+		
+		if (nameFilterNo == 0) {
+			sql.append(SELECT_EXTERNAL_COORD_FILTER);
+		} else  {
+			sql.append(SELECT_EXTERNAL);
+		}
+
 		sql.append(selectSQL);
 		
 		if (nameFilterNo == 0) {
@@ -164,23 +170,28 @@ public class NewsQueryBuilder extends DBBase {
 		filterNode.bindFilters(pst);
 	}
 
-	public List<News> processResultSet(ResultSet res) throws SQLException {
+	public List<News> processResultSet(ResultSet res, int nameFilterNo) throws SQLException {
 		List<News> rows = new ArrayList<News>(100);
 		while (res.next()) {
-			News row = createNewsRow(res);
+			News row = createNewsRow(res, nameFilterNo);
 			rows.add(row);
 		}
 
 		return rows;
 	}
 
-	private News createNewsRow(ResultSet res) throws SQLException {
+	private News createNewsRow(ResultSet res, int nameFilterNo) throws SQLException {
 		News row = new News();
 
 		String newsId = res.getString("newsId");
 		String label = res.getString("label");
 		String nPriority = res.getString("nPriority");
-		String nfPriority = res.getString("nfPriority");
+		String nfPriority = "0";
+		
+		if (nameFilterNo > 0) {
+			nfPriority = res.getString("nfPriority");
+		}
+		
 		Date date = res.getDate("dateTime");
 
 		String url = res.getString("url");
@@ -227,7 +238,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("NewsQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");
-		List<News> rows = processResultSet(resultSet);
+		List<News> rows = processResultSet(resultSet, nameFilterNo);
 		return rows;
 	}
 
