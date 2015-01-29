@@ -23,7 +23,8 @@ public class Day extends OfficialTimeFilter {
 		this.day = day;		
 		setPriority(30);	
 // 2011-12-03
-		setName(String.valueOf(year) + "-" + String.valueOf(month) + "-" + String.valueOf(day));	
+		String zero = day < 10 ? "0" : "";
+		setName(String.valueOf(year) + "-" + (month < 10 ? "0" : "") + String.valueOf(month) + "-" + zero + String.valueOf(day));	
 
 		begin = new GregorianCalendar(year, month, day);
 	//	end = new GregorianCalendar(year, month, begin.get(Calendar.DAY_OF_MONTH) + 2);

@@ -18,14 +18,20 @@ public class LocationByCoords extends NameFilter implements Location {
 	
 	final StringBuilder whereStringBuilder = new StringBuilder(" \n  \n and ( \n " + 
             "n.addressX <> 0 and n.addressY <> 0 and n.addressX <> -1 and n.addressY <> -1  \n" + 
-            "and n.addressY > ? and n.addressY < ? and n.addressX > ? and n.addressX < ?  \n" + 
+            "and n.addressY > ? and n.addressY < ? and (n.addressX > ? ");
+	
+	final StringBuilder whereStringBuilderEnd = new StringBuilder(" n.addressX < ?)  \n" + 
         "  \n ) ");
 	
 	public LocationByCoords (Rectangle rect) {
 		super("lat=" + rect.getXCenter() + ", long=" + rect.getYCenter());
 		this.rect = rect;		
-		setSelectSQL(selectStringBuilder);		
-		setWhereSQL(whereStringBuilder); 
+		setSelectSQL(selectStringBuilder);
+		
+		String orAnd = rect.getLeft() <= rect.getRight() ? " and " : " or ";
+		StringBuilder where = whereStringBuilder.append(orAnd).append(whereStringBuilderEnd);
+		Log.info ("LocationByCoords rect.getLeft() " + rect.getLeft() + " rect.getRight()=" + rect.getRight() + " orAnd=" + orAnd + " where=" + where);
+		setWhereSQL(where); 
 		setName("lat=" + rect.getXCenter() + ", long=" + rect.getYCenter());
 	}
 	
