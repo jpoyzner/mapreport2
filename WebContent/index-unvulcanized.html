@@ -1,0 +1,104 @@
+<!doctype html>
+<html class="locale-us user-recognized no-js" lang="en" xmlns:fb="http://www.facebook.com/2008/fbml" xmlns:og="http://opengraphprotocol.org/schema/" >
+	<head>
+		<title>Map Report | Dynamic News</title>
+		<meta name="description" content="Map Report Dynamic News">
+		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
+		<link rel="canonical" href="http://www.mapreport.com">
+		<link rel="image_src" href="http://www.mapreport.com">
+		<meta itemprop="publisher" content="MapReport" />
+		<meta property="og:type" content="News">
+		<meta property="og:title" content="Map Report Dynamic News">
+		<meta property="og:image" content="http://www.mapreport.com">
+		<meta property='og:url' content="http://www.mapreport.com">
+		<meta property="og:site_name" content="Map Report">
+		<meta property="og:description" content="Map Report Dynamic News">
+		<link rel="stylesheet" type="text/css" href="css/mapreport.css">
+
+		<script src="js/components/webcomponentsjs/webcomponents.js"></script>
+		<script src="js/components/platform/platform.js"></script>
+		
+		<!--<link rel="import" href="js/components/document-veil/document-veil.html">-->
+		<link rel="import" href="js/components/google-map/google-map.html">
+		<link rel="import" href="js/components/web-loader/web-loader.html">
+		<link rel="import" href="js/components/input-options/input-options.html">
+		
+	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+	</head>
+	<body style="background-color: lightblue">
+		<p style="color: white">&nbsp;LOADING...<p>
+	</body>
+	<script type="text/template" id="mr-template" class="template">
+		<div id="mr-buckets" class="<%= platform %>">
+			<div id="mr-options-bucket"><span class="header">&nbsp;MAPREPORT</span></div>
+			<div id="mr-map-bucket">
+				<web-loader type="circle" color="black"></web-loader>
+			</div>
+			<div id="mr-report-bucket">
+				<web-loader type="clock" color="white"></web-loader>
+			</div>	
+		</div>
+		<document-veil id="document-veil"></document-veil>
+	</script>
+	<script type="text/template" id="mr-map-template" class="template">
+		<div id="mr-map">
+			<google-map fitToMarkers></google-map>
+		</div>
+	</script>
+	<script type="text/template" id="mr-map-markers-template" class="template">
+		<% _.each(news.models, function(article) { %>
+			<google-map-marker
+				longitude="<%= article.get('x') %>"
+				latitude="<%= article.get('y') %>"
+				icon="<%= article.get('icon') %>">
+
+				<a href="<%= article.get('url') %>" target="_blank"><%= article.get('dateTime') %> : <%= article.get('label') %> : <%= article.get('address') %> : <%= article.get('location') %></a>
+			</google-map-marker>
+		<% }); %>
+	</script>
+	<script type="text/template" id="mr-console-template" class="template">
+		<div id="mr-console"></div>
+	</script>
+	<script type="text/template" id="mr-options-template" class="template">
+		<div id="mr-options">
+			<div class="mr-option mr-topic-option">
+				<span>TOPIC: </span>
+				<% var topicsList = _.map(topics.models, function(topic) {
+					return [topic.get('node'), topic.get('node')];
+				});
+
+				var topicTitle = typeof topic == 'undefined' ? 'All Topics' : topic %>
+				<input-options options="<%= JSON.stringify(topicsList).replace(/\"/g, '\'') %>" value="<%= topicTitle %>"></input-options>
+			</div>
+			<div class="mr-option mr-location-option">
+				<span>LOCATION: </span>
+				<% var locationsList = _.map(locations.models, function(location) {
+					return [location.get('node'), location.get('node')];
+				});
+
+				var locationTitle = typeof loc == 'undefined' ? 'Global' : loc %>
+				<input-options options="<%= JSON.stringify(locationsList).replace(/\"/g, '\'') %>" value="<%= locationTitle %>">
+				</input-options>
+			</div>
+			<div class="mr-option mr-time-option">
+				<span>TIME: </span>
+				<% var datesList = _.map(dates.models, function(date) {
+					return [date.get('node'), date.get('node')];
+				});
+
+				var dateTitle = typeof date == 'undefined' ? 'All Time' : date %>
+				<input-options options="<%= JSON.stringify(datesList).replace(/\"/g, '\'') %>" value="<%= dateTitle %>"></input-options>
+			</div>
+		</div>
+	</script>
+	<script type="text/template" id="mr-report-template" class="template">
+		<div id="mr-report">
+			<% _.each(news.models, function(article) { %>
+				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
+					<img src="http://www.mapreport.com/images/common/list5.gif"></img>
+					<a href="<%= article.get('url') %>" target="_blank"><p><%= article.get('mapLabel') %>: <%= article.get('dateTime') %>: <%= article.get('label') %><p></a>
+				</div>
+			<% }); %>
+		</div>
+	</script>
+</html>

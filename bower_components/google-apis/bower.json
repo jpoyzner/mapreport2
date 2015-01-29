@@ -1,11 +1,10 @@
 {
-  "name": "google-map",
-  "version": "0.3.1",
-  "homepage": "http://googlewebcomponents.github.io/google-map",
-  "description": "Google Maps web components",
-  "main": "google-map.html",
+  "name": "google-apis",
+  "version": "0.4.3",
+  "homepage": "http://googlewebcomponents.github.io/google-apis",
+  "description": "Web components to load Google API libraries",
+  "main": "google-apis.html",
   "authors": [
-    "Frankie Fu <ffu@google.com>",
     "Scott Miles <sjmiles@google.com>",
     "Eric Bidelman <ebidel@gmail.com>"
   ],
@@ -26,6 +25,6 @@
     "apis"
   ],
   "dependencies": {
-    "google-apis": "GoogleWebComponents/google-apis#~0.3.1"
+    "core-shared-lib": "Polymer/core-shared-lib#~0.5.1"
   }
 }

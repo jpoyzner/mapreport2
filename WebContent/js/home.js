@@ -14,12 +14,7 @@ requirejs.config({
     }
 });
 
-requirejs(['utils/detector', 'templates', 'collections/news', 'views/Map', 'views/Options', 'views/Report', 'jquery', 'backbone'],
-function(Detector, Templates, News, Map, Options, Report) {
-	$('body').html(Templates['mr-template']({platform: Detector.phone() ? 'mobile' : 'desktop'}));
-	
-	var news = new News();
-	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
-	new Options({news: news});
-	new Report({news: news});
+requirejs(['router'],
+function(Router) {
+	new Router();
 });

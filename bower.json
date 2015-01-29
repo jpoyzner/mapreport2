@@ -20,7 +20,8 @@
   ],
   "private": true,
   "dependencies": {
-    "polymer": "Polymer/polymer#~0.5.2",
-    "platform": "Polymer/platform#~0.4.2"
+    "polymer": "Polymer/polymer#~0.5.4",
+    "platform": "Polymer/platform#~0.4.2",
+    "google-map": "GoogleWebComponents/google-map#master"
   }
 }
