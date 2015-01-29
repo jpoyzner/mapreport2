@@ -54,12 +54,16 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				this.news.topic = event.target.value_;
 				this.news.optionsChanging();
 				this.news.fetch();
+				
+				require('router').navigateReplace('topic/' + this.news.topic);
 			}, this));
 			
 			$(menus[1]).find('input-options').on('action-fired', _.bind(function(event) {
 				this.news.loc = event.target.value_;
 				this.news.optionsChanging();
 				this.news.fetch();
+				
+				require('router').navigateReplace('location/' + this.news.loc);
 			}, this));
 			
 			$(menus[2]).find('input-options').on('action-fired', _.bind(function(event) {

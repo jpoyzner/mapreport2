@@ -3,7 +3,15 @@ define(['collections/topics', 'collections/locations', 'collections/dates', 'mod
 function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy) {
 	return Backbone.Collection.extend({
 		model: ArticleModel,
-		initialize: function() {
+		initialize: function(topic, loc) {
+			if (topic) {
+				this.topic = topic;
+			}
+			
+			if (loc) {
+				this.loc = loc;
+			}
+			
 			this.fetches = 0;
 			
 			this.on('request', _.bind(function() {
@@ -64,7 +72,7 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			return BuildURL('news', params);
         },
         optionsChanging: function() {
-        	this.optionMapUpdates = 3;
+        	this.optionMapUpdates = 3; //I hate this so much
         }
 	});
 });

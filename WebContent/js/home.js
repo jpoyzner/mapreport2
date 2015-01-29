@@ -14,7 +14,4 @@ requirejs.config({
     }
 });
 
-requirejs(['router'],
-function(Router) {
-	new Router();
-});
+requirejs(['router'], function(){});
