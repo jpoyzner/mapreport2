@@ -166,7 +166,7 @@ public class ResponseBuilder {
 			
 
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
-			List <NameFilter> dbFilters = filterBuilder.runQuery(newsMap);
+			List <DBFilter> dbFilters = filterBuilder.runQuery(newsMap);
 			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
 
 			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());

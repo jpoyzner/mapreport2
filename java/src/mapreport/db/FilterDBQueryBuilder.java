@@ -39,13 +39,13 @@ public class FilterDBQueryBuilder {
 	
 	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 1000";
 	
-	public List <NameFilter> processResultSet(ResultSet res) throws SQLException{ 
-		List <NameFilter> rows = new ArrayList<NameFilter>(1000);
+	public List <DBFilter> processResultSet(ResultSet res) throws SQLException{ 
+		List <DBFilter> rows = new ArrayList<DBFilter>(1000);
 		
 		while (res.next()) {
 			String fName = res.getString("name");
 			boolean isLocation = res.getBoolean("isLocation");
-			NameFilter row = isLocation ? new LocationByName(fName) : new Topic(fName);
+			DBFilter row = isLocation ? new LocationByName(fName) : new Topic(fName);
 		    int filterPriority = res.getInt("filterPriority");
 		    int newsFilterPriority = res.getInt("newsFilterPriority");
 		    int filterFilterPriority = res.getInt("filterFilterPriority");
@@ -60,13 +60,14 @@ public class FilterDBQueryBuilder {
 			  
 			row.setLevel(level);
 			row.setName(fName);
-			row.setImage(image);		  
+			row.setImage(image);
+			row.setFilterId(filterId);		  
 	
 			rows.add(row);			
 
 			boolean isParentLocation = res.getBoolean("parentLocation");
 			String fParentName = res.getString("parentName");
-			NameFilter rowParent = isParentLocation ? new LocationByName(fParentName) : new Topic(fParentName);
+			DBFilter rowParent = isParentLocation ? new LocationByName(fParentName) : new Topic(fParentName);
 			rowParent.setPriority(priority);
 			String filterParentId = res.getString("parentId");
 			String labelParent = res.getString("parentLabel");
@@ -132,9 +133,9 @@ public class FilterDBQueryBuilder {
 		return pst;
 	}
 	
-	public List <NameFilter> runQuery(Map<Integer, News> newsMap) throws SQLException {
+	public List <DBFilter> runQuery(Map<Integer, News> newsMap) throws SQLException {
 		if (newsMap.size() == 0) {
-			return new ArrayList <NameFilter>(1);
+			return new ArrayList <DBFilter>(1);
 		}
 		begin();
 		Log.info("FilterDBQueryBuilder start executeQuery");
@@ -143,7 +144,7 @@ public class FilterDBQueryBuilder {
 		Log.info("FilterDBQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
-		List <NameFilter> rows = processResultSet(resultSet);
+		List <DBFilter> rows = processResultSet(resultSet);
 	    return rows;
 	}
 	
@@ -160,7 +161,7 @@ public class FilterDBQueryBuilder {
 	    return dbFilters;
 	}
 	
-	public static Map<String, NameFilter> incrementFilterMapPriority(List <NameFilter> filterMapSrc) {
+	public static Map<String, NameFilter> incrementFilterMapPriority(List <DBFilter> filterMapSrc) {
 		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
 		
 		for (NameFilter filter : filterMapSrc) {
