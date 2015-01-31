@@ -169,7 +169,7 @@ public class FilterDBQueryBuilder {
 		}
 			
 		for (Map.Entry<String, NameFilter> entry : filterMapResult.entrySet()) {
-			Log.info("incrementFilterMapPriority Key = " + entry.getKey() + ", Value = " + entry.getValue().getPriority());
+			Log.log("incrementFilterMapPriority Key = " + entry.getKey() + ", Value = " + entry.getValue().getPriority());
 		}
 			
 		return filterMapResult;

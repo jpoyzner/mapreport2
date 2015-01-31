@@ -62,7 +62,7 @@ public class ResponseBuilder {
 		//		parents = filterDBQueryBuilder.runQuery(filterIds);
 		//	}
 			
-			Map <String, NameFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters);
+			Map <String, DBFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters); 
 			
 			for (NameFilter filter: nameFilters) {
 				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
@@ -85,7 +85,7 @@ public class ResponseBuilder {
 					}*/
 					
 					// NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
-					NameFilter newFilter = filterMap.get(filter.getName());
+					DBFilter newFilter = filterMap.get(filter.getName());
 					if (newFilter == null) {
 						Log.info(" CAN''T FIND FILTER: " + filter.getName());
 					} else {

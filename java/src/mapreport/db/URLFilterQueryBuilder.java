@@ -6,25 +6,27 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
+import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.topic.Topic;
 import mapreport.util.Log;
 
 public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
-	private static String sqlBegin = "select f.name, f.isLocation " + 
+	private static String sqlBegin = "select f.name, f.isLocation, f.filterId " + 
 			"\n from filter f" + 
 		"\n where f.name  in (";
 	private static String sqlEnd = ")";
 	
-	public Map <String, NameFilter> buildFilters(ResultSet res) throws SQLException{ 
-		Map <String, NameFilter> rows = new HashMap<String, NameFilter>(3);
+	public Map <String, DBFilter> buildFilters(ResultSet res) throws SQLException{ 
+		Map <String, DBFilter> rows = new HashMap<String, DBFilter>(3);
 		
 		while (res.next()) {
 			String fName = res.getString("name");
+			String filterId = res.getString("filterId");
 			boolean isLocation = res.getBoolean("isLocation");
-			NameFilter row = isLocation ? new LocationByName(fName) : new Topic(fName);
-			  
+			DBFilter row = isLocation ? new LocationByName(fName) : new Topic(fName);
+			row.setFilterId(filterId);  
 			  Log.info("URLFilterQueryBuilder processResultSet "
 					  +  " fName=" + fName   
 					  +  " isLocation=" + isLocation );		
@@ -57,9 +59,9 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 		return sql;
 	}
 	
-	public Map <String, NameFilter> runQuery(Set<NameFilter> nameFilters) throws SQLException {
+	public Map <String, DBFilter> runQuery(Set<NameFilter> nameFilters) throws SQLException {
 		if (nameFilters.size() == 0) {
-			return new  HashMap <String, NameFilter>(1);
+			return new  HashMap <String, DBFilter>(1);
 		}
 		begin();
 		Log.info("URLFilterQueryBuilder start executeQuery");
@@ -68,7 +70,7 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 		Log.info("URLFilterQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("URLFilterQueryBuilder start processResultSet");		
-		Map <String, NameFilter> rows = buildFilters(resultSet);
+		Map <String, DBFilter> rows = buildFilters(resultSet);
 	    return rows;
 	}
 }

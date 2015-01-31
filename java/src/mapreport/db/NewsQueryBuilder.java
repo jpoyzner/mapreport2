@@ -24,6 +24,7 @@ import mapreport.view.map.Rectangle;
 
 public class NewsQueryBuilder extends DBBase {
 	FilterNode filterNode = new FilterNode();
+	Map<String, DBFilter> dbFilterMap = new HashMap<String, DBFilter>(2);
 
 	public FilterNode getFilterNode() {
 		return filterNode;
@@ -39,7 +40,8 @@ public class NewsQueryBuilder extends DBBase {
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
 	static final String SELECT_EXTERNAL = "select n.addressText as addressText,"
-			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, "
+			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " 
+			+ " nf.priority as nfPriority, nf.topicExcludeId as topicExcludeId, "
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
@@ -49,7 +51,7 @@ public class NewsQueryBuilder extends DBBase {
 	static final String FROM_EXTERNAL_END = "";
 	static final String WHERE_EXTERNAL_COORD_FILTER = "\n where 1=1 ";
 	static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId " 
-			+ "and f.legacyType <> 'KeywordTimeLineFile' ";
+			+ "and f.legacyType <> 'KeywordTimeLineFile' "; // and fp.filterId <> nf.topicExcludeId and f.filterId <> nf.topicExcludeId "; // 
 
 	public void addFilter(Filter filter) {
 		Log.log("NewsQueryBuilder addFilter filter=" + filter);
@@ -57,9 +59,9 @@ public class NewsQueryBuilder extends DBBase {
 		// just for logging
 		if (filter instanceof DBFilter) {
 			DBFilter dBFilter = (DBFilter) filter;
-			Log.log("NewsQueryBuilder addFilter dBFilter=" + dBFilter
-					+ " getName=" + dBFilter.getName() + " getDbFilterCntr="
-					+ dBFilter.getDbFilterCntr());
+			Log.info("NewsQueryBuilder addFilter dBFilter=" + dBFilter
+					+ " getName=" + dBFilter.getName() + " getFilterId=" + dBFilter.getFilterId() + " getDbFilterCntr="+ dBFilter.getDbFilterCntr());
+			dbFilterMap.put(dBFilter.getFilterId(), dBFilter);
 		}
 		
 		if (!filter.isAllFilter()) {
@@ -151,7 +153,7 @@ public class NewsQueryBuilder extends DBBase {
 		// Json by URL by Java objects
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
         nameFilters.add(new DBFilter("Business"));
-		nameFilters.add(new DBFilter("San Francisco Bay Area"));
+	//	nameFilters.add(new DBFilter("San Francisco Bay Area"));
 		// nameFilters.add(new DBFilter("France"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
@@ -172,9 +174,19 @@ public class NewsQueryBuilder extends DBBase {
 
 	public List<News> processResultSet(ResultSet res, int nameFilterNo) throws SQLException {
 		List<News> rows = new ArrayList<News>(100);
+		
+		Set<Integer> excludedNesIds = new HashSet<Integer>(5); 
 		while (res.next()) {
 			News row = createNewsRow(res, nameFilterNo);
-			rows.add(row);
+			
+			if (dbFilterMap.get(row.getTopicExcludeId()) != null || excludedNesIds.contains(row.getNewsId())){
+				Log.info("dbFilterMap.get(row.getTopicExcludeId() row:" + row.getLabel());
+				if (!excludedNesIds.contains(row.getNewsId())) {
+					excludedNesIds.add(row.getNewsId());
+				}
+			} else {
+				rows.add(row);
+			}
 		}
 
 		return rows;
@@ -190,6 +202,9 @@ public class NewsQueryBuilder extends DBBase {
 		
 		if (nameFilterNo > 0) {
 			nfPriority = res.getString("nfPriority");
+			String topicExcludeId = res.getString("topicExcludeId");
+			row.setTopicExcludeId(topicExcludeId);
+			Log.info("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId);
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -220,7 +235,6 @@ public class NewsQueryBuilder extends DBBase {
 		row.setImage(image);
 		row.setShortLabel(shortLabel);
 		row.setDescription(description);
-
 		Log.info("processResultSet label=" + label + " date=" + date
 				+ " newsId=" + newsId + " nPriority=" + nPriority
 				+ " addressText=" + addressText);

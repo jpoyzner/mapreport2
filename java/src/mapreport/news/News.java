@@ -26,7 +26,16 @@ public class News implements Comparable{
 	double y = 0;
 	int newsId = 0;
 	int newsFilterPriority = 0;
+	String topicExcludeId = null;
 	
+	public String getTopicExcludeId() {
+		return topicExcludeId;
+	}
+
+	public void setTopicExcludeId(String topicExcludeId) {
+		this.topicExcludeId = topicExcludeId;
+	}
+
 	public int getNewsFilterPriority() {
 		return newsFilterPriority;
 	}
