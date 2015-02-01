@@ -177,7 +177,7 @@ public class ResponseBuilder {
 				allHintMap.put(filter.getName(), filter);
 			}
 			
-			newsList = NewsQueryBuilder.buildNewsList(newsMap); 
+			newsList = NewsQueryBuilder.buildNewsList(newsMap, newsBuilder.getFilterNode().getTimeFilter()); 
 			
 			if (newsList.size() > NEWS_LIMIT + 1) {
 				newsList = newsList.subList(0, NEWS_LIMIT);

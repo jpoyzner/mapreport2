@@ -6,7 +6,7 @@ import java.util.GregorianCalendar;
 import mapreport.util.Log;
 
 public class Latest extends OfficialTimeFilter {
-	final static String LATEST = "Latest";
+	final public static String LATEST = "Latest";
 	public Latest() {
 		super(LATEST);
 		setOrderBySQL(new StringBuilder("\n order by n.dateTime desc, n.priority "));

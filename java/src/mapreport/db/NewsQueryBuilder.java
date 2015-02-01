@@ -5,6 +5,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -15,7 +16,9 @@ import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.time.AllTime;
+import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.TimeFilter;
 import mapreport.front.page.FilterNode;
 import mapreport.news.News;
 import mapreport.resp.ResponseBuilder;
@@ -160,7 +163,7 @@ public class NewsQueryBuilder extends DBBase {
    //     nameFilters.add(new DBFilter("Business"));
     //    nameFilters.add(new NameFilter("Latest"));
 	//	nameFilters.add(new DBFilter("San Francisco Bay Area"));
-		// nameFilters.add(new DBFilter("France"));
+		 nameFilters.add(new DBFilter("France"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
 		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
@@ -262,14 +265,27 @@ public class NewsQueryBuilder extends DBBase {
 		return rows;
 	}
 
-	public static List<News> buildNewsList(Map<Integer, News> newsMap) {
+	public static List<News> buildNewsList(Map<Integer, News> newsMap, TimeFilter timeFilter) {
 		Log.log("buildNewsList newsMap.size()=" + newsMap.size());
 		List<News> newsList = new ArrayList<News>(300);
 
 		for (Integer key : newsMap.keySet()) {
 			newsList.add(newsMap.get(key));
 		}
-		Collections.sort(newsList);
+		
+		if (timeFilter != null && timeFilter instanceof Latest) {
+			Collections.sort(newsList, new Comparator() {
+	            public int compare(Object o1, Object o2) 
+	            {
+	                News news1 = (News)o1;
+	                News news2 = (News)o2; 
+	                return news1.getDateTime().after(news2.getDateTime()) ? 1 : 0;
+	                // it can also return 0, and 1
+	            }
+	 		});
+		} else {		
+			Collections.sort(newsList);
+		}
 		return newsList;
 	}
 
