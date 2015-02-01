@@ -54,7 +54,7 @@ public class NewsQueryBuilder extends DBBase {
 			+ "and f.legacyType <> 'KeywordTimeLineFile' "; // and fp.filterId <> nf.topicExcludeId and f.filterId <> nf.topicExcludeId "; // 
 
 	public void addFilter(Filter filter) {
-		Log.log("NewsQueryBuilder addFilter filter=" + filter);
+		Log.info("NewsQueryBuilder addFilter filter=" + filter + " getName=" + filter.getName() + " filter.getOrderBySQL=" + filter.getOrderBySQL());
 		filterNode.add(filter);
 		// just for logging
 		if (filter instanceof DBFilter) {
@@ -72,6 +72,7 @@ public class NewsQueryBuilder extends DBBase {
 			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()="
 					+ filter.getWhereSQL());
 			orderBySQL.append(filter.getOrderBySQL());
+			Log.info("NewsQueryBuilder addFilter filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
 		}
 	}
 
@@ -118,6 +119,10 @@ public class NewsQueryBuilder extends DBBase {
 		sql.append("\n");
 		sql.append(whereSQL);
 		sql.append("\r\n\r\n");
+		
+	//	if (nameFilterNo > 0) {
+	//		orderBySQL.append(", topicExcludeId desc ");
+	//	}
 		sql.append(orderBySQL);
 		sql.append(" limit ");
 		sql.append(limit);
@@ -152,12 +157,13 @@ public class NewsQueryBuilder extends DBBase {
 		 */
 		// Json by URL by Java objects
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>(3);
-        nameFilters.add(new DBFilter("Business"));
+   //     nameFilters.add(new DBFilter("Business"));
+    //    nameFilters.add(new NameFilter("Latest"));
 	//	nameFilters.add(new DBFilter("San Francisco Bay Area"));
 		// nameFilters.add(new DBFilter("France"));
 
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
-		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));

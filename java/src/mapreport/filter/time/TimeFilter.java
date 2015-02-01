@@ -28,7 +28,10 @@ public class TimeFilter extends NameFilter {
 	}
 	protected void buildTimeSQL() {
 		whereSQL = new StringBuilder(" \n ");
-		orderBySQL = new StringBuilder("\n order by n.priority, n.dateTime ");
+		
+		if (orderBySQL.length() == 0) {
+			orderBySQL = new StringBuilder("\n order by n.priority, n.dateTime ");
+		}
 
 		if (begin != null) {
 			whereSQL.append(" and n.dateTime > ? ");
