@@ -3,13 +3,19 @@ define(['collections/topics', 'collections/locations', 'collections/dates', 'mod
 function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy) {
 	return Backbone.Collection.extend({
 		model: ArticleModel,
-		initialize: function(topic, loc) {
-			if (topic) {
-				this.topic = topic;
+		initialize: function(rootUrl, options) {
+			this.rootUrl = rootUrl;
+			
+			if (options.topic) {
+				this.topic = options.topic;
 			}
 			
-			if (loc) {
-				this.loc = loc;
+			if (options.loc) {
+				this.loc = options.loc;
+			}
+			
+			if (options.date) {
+				this.date = options.date;
 			}
 			
 			this.fetches = 0;
@@ -18,6 +24,7 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				this.fetches++;
 			}, this));
 			
+			this.optionsChanging();
 			this.fetch();
 		},
 		parse: function(response) {
@@ -41,11 +48,22 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			
 			Spiderfy(response.news, this.mapBounds);
 			
-			console.log(response.SQL);
+			//console.log(response.SQL);
+			
+			if (this.topic || this.loc || this.date) {
+				require('router').navigateTo(
+					(this.topic ? 'topic/' + this.topic : '')
+						+ ((this.topic && this.loc) ? '/' : '')
+						+ (this.loc ? 'location/' + this.loc : '')
+						+ ((this.topic && this.loc && this.date) ? '/' : '')
+						+ (this.date ? 'date/' + this.date : ''));
+			}
 			
 			return response.news;
 		},
 		url: function() {
+			console.log("fetching map");
+			
 			var params;
 			params = []; //to avoid stupid syntax warning;
 			
@@ -69,7 +87,7 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				params.push("date=" + encodeURI(this.date));
 			}
 			
-			return BuildURL('news', params);
+			return BuildURL(this.rootUrl + 'news', params);
         },
         optionsChanging: function() {
         	this.optionMapUpdates = 3; //I hate this so much

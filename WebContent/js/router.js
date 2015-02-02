@@ -2,22 +2,23 @@ define(['utils/detector', 'templates', 'collections/news', 'views/Map', 'views/O
 function (Detector, Templates, News, Map, Options, Report) {
 	return new (Backbone.Router.extend({
 	    initialize: function() {
-	    	this.usePushStates = "pushState" in history; //don't need "this" here
-	    	Backbone.history.start({pushState: this.usePushStates, hashChange: this.usePushStates});
+	    	var usePushStates = "pushState" in history;
+	    	Backbone.history.start({pushState: usePushStates, hashChange: usePushStates});
 	    },
 	    routes: {
 	    	'*path': 'homePage'
 	    },
 	    homePage: function(options) {
 	    	$('body').html(Templates['mr-template']({platform: Detector.phone() ? 'mobile' : 'desktop'}));
-	    	
-	    	var path = window.location.pathname.split('/');
-	    	
-	    	switch (document.domain) {
+
+	    	var rootDomain = document.domain;
+	    	switch (rootDomain) {
 	    		case "50.62.80.222": this.pathPrefix = "/mapreport/"; break;
-	    		case "localhost": this.pathPrefix = "/mapreport-stable/"; break;
+	    		case "localhost": this.pathPrefix = "/mapreport-stable/"; rootDomain = "localhost:8080"; break;
 	    		default: this.pathPrefix = "";
 	    	}
+
+	    	var path = window.location.pathname.split('/');
 	    	
 	    	var topic;
 	    	var topicIndex = path.indexOf('topic') + 1;
@@ -31,7 +32,13 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    		loc = path[locationIndex];
 	    	}
 	    	
-	    	var news = new News(topic, loc);
+	    	var date;
+	    	var dateIndex = path.indexOf('date') + 1;
+	    	if (dateIndex && dateIndex < path.length) {
+	    		date = path[dateIndex];
+	    	}
+	    	
+	    	var news = new News("http://" + rootDomain + this.pathPrefix, {topic: topic, loc: loc, date: date});
 	    	
 	    	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
 	    	new Options({news: news});	    	
@@ -40,11 +47,8 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    redirectTo: function(path) {
 	        location.href = path;
 	    }, 
-	    //Use this function instead of backbone's navigate(..., {replace: true}) because of IE9 (no push states):
-	    navigateReplace: function(URL) {
-	    	if (this.usePushStates) {
-	    		this.navigate(this.pathPrefix + URL, {replace: true});
-	    	}
+	    navigateTo: function(URL) {
+	    	this.navigate(this.pathPrefix + URL);
 	    }
 	}))();
 });

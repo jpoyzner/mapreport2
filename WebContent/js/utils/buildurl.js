@@ -1,6 +1,5 @@
 define([], function() {
-	return function(path, params) {
-		var URL = path;
+	return function(URL, params) {
 		var firstParam = params.shift();
 		if (firstParam) {
 			URL += "?" + firstParam;
