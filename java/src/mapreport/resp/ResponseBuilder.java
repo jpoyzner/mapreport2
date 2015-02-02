@@ -62,7 +62,7 @@ public class ResponseBuilder {
 		//		parents = filterDBQueryBuilder.runQuery(filterIds);
 		//	}
 			
-			Map <String, NameFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters);
+			Map <String, DBFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters); 
 			
 			for (NameFilter filter: nameFilters) {
 				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
@@ -85,7 +85,7 @@ public class ResponseBuilder {
 					}*/
 					
 					// NameFilter newFilter = isLocation ? new LocationByName(filter.getName()) :  new Topic(filter.getName());
-					NameFilter newFilter = filterMap.get(filter.getName());
+					DBFilter newFilter = filterMap.get(filter.getName());
 					if (newFilter == null) {
 						Log.info(" CAN''T FIND FILTER: " + filter.getName());
 					} else {
@@ -166,7 +166,7 @@ public class ResponseBuilder {
 			
 
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
-			List <NameFilter> dbFilters = filterBuilder.runQuery(newsMap);
+			List <DBFilter> dbFilters = filterBuilder.runQuery(newsMap);
 			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
 
 			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());
@@ -177,7 +177,7 @@ public class ResponseBuilder {
 				allHintMap.put(filter.getName(), filter);
 			}
 			
-			newsList = NewsQueryBuilder.buildNewsList(newsMap); 
+			newsList = NewsQueryBuilder.buildNewsList(newsMap, newsBuilder.getFilterNode().getTimeFilter()); 
 			
 			if (newsList.size() > NEWS_LIMIT + 1) {
 				newsList = newsList.subList(0, NEWS_LIMIT);

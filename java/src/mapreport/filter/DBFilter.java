@@ -7,6 +7,16 @@ import mapreport.util.Log;
 public class DBFilter extends NameFilter {
 
 	int dbFilterCntr = 0;
+	String filterId = null;
+
+	public String getFilterId() {
+		return filterId;
+	}
+
+
+	public void setFilterId(String filterId) {
+		this.filterId = filterId;
+	}
 
 	final static String SECOND_SELECT_SQL = " \n , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.pLevel as pLevel2, f2.nfPriority as nfPriority2 \n ";
 	final static String SECOND_FROM_SQL_START = ", \n ( select n.newsId, f.priority as filterPriority,  f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority," + ""

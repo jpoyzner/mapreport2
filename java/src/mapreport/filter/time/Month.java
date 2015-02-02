@@ -25,7 +25,7 @@ public class Month extends OfficialTimeFilter {
 		end = new GregorianCalendar(year, month - 1, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
 		
 		setName(String.valueOf(year) + "-" + (month < 10 ? "0" : "") + String.valueOf(month));		
-		           Log.info("Month year=" + year + " month=" + month + " name=" + getName());
+		           Log.log("Month year=" + year + " month=" + month + " name=" + getName());
 
 		parent = new Year(year);		
 		buildTimeSQL(); 	           
