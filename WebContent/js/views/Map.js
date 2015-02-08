@@ -27,7 +27,8 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 				return;
 			}
 			
-			if (this.news.optionMapUpdates && this.news.optionMapUpdates != 1) {
+			//if (this.news.optionMapUpdates && this.news.optionMapUpdates != 1) {
+			if (!this.news.mapReloading) {
 				this.map.attr('fitToMarkers', '');
 			}
 			
@@ -35,8 +36,8 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			this.map.html(Templates['mr-map-markers-template']({news: this.news, latitude: this.latitude, longitude: this.longitude}));
 		},
 		mapUpdated: function(event) { //called after template updated above
-			if (this.news.optionMapUpdates) { //do not fetch again if map updated because of options changing
-				this.news.optionMapUpdates--;
+			if (this.news.mapReloading) {//this.news.optionMapUpdates) { //do not fetch again if map updated because of options changing
+				//this.news.optionMapUpdates--;
 				return;
 			}
 

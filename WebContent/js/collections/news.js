@@ -24,7 +24,6 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				this.fetches++;
 			}, this));
 			
-			this.optionsChanging();
 			this.fetch();
 		},
 		parse: function(response) {
@@ -59,6 +58,8 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 						+ (this.date ? 'date/' + this.date : ''));
 			}
 			
+			this.optionsChanging();
+			
 			return response.news;
 		},
 		url: function() {
@@ -90,7 +91,10 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			return BuildURL(this.rootUrl + 'news', params);
         },
         optionsChanging: function() {
-        	this.optionMapUpdates = 3; //I hate this so much
+        	this.mapReloading = true;
+        	setTimeout(_.bind(function() {
+        		this.mapReloading = false;
+        	}, this), 500);
         }
 	});
 });
