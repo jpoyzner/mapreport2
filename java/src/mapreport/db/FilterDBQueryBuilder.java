@@ -32,14 +32,14 @@ public class FilterDBQueryBuilder {
 	 */
 	private static String sqlBegin = "select f.filterId, f.name, f.label, f.image, f.isLocation, f.name as filterName, ff.level, " + 
 			"\n  f.priority as filterPriority,  nf.priority as newsFilterPriority,  ff.priority as filterFilterPriority, " + 
-			"\n  fp.filterId as parentId, fp.name as parentName, fp.label as parentLabel, fp.image as parentImage, fp.isLocation as parentLocation" + 
+			"\n  fp.filterId as parentId, fp.name as parentName, fp.label as parentLabel, fp.image as parentImage, fp.isLocation as parentLocation, n.newsId" + 
 			"\n from filter f, filter fp, newsfilter nf, filterfilter ff, news n  " + 
 		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
 	
 	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 1000";
 	
-	public List <DBFilter> processResultSet(ResultSet res) throws SQLException{ 
+	public List <DBFilter> processResultSet(ResultSet res, Map<Integer, News> newsMap) throws SQLException{ 
 		List <DBFilter> rows = new ArrayList<DBFilter>(1000);
 		
 		while (res.next()) {
@@ -57,6 +57,7 @@ public class FilterDBQueryBuilder {
 			String filterId = res.getString("filterId");
 			String label = res.getString("label");
 			String image = res.getString("image");
+			String newsId = res.getString("newsId");
 			  
 			row.setLevel(level);
 			row.setName(fName);
@@ -89,6 +90,19 @@ public class FilterDBQueryBuilder {
 					  " labelParent=" + labelParent +  " filterParentId=" + filterParentId 
 					  +  " fParentName=" + fParentName   
 					  +  " isParentLocation=" + isParentLocation   +  " imageParent=" + imageParent  );	
+			  
+			  if (Topic.mainTopics.contains(fName)) {
+				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics fName=" + fName + " newsId=" + newsId);
+			  }
+			  if (Topic.mainTopics.contains(fParentName)) {
+				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics fParentName=" + fParentName + " newsId=" + newsId);
+				  News news = newsMap.get(new Integer(newsId));
+				  
+				  String rootTopic = news.getRootTopic();
+				  if (rootTopic == null || rootTopic.isEmpty()) {
+					  news.setRootTopic(fParentName);
+				  }
+			  }
 		}
 		
 		return rows;
@@ -144,7 +158,7 @@ public class FilterDBQueryBuilder {
 		Log.info("FilterDBQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
-		List <DBFilter> rows = processResultSet(resultSet);
+		List <DBFilter> rows = processResultSet(resultSet, newsMap);
 	    return rows;
 	}
 	
