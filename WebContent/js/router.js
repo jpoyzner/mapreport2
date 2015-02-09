@@ -52,10 +52,13 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    		}
 	    	});
 	    	
-	    	var news =
-	    		new News(
-	    			"http://" + rootDomain + this.pathPrefix,
-	    			{topic: topic, loc: loc, date: date, mapBounds: {left: left, right: right, top: top, bottom: bottom}});
+	    	var settings = {topic: topic, loc: loc, date: date};
+	    	
+	    	if (left && right && top && bottom) {
+	    		settings.mapBounds = {left: left, right: right, top: top, bottom: bottom};
+	    	}
+	    	
+	    	var news = new News("http://" + rootDomain + this.pathPrefix, settings);
 	    	
 	    	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
 	    	new Options({news: news});	    	
