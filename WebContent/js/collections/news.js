@@ -18,6 +18,10 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				this.date = options.date;
 			}
 			
+			if (options.mapBounds) {
+				this.mapBounds = options.mapBounds;
+			}
+			
 			this.fetches = 0;
 			
 			this.on('request', _.bind(function() {
@@ -49,13 +53,19 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			
 			//console.log(response.SQL);
 			
-			if (this.topic || this.loc || this.date) {
+			if (this.topic || this.loc || this.date || this.mapBounds) {
 				require('router').navigateTo(
-					(this.topic ? 'topic/' + this.topic : '')
-						+ ((this.topic && this.loc) ? '/' : '')
-						+ (this.loc ? 'location/' + this.loc : '')
-						+ ((this.topic && this.loc && this.date) ? '/' : '')
-						+ (this.date ? 'date/' + this.date : ''));
+					(this.topic ? "topic/" + this.topic : "")
+						+ ((this.topic && this.loc) ? "/" : "")
+						+ (this.loc ? "location/" + this.loc : "")
+						+ (((this.topic || this.loc) && this.date) ? "/" : "")
+						+ (this.date ? "date/" + this.date : "")
+						+ BuildURL(
+							"",
+							["left=" + this.mapBounds.left,
+							 	"right=" + this.mapBounds.right,
+			            		"top=" + this.mapBounds.top,
+			            		"bottom=" + this.mapBounds.bottom]));
 			}
 			
 			this.optionsChanging();

@@ -18,7 +18,7 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    		default: this.pathPrefix = "";
 	    	}
 
-	    	var path = window.location.pathname.split('/');
+	    	var path = location.pathname.split('/');
 	    	
 	    	var topic;
 	    	var topicIndex = path.indexOf('topic') + 1;
@@ -38,7 +38,24 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    		date = path[dateIndex];
 	    	}
 	    	
-	    	var news = new News("http://" + rootDomain + this.pathPrefix, {topic: topic, loc: loc, date: date});
+	    	var left, right, top, bottom;
+	    	_.each(location.search.slice(1).split('&'), function(queryParam) {
+	    		var entry = queryParam.split('=');
+	    		if (entry[0] === 'left') {
+	    			left = entry[1];
+	    		} else if (entry[0] === 'right') {
+	    			right = entry[1];
+	    		} else if (entry[0] === 'top') {
+	    			top = entry[1];
+	    		} else if (entry[0] === 'bottom') {
+	    			bottom = entry[1];
+	    		}
+	    	});
+	    	
+	    	var news =
+	    		new News(
+	    			"http://" + rootDomain + this.pathPrefix,
+	    			{topic: topic, loc: loc, date: date, mapBounds: {left: left, right: right, top: top, bottom: bottom}});
 	    	
 	    	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
 	    	new Options({news: news});	    	
