@@ -60,12 +60,14 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 						+ (this.loc ? "location/" + this.loc : "")
 						+ (((this.topic || this.loc) && this.date) ? "/" : "")
 						+ (this.date ? "date/" + this.date : "")
-						+ BuildURL(
-							"",
-							["left=" + this.mapBounds.left,
-							 	"right=" + this.mapBounds.right,
-			            		"top=" + this.mapBounds.top,
-			            		"bottom=" + this.mapBounds.bottom]));
+						+ (this.mapBounds ?
+							BuildURL(
+								"",
+								["left=" + this.mapBounds.left,
+								 	"right=" + this.mapBounds.right,
+				            		"top=" + this.mapBounds.top,
+				            		"bottom=" + this.mapBounds.bottom])
+				            : ""));
 			}
 			
 			this.optionsChanging();
