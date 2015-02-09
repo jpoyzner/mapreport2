@@ -166,8 +166,8 @@ public class FilterDBQueryBuilder {
 		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
 		for (News news : newsMap.values()) {
 			incrementFilterMapPriority(filterMapResult, new Year(news.getDateTime().getYear() + 1900));
-			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth() + 1));
-			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth() + 1, news.getDateTime().getDate()));		
+			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth()));
+			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth(), news.getDateTime().getDate()));		
 			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10));
 		}
 		Log.info("addTimeFilters filterMapResult.size() = " + filterMapResult.size());
