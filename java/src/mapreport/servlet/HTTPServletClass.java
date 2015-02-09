@@ -16,11 +16,11 @@ public class HTTPServletClass extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	
 	public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
     	Log.info("HTTPServletClass doGet");
+    	
 		response.setContentType("text/x-json;charset=UTF-8");           
         response.setHeader("Cache-Control", "no-cache");
-        response.addHeader("Access-Control-Allow-Origin", "*");
+        //response.addHeader("Access-Control-Allow-Origin", "*");
 		
         try {
             response.getWriter().write(Endpoints.news(request));

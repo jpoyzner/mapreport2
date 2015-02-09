@@ -11,11 +11,11 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    homePage: function(options) {
 	    	$('body').html(Templates['mr-template']({platform: Detector.phone() ? 'mobile' : 'desktop'}));
 
-	    	var rootDomain = document.domain;
-	    	switch (rootDomain) {
+	    	var rootDomain = document.domain + ":8080";
+	    	switch (document.domain) {
 	    		case "50.62.80.222": this.pathPrefix = "/mapreport/"; break;
-	    		case "localhost": this.pathPrefix = "/mapreport-stable/"; rootDomain = "localhost:8080"; break;
-	    		default: this.pathPrefix = "";
+	    		case "localhost": this.pathPrefix = "/mapreport-stable/"; break;
+	    		default: this.pathPrefix = ""; //is this actually needed?
 	    	}
 
 	    	var path = location.pathname.split('/');
