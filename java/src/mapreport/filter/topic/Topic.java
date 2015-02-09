@@ -2,6 +2,8 @@ package mapreport.filter.topic;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.util.HashSet;
+import java.util.Set;
 
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
@@ -9,6 +11,21 @@ import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
 public class Topic extends DBFilter{
+	public static Set<String> mainTopics = new HashSet<String>(7);
+	
+	static void populateMainTopics() {
+		mainTopics.add("Disasters");
+		mainTopics.add("Crime");
+		mainTopics.add("Business");
+		mainTopics.add("Politics");
+		mainTopics.add("Sports");
+	//	mainTopics.add("War & Army");
+		mainTopics.add("Science & Education");
+	}
+	
+	static {
+		populateMainTopics();
+	} 
 
 	public Topic(String name) {
 		super(name);

@@ -2,6 +2,7 @@ package mapreport.filter.time;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.DateFormatSymbols;
 import java.util.GregorianCalendar;
 
 import mapreport.db.NewsFilterRow;
@@ -17,14 +18,14 @@ public class Day extends OfficialTimeFilter {
 	}
 
 	public Day(int year, int month, int day) {
-		super(String.valueOf(day) + "/" + String.valueOf(month) + "/" + String.valueOf(year));		
+		super(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + (day < 10 ? "0" : "") + String.valueOf(day)  + "-" + String.valueOf(year));		
 		this.year = year;		
 		this.month = month;	
 		this.day = day;		
 		setPriority(30);	
 // 2011-12-03
 		String zero = day < 10 ? "0" : "";
-		setName(String.valueOf(year) + "-" + (month < 10 ? "0" : "") + String.valueOf(month) + "-" + zero + String.valueOf(day));	
+		setName(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + (day < 10 ? "0" : "") + String.valueOf(day)  + "-" + String.valueOf(year));	
 
 		begin = new GregorianCalendar(year, month, day);
 	//	end = new GregorianCalendar(year, month, begin.get(Calendar.DAY_OF_MONTH) + 2);

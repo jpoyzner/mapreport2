@@ -40,6 +40,7 @@ public class NewsPresentation extends News {
 		x = news.getX();
 		y = news.getY();
 		location = news.getLocation();
+		rootTopic = news.getRootTopic();
 	}
 
 	
@@ -75,6 +76,8 @@ public class NewsPresentation extends News {
 		sb.append(location);
 		sb.append(", mapLabel=");
 		sb.append(mapLabel);
+		sb.append(", rootTopic=");
+		sb.append(rootTopic);
 		sb.append("]");
 		return sb.toString();
 	}

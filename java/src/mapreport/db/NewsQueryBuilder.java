@@ -19,6 +19,7 @@ import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
+import mapreport.filter.topic.Topic;
 import mapreport.front.page.FilterNode;
 import mapreport.news.News;
 import mapreport.resp.ResponseBuilder;
@@ -247,6 +248,14 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("processResultSet label=" + label + " date=" + date
 				+ " newsId=" + newsId + " nPriority=" + nPriority
 				+ " addressText=" + addressText);
+		
+      /* if (Topic.mainTopics.contains(fName)) {
+			  Log.info("FilterDBQueryBuilder processResultSet Topic.mainTopics fName=" + fName);
+	   }
+	   if (Topic.mainTopics.contains(fParentName)) {
+			  Log.info("FilterDBQueryBuilder processResultSet Topic.mainTopics fParentName=" + fParentName);
+	   }*/
+
 		return row;
 	}
 
