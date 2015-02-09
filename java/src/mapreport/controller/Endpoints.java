@@ -18,7 +18,7 @@ import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class Endpoints {
-	public static final String news(HttpServletRequest request)  throws MalformedURLException, UnsupportedEncodingException{
+	public static final String news(HttpServletRequest request) throws Exception {
     	Log.info("Endpoints news");
 		
     	Rectangle rectangle = null;

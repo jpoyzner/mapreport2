@@ -20,12 +20,12 @@ public class HTTPServletClass extends HttpServlet {
     	Log.info("HTTPServletClass doGet");
 		response.setContentType("text/x-json;charset=UTF-8");           
         response.setHeader("Cache-Control", "no-cache");
+        response.addHeader("Access-Control-Allow-Origin", "*");
 		
         try {
             response.getWriter().write(Endpoints.news(request));
-        } catch (IOException e) {
+        } catch (Exception e) {
         	Log.info("HTTPServletClass IOException in populateWithJSON" + e);
-           throw new IOException("IOException in populateWithJSON", e);
         }    
 	}
 }
