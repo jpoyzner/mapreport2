@@ -6,8 +6,15 @@
 .mr-option {
 	background-color: lightblue;
 	cursor: pointer;
+	display: table;
 	height: 100%;
 	text-align: center;
+	width: 33.3%;
+}
+
+.mr-option-cell {
+	display: table-cell;
+	vertical-align: middle;
 }
 
 input-options {
@@ -26,7 +33,6 @@ input-options::shadow nested-menu::shadow nested-submenu {
 .mr-topic-option {
 	border-right: 1px solid black;
 	float: left;
-	width: 33.3%;
 }
 
 .mr-topic-option input-options::shadow nested-menu {
@@ -36,7 +42,6 @@ input-options::shadow nested-menu::shadow nested-submenu {
 .mr-location-option {
 	border-right: 1px solid black;
 	float: left;
-	width: 33.3%;
 }
 
 .mr-location-option input-options::shadow nested-menu {

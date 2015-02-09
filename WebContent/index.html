@@ -3302,32 +3302,40 @@ Fired when the Maps API has fully loaded.
 	<script type="text/template" id="mr-options-template" class="template">
 		<div id="mr-options">
 			<div class="mr-option mr-topic-option">
-				<span>TOPIC: </span>
-				<% var topicsList = _.map(topics.models, function(topic) {
-					return [topic.get('node'), topic.get('node')];
-				});
+				<span class="mr-option-cell">
+					<span>TOPIC: </span>
+					<% var topicsList = _.map(topics.models, function(topic) {
+						return [topic.get('node'), topic.get('node')];
+					});
 
-				var topicTitle = typeof topic == 'undefined' ? 'All Topics' : topic %>
-				<input-options options="<%= JSON.stringify(topicsList).replace(/\"/g, '\'') %>" value="<%= topicTitle %>"></input-options>
+					var topicTitle = typeof topic == 'undefined' ? 'All Topics' : topic %>
+					<input-options options="<%= JSON.stringify(topicsList).replace(/\"/g, '\'') %>" value="<%= topicTitle %>">
+					</input-options>
+				</span>
 			</div>
 			<div class="mr-option mr-location-option">
-				<span>LOCATION: </span>
-				<% var locationsList = _.map(locations.models, function(location) {
-					return [location.get('node'), location.get('node')];
-				});
+				<span class="mr-option-cell">
+					<span>LOCATION: </span>
+					<% var locationsList = _.map(locations.models, function(location) {
+						return [location.get('node'), location.get('node')];
+					});
 
-				var locationTitle = typeof loc == 'undefined' ? 'Global' : loc %>
-				<input-options options="<%= JSON.stringify(locationsList).replace(/\"/g, '\'') %>" value="<%= locationTitle %>">
-				</input-options>
+					var locationTitle = typeof loc == 'undefined' ? 'Global' : loc %>
+					<input-options options="<%= JSON.stringify(locationsList).replace(/\"/g, '\'') %>" value="<%= locationTitle %>">
+					</input-options>
+				</span>
 			</div>
 			<div class="mr-option mr-time-option">
-				<span>TIME: </span>
-				<% var datesList = _.map(dates.models, function(date) {
-					return [date.get('node'), date.get('node')];
-				});
+				<span class="mr-option-cell">
+					<span>TIME: </span>
+					<% var datesList = _.map(dates.models, function(date) {
+						return [date.get('node'), date.get('node')];
+					});
 
-				var dateTitle = typeof date == 'undefined' ? 'All Time' : date %>
-				<input-options options="<%= JSON.stringify(datesList).replace(/\"/g, '\'') %>" value="<%= dateTitle %>"></input-options>
+					var dateTitle = typeof date == 'undefined' ? 'All Time' : date %>
+					<input-options options="<%= JSON.stringify(datesList).replace(/\"/g, '\'') %>" value="<%= dateTitle %>">
+					</input-options>
+				</span>
 			</div>
 		</div>
 	</script>

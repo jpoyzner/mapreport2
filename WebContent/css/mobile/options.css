@@ -6,8 +6,14 @@
 .mr-option {
 	background-color: lightblue;
 	cursor: pointer;
+	display: table;
 	height: 100%;
 	text-align: center;
+}
+
+.mr-option-cell {
+	display: table-cell;
+	vertical-align: middle;
 }
 
 input-options {

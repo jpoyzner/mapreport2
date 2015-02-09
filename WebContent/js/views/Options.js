@@ -22,7 +22,8 @@ define(['templates', 'utils/css', 'backbone', 'underscore'], function(Templates,
 			var menus = $('.mr-option');
 			
 			menus.click(function(e) {
-				if ($(e.target).is('input-options')) {
+				if (!this.expanded && $(e.target).is('input-options')) {
+					this.expanded = !this.expanded; //'this' is the element here
 					return;
 				}
 				
