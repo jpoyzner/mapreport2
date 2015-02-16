@@ -214,7 +214,7 @@ public class NewsQueryBuilder extends DBBase {
 			nfPriority = res.getString("nfPriority");
 			String topicExcludeId = res.getString("topicExcludeId");
 			row.setTopicExcludeId(topicExcludeId);
-			Log.info("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId);
+			Log.log("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId);
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -245,7 +245,7 @@ public class NewsQueryBuilder extends DBBase {
 		row.setImage(image);
 		row.setShortLabel(shortLabel);
 		row.setDescription(description);
-		Log.info("processResultSet label=" + label + " date=" + date
+		Log.log("processResultSet label=" + label + " date=" + date
 				+ " newsId=" + newsId + " nPriority=" + nPriority
 				+ " addressText=" + addressText);
 		

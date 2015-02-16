@@ -20,7 +20,9 @@ public class LocationByCoords extends NameFilter implements Location {
             "n.addressX <> 0 and n.addressY <> 0 and n.addressX <> -1 and n.addressY <> -1  \n" + 
             "and n.addressY > ? and n.addressY < ? and (n.addressX > ? ");
 	
+//	final StringBuilder whereStringBuilderEnd = new StringBuilder(" n.addressX < ?) and ? > n.span  \n" + 
 	final StringBuilder whereStringBuilderEnd = new StringBuilder(" n.addressX < ?)  \n" + 
+
         "  \n ) ");
 	
 	public LocationByCoords (Rectangle rect) {
@@ -48,6 +50,7 @@ public class LocationByCoords extends NameFilter implements Location {
 				pst.setDouble(++col, rect.getTop() * 1000000);	
 				pst.setDouble(++col, rect.getLeft() * 1000000);	
 				pst.setDouble(++col, rect.getRight() * 1000000);
+			//	pst.setDouble(++col, Math.abs(rect.getRight() - rect.getLeft()) * 1000000);
 				
 				return col;
 	}

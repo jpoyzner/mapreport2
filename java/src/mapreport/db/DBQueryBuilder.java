@@ -245,7 +245,7 @@ public class DBQueryBuilder extends DBBase{
 		  row.setParentLevel(pLevel);
 		  row.setParentLocation(isParentLocation);
 		  
-		  Log.info("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
+		  Log.log("processResultSet label=" + label +  " filterPriority=" + filterPriority +  " date=" + date 
 			  +  " fName=" + fName +  " pName=" + pName +  " pLevel=" + pLevel  +  " newsId=" + newsId  +  " isLocation=" + isLocation  +  " isParentLocation=" + isParentLocation 
 			  +  " nPriority=" + nPriority  +  " isPrimary=" + isPrimary  +  " addressText=" + addressText  );
 		  return row;
