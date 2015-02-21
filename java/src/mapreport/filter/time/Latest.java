@@ -22,7 +22,7 @@ public class Latest extends OfficialTimeFilter {
 		setPriority(2000000);
 		
 		// TEMPORARY !!!!!!!!!!!!!!!!!!!!!
-		whereSQL.append(" and n.dateTime < '2008-11-17' ");
+		// whereSQL.append(" and n.dateTime < '2008-11-17' ");
 		setName(LATEST);
 	}
 	
