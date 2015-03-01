@@ -37,12 +37,15 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 	}
 	
 	public String buildSql(Set<NameFilter> nameFilters) {
-	     Log.log("URLFilterQueryBuilder buildSql nameFilters.size()=" + nameFilters.size());
+	     Log.info("URLFilterQueryBuilder buildSql nameFilters.size()=" + nameFilters.size());
 		StringBuilder sqlBuff = new StringBuilder();
 		sqlBuff.append(sqlBegin);
 		
 		boolean isStarted = false;
 		for (NameFilter filter : nameFilters) {
+			if (filter == null || filter.getName() == null || filter.getName().isEmpty()) {
+				continue;
+			}
 			if (isStarted) {
 				sqlBuff.append(", ");
 			} else {
@@ -51,6 +54,10 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 			sqlBuff.append("'");
 			sqlBuff.append(filter.getName().replaceAll("'","''"));
 			sqlBuff.append("'");		
+		}
+		
+		if (!isStarted) {
+			return null;
 		}
 		sqlBuff.append(sqlEnd);
 		sql = sqlBuff.toString();
@@ -65,7 +72,11 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 		}
 		begin();
 		Log.info("URLFilterQueryBuilder start executeQuery");
-   	    buildSql(nameFilters);
+   	    String sql = buildSql(nameFilters);
+   	    
+   	    if (sql == null) {
+   	    	return new  HashMap <String, DBFilter>(1);
+   	    }
    	    prepareStmt();
 		Log.info("URLFilterQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
