@@ -492,7 +492,7 @@ html /deep/ core-icon {
 		
 	    <script data-main="js/home.js" src="//cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 	</head>
-	<body style="background-color: lightblue"><div hidden="">
+	<body style="background-color: black"><div hidden="">
 <polymer-element name="core-shared-lib" attributes="url notifyEvent callbackName" assetpath="js/components/core-shared-lib/">
 <script>
 (function() {
@@ -1461,7 +1461,7 @@ Fired when the Maps API has fully loaded.
     getMapOptions: function() {
       var mapOptions = {
         zoom: this.zoom,
-        mapTypeId: this.mapType,
+        mapTypeId: google.maps.MapTypeId.SATELLITE,//this.mapType,
         disableDefaultUI: this.disableDefaultUI,
         disableDoubleClickZoom: !this.zoomable,
         scrollwheel: this.zoomable,
@@ -3342,7 +3342,7 @@ Fired when the Maps API has fully loaded.
 	<script type="text/template" id="mr-report-template" class="template">
 		<div id="mr-report">
 			<% _.each(news.models, function(article) { %>
-				<div class="mr-report-article" style="background-color: <%= randomColor() %>">
+				<div class="mr-report-article" style="background-color: #<%= article.get('colorHex') %>">
 					<img src="http://www.mapreport.com/images/common/list5.gif"></img>
 					<a href="<%= article.get('url') %>" target="_blank"><p><%= article.get('mapLabel') %>: <%= article.get('dateTime') %>: <%= article.get('label') %><p></a>
 				</div>

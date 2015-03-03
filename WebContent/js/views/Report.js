@@ -15,7 +15,7 @@ function(Templates, Css, Color) {
 		},
 		render: function() {
 			if (!this.news.fetches) {
-				this.bucket.html(Templates['mr-report-template']({news: this.news, randomColor: Color.random}));
+				this.bucket.html(Templates['mr-report-template']({news: this.news/*, randomColor: Color.random*/}));
 			}
 		}
 	});

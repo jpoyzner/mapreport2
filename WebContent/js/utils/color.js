@@ -10,6 +10,13 @@ define(['jquerycolor'], function() {
 		    lightness: 0.8,
 		    alpha: 1
 		  }).toHexString();
-		}
+		},
+		blue: '000080', //NAVY
+		yellow: 'FFD700', //GOLD
+		gray: '708090', //SLATE GRAY
+		orange: 'A0522D', //SIENNA
+		green: '228B22', //FOREST GREEN
+		purple: '800080',
+		white: 'FFFFFF'
 	};
 });

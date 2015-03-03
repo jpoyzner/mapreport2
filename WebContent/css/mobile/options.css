@@ -1,10 +1,10 @@
 #mr-options {
-	background-color: lightblue;
+	background-color: black;
 	height: 100%;
 }
 
 .mr-option {
-	background-color: lightblue;
+	background-color: black;
 	cursor: pointer;
 	display: table;
 	height: 100%;

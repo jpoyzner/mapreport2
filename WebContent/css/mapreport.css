@@ -13,17 +13,18 @@ body {
 }
 
 #mr-options-bucket {
-	background-color: lightblue;
+	background-color: black;
 	border-bottom: 1px solid;
 	border-color: black;
 	color: white;
 	font-weight: bold;
 	height: 5%;
+	text-align: center;
 }
 
 #mr-options-bucket .header {	
 	font-size: 20px;
-	letter-spacing: 5.4em;
+	letter-spacing: 7vw;
 	text-align: center;
 	vertical-align: middle;
 }
@@ -44,7 +45,7 @@ body {
 }
 
 #mr-report-bucket {
-	background-color: lightblue;
+	background-color: black;
 	height: 95%;
 	top: 5%;
 }

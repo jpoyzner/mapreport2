@@ -490,7 +490,7 @@ Fired when the Maps API has fully loaded.
     getMapOptions: function() {
       var mapOptions = {
         zoom: this.zoom,
-        mapTypeId: this.mapType,
+        mapTypeId: google.maps.MapTypeId.SATELLITE,//this.mapType,
         disableDefaultUI: this.disableDefaultUI,
         disableDoubleClickZoom: !this.zoomable,
         scrollwheel: this.zoomable,
