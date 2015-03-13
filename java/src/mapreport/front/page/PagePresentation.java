@@ -77,6 +77,12 @@ public class PagePresentation {
 		navigationPath = new NavigationPath(pageFilters, childFilters);
 		view = new MapView(new MapNewsList(newsList, pageFilters)); // MapView  just is one of the view, extend later
 		   Log.log("PagePresentation view.getNewsList()=" + view.getNewsList());
+		   
+				for (News news : newsList) {
+					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + "  isMapShow=" + news.isMapShow());
+				}			  
+   
+	
 	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
 		
 	}

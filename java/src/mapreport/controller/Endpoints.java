@@ -58,7 +58,7 @@ public class Endpoints {
 			Log.info("Endpoints date added:" + date);
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
-		return ResponseBuilder.buildJson(rectangle, nameFilters, 100).toString();
+		return ResponseBuilder.buildJson(rectangle, nameFilters, 500).toString();
 	}
 	
 	//TODO: extract all params here and pass into functional classes

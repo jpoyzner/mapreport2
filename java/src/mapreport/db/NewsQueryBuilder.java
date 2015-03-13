@@ -43,7 +43,7 @@ public class NewsQueryBuilder extends DBBase {
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
-	static final String SELECT_EXTERNAL = "select n.addressText as addressText,"
+	static final String SELECT_EXTERNAL = "select nf.isPrimary as isPrimary, f.isLocation as isLocation, n.addressText as addressText,"
 			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " 
 			+ " nf.priority as nfPriority, nf.topicExcludeId as topicExcludeId, "
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
@@ -214,7 +214,16 @@ public class NewsQueryBuilder extends DBBase {
 			nfPriority = res.getString("nfPriority");
 			String topicExcludeId = res.getString("topicExcludeId");
 			row.setTopicExcludeId(topicExcludeId);
-			Log.log("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId);
+			
+			boolean isPrimary = res.getBoolean("isPrimary");
+			boolean isLocation = res.getBoolean("isLocation");
+			row.setLocation(isLocation);
+			row.setPrimary(isPrimary);
+			
+			if (isPrimary && isLocation) {
+				row.setMapShow(true);
+			}
+			Log.info("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -230,7 +239,7 @@ public class NewsQueryBuilder extends DBBase {
 		double y = res.getDouble("addressY");
 
 		String addressText = res.getString("addressText");
-
+		
 		row.setAddress(addressText);
 		row.setX(x);
 		row.setY(y);
@@ -279,6 +288,14 @@ public class NewsQueryBuilder extends DBBase {
 		List<News> newsList = new ArrayList<News>(300);
 
 		for (Integer key : newsMap.keySet()) {
+			Log.info("buildNewsList newsTest key=" + key);
+			
+			News newsTest = newsMap.get(158150); //news.getNewsId()); //"14-year-old middle school student killed by car");
+			
+			if (newsTest != null) {
+				Log.info("buildNewsList newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+			}
+
 			newsList.add(newsMap.get(key));
 		}
 		
@@ -306,17 +323,37 @@ public class NewsQueryBuilder extends DBBase {
 			if (newsMap.get(news.getNewsId()) == null) {
 				newsMap.put(news.getNewsId(), news);
 			} else {
+				News existNews = newsMap.get(news.getNewsId());
+				
+				if (news.isLocation() && news.isPrimary()) {
+					existNews.setMapShow(true);
+					newsMap.put(news.getNewsId(), existNews);
+				}
+
+				Log.info("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
+						+ " isMapShow=" + existNews.isMapShow() + " news.getNewsId()=" +news.getNewsId() + " get isMapShow=" + newsMap.get(news.getNewsId()).isMapShow());
+				
 				int nfPriority = newsMap.get(news.getNewsId())
 						.getNewsFilterPriority();
 				if (news.getNewsFilterPriority() < nfPriority) { 
 					// lower better: 'Berlin','Khodorkovsky vows to help prisoners', '100'
 					nfPriority = news.getNewsFilterPriority();
-					News existNews = newsMap.get(news.getNewsId());
 					existNews.setNewsFilterPriority(nfPriority);
 					newsMap.put(news.getNewsId(), existNews);
 				}
 			}
+			
+			News newsTest = newsMap.get("158150"); //news.getNewsId()); //"14-year-old middle school student killed by car");
+			if (newsTest != null) {
+				Log.info("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+			}
 		}
+		
+		News newsTest = newsMap.get("158150"); //news.getNewsId()); //"14-year-old middle school student killed by car");
+		if (newsTest != null) {
+			Log.info("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+		}
+
 		return newsMap;
 	}
 

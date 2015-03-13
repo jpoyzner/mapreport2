@@ -41,6 +41,7 @@ public class NewsPresentation extends News {
 		y = news.getY();
 		location = news.getLocation();
 		rootTopic = news.getRootTopic();
+		isMapShow = news.isMapShow();
 	}
 
 	

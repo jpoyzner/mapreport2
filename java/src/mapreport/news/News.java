@@ -26,8 +26,38 @@ public class News implements Comparable{
 	double y = 0;
 	int newsId = 0;
 	int newsFilterPriority = 0;
-	String topicExcludeId = null;
+	String topicExcludeId = null;	
+	
+	boolean isPrimary = false;
+	boolean isLocation = false;
+	@Expose boolean isMapShow = false;
 	@Expose String rootTopic = null;
+	
+	public boolean isPrimary() {
+		return isPrimary;
+	}
+
+	public void setPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
+	}
+
+	public boolean isLocation() {
+		return isLocation;
+	}
+
+	public void setLocation(boolean isLocation) {
+		this.isLocation = isLocation;
+	}
+
+	public boolean isMapShow() {
+		return isMapShow;
+	}
+
+	public void setMapShow(boolean isMapShow) {
+		this.isMapShow = isMapShow;
+	}
+
+
 	
 	public String getRootTopic() {
 		return rootTopic;
