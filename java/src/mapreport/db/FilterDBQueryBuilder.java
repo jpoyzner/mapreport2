@@ -37,7 +37,7 @@ public class FilterDBQueryBuilder {
 		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
 	
-	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 1000";
+	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 2000";
 	
 	public List <DBFilter> processResultSet(ResultSet res, Map<Integer, News> newsMap) throws SQLException{ 
 		List <DBFilter> rows = new ArrayList<DBFilter>(1000);
@@ -80,22 +80,23 @@ public class FilterDBQueryBuilder {
 			rows.add(rowParent);
 			
 			  Log.log("FilterDBQueryBuilder processResultSet "
+					  +  " newsId=" + newsId 
 					  +  " priority=" + priority 
 					  +  " newsFilterPriority=" + newsFilterPriority 
 					  +  " filterFilterPriority=" + filterFilterPriority 
 					  +  " filterPriority=" + filterPriority +
 					  " label=" + label +  " level=" + level  +  " filterId=" + filterId 
-					  +  " fName=" + fName   
+					  +  " fName=" + fName  
+					  +  " fParentName=" + fParentName    
 					  +  " isLocation=" + isLocation   +  " image=" + image  +
 					  " labelParent=" + labelParent +  " filterParentId=" + filterParentId 
-					  +  " fParentName=" + fParentName   
 					  +  " isParentLocation=" + isParentLocation   +  " imageParent=" + imageParent  );	
 			  
 			  if (Topic.mainTopics.contains(fName)) {
-				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics fName=" + fName + " newsId=" + newsId);
+				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics.contains(fName) Topic.mainTopics fName=" + fName + " newsId=" + newsId);
 			  }
 			  if (Topic.mainTopics.contains(fParentName)) {
-				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics fParentName=" + fParentName + " newsId=" + newsId);
+				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics.contains(fParentName) fParentName=" + fParentName + " newsId=" + newsId);
 				  News news = newsMap.get(new Integer(newsId));
 				  
 				  String rootTopic = news.getRootTopic();
