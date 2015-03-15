@@ -288,12 +288,12 @@ public class NewsQueryBuilder extends DBBase {
 		List<News> newsList = new ArrayList<News>(300);
 
 		for (Integer key : newsMap.keySet()) {
-			Log.info("buildNewsList newsTest key=" + key);
+			Log.log("buildNewsList newsTest key=" + key);
 			
 			News newsTest = newsMap.get(158150); //news.getNewsId()); //"14-year-old middle school student killed by car");
 			
 			if (newsTest != null) {
-				Log.info("buildNewsList newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+				Log.log("buildNewsList newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
 			}
 
 			newsList.add(newsMap.get(key));

@@ -37,7 +37,7 @@ public class FilterDBQueryBuilder {
 		"\n where f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId  " + 
 		"\n and n.newsId  in (";
 	
-	private static String sqlEnd = ") \n  order by f.priority, n.priority, ff.level, nf.priority, n.dateTime, nf.isPrimary \n limit 2000";
+	private static String sqlEnd = ") \n  order by nf.isPrimary, ff.level, f.priority, n.priority, nf.priority, n.dateTime \n limit 15000";
 	
 	public List <DBFilter> processResultSet(ResultSet res, Map<Integer, News> newsMap) throws SQLException{ 
 		List <DBFilter> rows = new ArrayList<DBFilter>(1000);
@@ -79,25 +79,38 @@ public class FilterDBQueryBuilder {
 			
 			rows.add(rowParent);
 			
+			  if (Topic.mainTopics.contains(fName)) {
+				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics.contains(fName) Topic.mainTopics fName=" + fName + " newsId=" + newsId);
+			  }
+			 
+			  News news = newsMap.get(new Integer(newsId));
+			  
+			  String prevImage = news.getImage();			  
+			  String newImage = image;
+			  if (newImage == null || newImage.isEmpty()) {
+				  newImage = imageParent;
+			  }
+			  
+			  if (prevImage == null || prevImage.isEmpty() || (!newImage.isEmpty() && newImage.length() > prevImage.length())) {
+				  news.setImage(newImage);
+			  }
+			  
 			  Log.log("FilterDBQueryBuilder processResultSet "
+					  +  " fName=" + fName   +  " image=" + image  +  " imageParent=" + imageParent   +  " newImage=" + newImage  
 					  +  " newsId=" + newsId 
 					  +  " priority=" + priority 
 					  +  " newsFilterPriority=" + newsFilterPriority 
 					  +  " filterFilterPriority=" + filterFilterPriority 
 					  +  " filterPriority=" + filterPriority +
 					  " label=" + label +  " level=" + level  +  " filterId=" + filterId 
-					  +  " fName=" + fName  
 					  +  " fParentName=" + fParentName    
-					  +  " isLocation=" + isLocation   +  " image=" + image  +
+					  +  " isLocation=" + isLocation   +
 					  " labelParent=" + labelParent +  " filterParentId=" + filterParentId 
-					  +  " isParentLocation=" + isParentLocation   +  " imageParent=" + imageParent  );	
+					  +  " isParentLocation=" + isParentLocation   );	
 			  
-			  if (Topic.mainTopics.contains(fName)) {
-				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics.contains(fName) Topic.mainTopics fName=" + fName + " newsId=" + newsId);
-			  }
+
 			  if (Topic.mainTopics.contains(fParentName)) {
 				  Log.log("FilterDBQueryBuilder processResultSet Topic.mainTopics.contains(fParentName) fParentName=" + fParentName + " newsId=" + newsId);
-				  News news = newsMap.get(new Integer(newsId));
 				  
 				  String rootTopic = news.getRootTopic();
 				  if (rootTopic == null || rootTopic.isEmpty()) {
