@@ -10,12 +10,15 @@ import java.util.Map;
 
 
 
+
+
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
+import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
@@ -31,6 +34,7 @@ import mapreport.util.Log;
 import mapreport.view.View;
 import mapreport.view.map.MapNewsList;
 import mapreport.view.map.MapView;
+import mapreport.view.map.Rectangle;
 
 public class PagePresentation {
 	//private String value2 = "abc";
@@ -106,6 +110,7 @@ public class PagePresentation {
 		}
 
 		navLocations.addChildFilter(new Global(), pageFilters);
+		navLocations.addChildFilter(new Local(new Rectangle(0, 0, 0, 0)), pageFilters);
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
 		navDates.addChildFilter(new Latest(), pageFilters);

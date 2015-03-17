@@ -88,8 +88,11 @@ public class LocationByCoords extends NameFilter implements Location {
 		
 //		if (filterNode.getLocationFilter() == null || this.getParents().get(filterNode.getLocationFilter().getName()) != null) {
 			updateFilterNode(filterNode);
-				 Log.log("LocationByCoords limitFilter LIMITED  filterNode.getLocationFilter()=" + filterNode.getLocationFilter() + 
-						 "  getName()=" + filterNode.getLocationFilter().getName() + "  getLink()=" + filterNode.getLocationFilter().getLink());
+			 Log.log("LocationByCoords limitFilter LIMITED  filterNode.getLocationFilter()=" + filterNode.getLocationFilter());
+			 
+			 if (filterNode.getLocationFilter() != null) { 
+				 Log.log("LocationByCoords limitFilter getName()=" + filterNode.getLocationFilter().getName() + "  getLink()=" + filterNode.getLocationFilter().getLink());
+			 }
 //		}
 		
 	}	
