@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -143,13 +144,17 @@ public class ResponseBuilder {
 			NewsQueryBuilder newsBuilder = new NewsQueryBuilder(size);
 		
 				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
+				Set<String> filterNameSet = new HashSet<String>(nameFilters.size()); 
+				
 				if (nameFilters != null) {
 					for (NameFilter filter: nameFilters) {
 						Log.info("buildJson NameFilter: " + filter);
-						if (filter != null) Log.info("buildJson NameFilter.getName(): " + filter.getName());
+						if (filter != null) {
+							Log.info("buildJson NameFilter.getName(): " + filter.getName());
+							filterNameSet.add(filter.getName());
+						}
 					}
-				}
-
+			}
 		
 			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
 			
@@ -172,9 +177,18 @@ public class ResponseBuilder {
 			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());
 			List <NameFilter> allHintList = filterBuilder.addTimeFilters(filterList, newsMap);
 			
+			Log.info("buildJson filterNameSet.size()=" + filterNameSet.size());
+			
+			for (String filterName: filterNameSet) {
+				Log.info("buildJson filterName=" + filterName);
+			}
+				
 			Map<String, NameFilter> allHintMap = new HashMap<String, NameFilter>(111); 
 			for (NameFilter filter : allHintList) {
-				allHintMap.put(filter.getName(), filter);
+				Log.log("buildJson filter.getName()=" + filter.getName() + " filterNameSet.contains(filter.getName()=" + filterNameSet.contains(filter.getName()));
+				if (!filterNameSet.contains(filter.getName())) {
+					allHintMap.put(filter.getName(), filter);
+				}
 			}
 			
 			newsList = NewsQueryBuilder.buildNewsList(newsMap, newsBuilder.getFilterNode().getTimeFilter()); 
