@@ -182,12 +182,12 @@ public class NewsQueryBuilder extends DBBase {
 		filterNode.bindFilters(pst);
 	}
 
-	public List<News> processResultSet(ResultSet res, int nameFilterNo) throws SQLException {
+	public List<News> processResultSet(ResultSet res, int nameFilterNo, boolean hasLocationFilter) throws SQLException {
 		List<News> rows = new ArrayList<News>(100);
 		
 		Set<Integer> excludedNesIds = new HashSet<Integer>(5); 
 		while (res.next()) {
-			News row = createNewsRow(res, nameFilterNo);
+			News row = createNewsRow(res, nameFilterNo, hasLocationFilter);
 			
 			if (dbFilterMap.get(row.getTopicExcludeId()) != null || excludedNesIds.contains(row.getNewsId())){
 				Log.info("dbFilterMap.get(row.getTopicExcludeId() row:" + row.getLabel());
@@ -202,7 +202,7 @@ public class NewsQueryBuilder extends DBBase {
 		return rows;
 	}
 
-	private News createNewsRow(ResultSet res, int nameFilterNo) throws SQLException {
+	private News createNewsRow(ResultSet res, int nameFilterNo, boolean hasLocationFilter) throws SQLException {
 		News row = new News();
 
 		String newsId = res.getString("newsId");
@@ -215,15 +215,30 @@ public class NewsQueryBuilder extends DBBase {
 			String topicExcludeId = res.getString("topicExcludeId");
 			row.setTopicExcludeId(topicExcludeId);
 			
-			boolean isPrimary = res.getBoolean("isPrimary");
-			boolean isLocation = res.getBoolean("isLocation");
-			row.setLocation(isLocation);
-			row.setPrimary(isPrimary);
-			
-			if (isPrimary && isLocation) {
+			if (hasLocationFilter) {
+				boolean isPrimary = res.getBoolean("isPrimary");
+				boolean isLocation = res.getBoolean("isLocation");
+				row.setLocation(isLocation);
+				row.setPrimary(isPrimary);
+				
+				if (isPrimary && isLocation) {
+					row.setMapShow(true);
+				} else {			
+					if (DBBase.hasColumn(res, "isPrimary2")) {
+						isPrimary = res.getBoolean("isPrimary2");
+						isLocation = res.getBoolean("isLocation2");
+						row.setLocation(isLocation);
+						row.setPrimary(isPrimary);
+						
+						if (isPrimary && isLocation) {
+							row.setMapShow(true);
+						}
+					}
+				}
+				Log.log("NewsQueryBuilder processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
+			} else {
 				row.setMapShow(true);
 			}
-			Log.log("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -254,7 +269,7 @@ public class NewsQueryBuilder extends DBBase {
 		row.setImage(image);
 		row.setShortLabel(shortLabel);
 		row.setDescription(description);
-		Log.log("processResultSet label=" + label + " date=" + date
+		Log.log("NewsQueryBuilder processResultSet label=" + label + " date=" + date
 				+ " newsId=" + newsId + " nPriority=" + nPriority
 				+ " addressText=" + addressText);
 		
@@ -268,7 +283,7 @@ public class NewsQueryBuilder extends DBBase {
 		return row;
 	}
 
-	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter) throws SQLException {
+	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter, boolean hasLocationFilter) throws SQLException {
 		Log.info("NewsQueryBuilder runQuery nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		begin(nameFilterNo, isCoordFilter);
 		Log.log("start startBindQuery");
@@ -279,7 +294,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("NewsQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");
-		List<News> rows = processResultSet(resultSet, nameFilterNo);
+		List<News> rows = processResultSet(resultSet, nameFilterNo, hasLocationFilter);
 		return rows;
 	}
 

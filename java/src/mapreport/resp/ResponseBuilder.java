@@ -37,7 +37,7 @@ import mapreport.view.map.Rectangle;
 public class ResponseBuilder {
 	static int NEWS_LIMIT = 20;	
 
-	public static void addFiltersToQueryBuilder(Rectangle rect,
+	public static boolean addFiltersToQueryBuilder(Rectangle rect,
 			Set<NameFilter> nameFilters, NewsQueryBuilder queryBuilder)
 			throws SQLException {
 		LocationByCoords coordFilter;
@@ -48,6 +48,7 @@ public class ResponseBuilder {
 		}		
 		
 	//	List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
+		boolean hasLocationFilter = false;
 		
 		if (nameFilters != null) {
 		//	List<String> filterIds = new ArrayList<String>(nameFilters.size());
@@ -63,7 +64,9 @@ public class ResponseBuilder {
 		//		parents = filterDBQueryBuilder.runQuery(filterIds);
 		//	}
 			
-			Map <String, DBFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters); 
+			URLFilterQueryBuilder urlFilterQueryBuilder = new URLFilterQueryBuilder();			
+			Map <String, DBFilter> filterMap = urlFilterQueryBuilder.runQuery(nameFilters); 
+			hasLocationFilter = urlFilterQueryBuilder.isHasLocationByName();
 			
 			for (NameFilter filter: nameFilters) {
 				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
@@ -101,7 +104,7 @@ public class ResponseBuilder {
 		     queryBuilder.addFilter(new Latest());  
 		}
 	
-		return;
+		return hasLocationFilter;
 	}
 
 	
@@ -144,9 +147,9 @@ public class ResponseBuilder {
 			NewsQueryBuilder newsBuilder = new NewsQueryBuilder(size);
 		
 				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
-				Set<String> filterNameSet = new HashSet<String>(nameFilters.size()); 
+			Set<String> filterNameSet = new HashSet<String>(nameFilters.size()); 
 				
-				if (nameFilters != null) {
+			if (nameFilters != null) {
 					for (NameFilter filter: nameFilters) {
 						Log.info("buildJson NameFilter: " + filter);
 						if (filter != null) {
@@ -156,14 +159,14 @@ public class ResponseBuilder {
 					}
 			}
 		
-			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
+			boolean hasLocationFilter = addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
 			
 				Log.info("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
 			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<News> newsList = newsBuilder.runQuery(nameFilters.size(), rect != null);
+			List<News> newsList = newsBuilder.runQuery(nameFilters.size(), rect != null, hasLocationFilter);
 		
 			
 			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
