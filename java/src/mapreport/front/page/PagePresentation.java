@@ -72,7 +72,7 @@ public class PagePresentation {
 		//	}			  
 		
 	//	addParentNodes(pageFilters, parents); 	
-
+		newsList = buildIsMapShow(newsList);
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -85,10 +85,24 @@ public class PagePresentation {
 				for (News news : newsList) {
 					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + "  isMapShow=" + news.isMapShow());
 				}			  
-   
+  	}
 	
-	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
+	List<News> buildIsMapShow(List<News> newsList) {
+		int notMapShowCntr = 0;
 		
+		for (News news : newsList) {
+			if (!news.isMapShow()) {
+				notMapShowCntr++;
+			} 
+			if (notMapShowCntr > newsList.size() * 0.4) {
+				for (News newsToChange : newsList) {
+					newsToChange.setMapShow(true);
+				}
+				break;
+			}
+		}
+		
+		return newsList;
 	}
 
 	private void addChildNodes(FilterNode pageFilters,
