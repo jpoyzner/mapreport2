@@ -2,6 +2,7 @@ package mapreport.controller;
 
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
+import java.net.URLDecoder;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -43,17 +44,20 @@ public class Endpoints {
 		
 		String topic = request.getParameter("topic");
 		if (topic != null) {
+			topic = URLDecoder.decode(topic, "UTF-8");
 			nameFilters.add(new Topic(topic));
 			Log.info("Endpoints topic added:" + topic);
 		}
 		
 		if (location != null && !location.equals(Global.GLOBAL)) {
+			location = URLDecoder.decode(location, "UTF-8");
 			nameFilters.add(new LocationByName(location));
 			Log.info("Endpoints Location added:" + location);
 		}
 		
 		String date = request.getParameter("date");
 		if (date != null) {
+			date = URLDecoder.decode(date, "UTF-8");
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
 			Log.info("Endpoints date added:" + date);
 		} 
