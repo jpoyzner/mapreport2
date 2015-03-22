@@ -223,7 +223,7 @@ public class NewsQueryBuilder extends DBBase {
 			if (isPrimary && isLocation) {
 				row.setMapShow(true);
 			}
-			Log.info("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
+			Log.log("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -330,7 +330,7 @@ public class NewsQueryBuilder extends DBBase {
 					newsMap.put(news.getNewsId(), existNews);
 				}
 
-				Log.info("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
+				Log.log("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
 						+ " isMapShow=" + existNews.isMapShow() + " news.getNewsId()=" +news.getNewsId() + " get isMapShow=" + newsMap.get(news.getNewsId()).isMapShow());
 				
 				int nfPriority = newsMap.get(news.getNewsId())
