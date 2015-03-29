@@ -315,15 +315,21 @@ public class NewsQueryBuilder extends DBBase {
 			newsList.add(newsMap.get(key));
 		}
 		
-		Log.info("buildNewsList timeFilter instanceof Latest=" + (timeFilter instanceof Latest));
+		Log.info("buildNewsList timeFilter instanceof Latest=" + (timeFilter != null && timeFilter instanceof Latest));
 		
 		if (timeFilter != null && timeFilter instanceof Latest) {
 			Collections.sort(newsList, new Comparator() {
 	            public int compare(Object o1, Object o2) 
-	            {
-	                News news1 = (News)o1;
-	                News news2 = (News)o2; 
-	                return news1.getDateTime().after(news2.getDateTime()) ? 1 : 0;
+	            {       
+	            	News news1 = (News)o1;
+	            	News news2 = (News)o2;                 
+
+	                if (news1.getDateTime().after(news2.getDateTime())) {
+	                	return -1;
+	                } else if (news1.getDateTime().before(news2.getDateTime())) {
+	                	return 1;
+	                }
+	                return 0;
 	                // it can also return 0, and 1
 	            }
 	 		});
