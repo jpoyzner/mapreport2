@@ -166,13 +166,14 @@ public class NewsQueryBuilder extends DBBase {
 	//	nameFilters.add(new DBFilter("San Francisco Bay Area"));
 		 nameFilters.add(new DBFilter("France"));
 
+		 int timeFilterCntr = 0;
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
-		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));  timeFilterCntr++;
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-		json = ResponseBuilder.buildJson(null, nameFilters, 200);
+		json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200);
 		// json = ResponseBuilder.buildJson(
 			//	new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
 		Log.log("end main");
@@ -299,11 +300,11 @@ public class NewsQueryBuilder extends DBBase {
 	}
 
 	public static List<News> buildNewsList(Map<Integer, News> newsMap, TimeFilter timeFilter) {
-		Log.log("buildNewsList newsMap.size()=" + newsMap.size());
+		Log.info("buildNewsList newsMap.size()=" + newsMap.size());
 		List<News> newsList = new ArrayList<News>(300);
 
 		for (Integer key : newsMap.keySet()) {
-			Log.log("buildNewsList newsTest key=" + key);
+			Log.log("buildNewsList key=" + key);
 			
 			News newsTest = newsMap.get(158150); //news.getNewsId()); //"14-year-old middle school student killed by car");
 			
@@ -313,6 +314,8 @@ public class NewsQueryBuilder extends DBBase {
 
 			newsList.add(newsMap.get(key));
 		}
+		
+		Log.info("buildNewsList timeFilter instanceof Latest=" + (timeFilter instanceof Latest));
 		
 		if (timeFilter != null && timeFilter instanceof Latest) {
 			Collections.sort(newsList, new Comparator() {
@@ -326,6 +329,10 @@ public class NewsQueryBuilder extends DBBase {
 	 		});
 		} else {		
 			Collections.sort(newsList);
+		}
+
+		for (News n : newsList) {
+			Log.log("buildNewsList getDateTime=" + n.getDateTime());
 		}
 		return newsList;
 	}

@@ -3,10 +3,13 @@ package mapreport.front.page;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 //import com.mysql.jdbc.PreparedStatement;
+
 
 
 
@@ -65,14 +68,48 @@ public class PagePresentation {
 		List<News> newsList,	
 		Map<String, NameFilter> childFilters) throws SQLException {    
 		
-		    Log.info("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
+		    Log.info("PagePresentation newsList.size()=" + newsList.size() + " pageFilters=" + pageFilters);
 			
 		//	for (NewsFilterRow filter : filters) {
 		//		 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
 		//	}			  
 		
-	//	addParentNodes(pageFilters, parents); 	
-		newsList = buildIsMapShow(newsList);
+		if (pageFilters.getTimeFilter() != null && pageFilters.getTimeFilter() instanceof Latest) {
+			 Log.info("PagePresentation getTimeFilter() instanceof Latest");
+				Collections.sort(newsList, new Comparator() {
+		            public int compare(Object o1, Object o2) 
+		            {
+		                News news1 = (News)o1;
+		                News news2 = (News)o2; 
+		                return news1.getDateTime().after(news2.getDateTime()) ? 1 : 0;
+		                // it can also return 0, and 1
+		            }
+		 		});
+		} else {		
+			 Log.info("PagePresentation getTimeFilter() NOT instanceof Latest");
+			Collections.sort(newsList, new Comparator() {
+	            public int compare(Object o1, Object o2) 
+	            {
+	                News news1 = (News)o1;
+	                News news2 = (News)o2; 
+	                
+	                if (news1.getDateTime().after(news2.getDateTime())) {
+	                	return 1;
+	                } else if (news1.getDateTime().before(news2.getDateTime())) {
+	                	return -1;
+	                }
+	                return 0;
+	             //   return news1.getDateTime().after(news2.getDateTime()) ? 0 : 1;
+	                // it can also return 0, and 1
+	            }
+	 		});
+		}
+
+		for (News n : newsList) {
+			Log.log("PagePresentation after sort getDateTime=" + n.getDateTime());
+		}
+
+	    newsList = buildIsMapShow(newsList);
 		addChildNodes(pageFilters, childFilters);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -80,7 +117,7 @@ public class PagePresentation {
 		metaData = new PageMetaData(pageFilters);
 		navigationPath = new NavigationPath(pageFilters, childFilters);
 		view = new MapView(new MapNewsList(newsList, pageFilters)); // MapView  just is one of the view, extend later
-		   Log.log("PagePresentation view.getNewsList()=" + view.getNewsList());
+		   Log.info("PagePresentation view.getNewsList()=" + view.getNewsList());
 		   
 				for (News news : newsList) {
 					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + "  isMapShow=" + news.isMapShow());

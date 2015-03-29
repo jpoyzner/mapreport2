@@ -123,12 +123,15 @@ public class ResponseBuilder {
 		if (options.getParam("size") != null) {
 			size = Integer.parseInt(options.getParam("size"));
 		}
-		String json = buildJson(rect, nameFilters, size);
+		
+    	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
+		 
+		String json = buildJson(rect, nameFilters, timeFilterCntr, size);
 		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
 	
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {  
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size) {  
 		String json = null;
 		
 		try {
@@ -166,7 +169,7 @@ public class ResponseBuilder {
 			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<News> newsList = newsBuilder.runQuery(nameFilters.size(), rect != null, hasLocationFilter);
+			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter);
 		
 			
 			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);

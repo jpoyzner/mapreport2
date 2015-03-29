@@ -55,14 +55,17 @@ public class Endpoints {
 			Log.info("Endpoints Location added:" + location);
 		}
 		
+		int dateFilterCnt = 0;
+		
 		String date = request.getParameter("date");
 		if (date != null) {
 			date = URLDecoder.decode(date, "UTF-8");
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
+			dateFilterCnt++;
 			Log.info("Endpoints date added:" + date);
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
-		return ResponseBuilder.buildJson(rectangle, nameFilters, 500).toString();
+		return ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
 	}
 	
 	//TODO: extract all params here and pass into functional classes

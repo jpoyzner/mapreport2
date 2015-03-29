@@ -144,13 +144,14 @@ public class DBQueryBuilder extends DBBase{
 	    nameFilters.add(new DBFilter("Fire"));
 	//    nameFilters.add(new DBFilter("San Jose"));
 	    
+	    int timeFilterCntr = 0;
 	 //   OfficialTimeFilter timeFilter = parseDateStr(partPath); 
-		//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
-	//	    nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
-	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
-	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));
-	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-	    json = ResponseBuilder.buildJson(null, nameFilters, 200);
+		//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011")); timeFilterCntr++;
+	//	    nameFilters.add(OfficialTimeFilter.parseDateStr("2010s")); timeFilterCntr++;
+	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));  timeFilterCntr++;
+	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));  timeFilterCntr++;
+	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));  timeFilterCntr++;
+	    json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200);
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}
