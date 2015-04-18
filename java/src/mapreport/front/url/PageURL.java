@@ -50,7 +50,7 @@ public class PageURL {
             Log.info("PageUrl parseParams() partPath = " + partPath);     
             if (!partPath.trim().isEmpty() && !partPath.equals("news") && !partPath.equals("api") 
             		&& !partPath.equals("mapreport-stable") && !partPath.equals("mapreport") && !partPath.equals(Global.GLOBAL)) {	
-            	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath);            	
+            	OfficialTimeFilter timeFilter = OfficialTimeFilter.parseDateStr(partPath, filters.size());            	
             	if (timeFilter != null) {
             		       Log.info("buildParams timeFilter != null timeFilter:" + timeFilter);
 		        	filters.add(timeFilter);

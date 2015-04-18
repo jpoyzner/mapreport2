@@ -164,7 +164,7 @@ public class PagePresentation {
 		navLocations.addChildFilter(new Local(new Rectangle(0, 0, 0, 0)), pageFilters);
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
-		navDates.addChildFilter(new Latest(), pageFilters);
+		navDates.addChildFilter(new Latest(1), pageFilters);
         
         navLocations.sort();
         navTopics.sort();

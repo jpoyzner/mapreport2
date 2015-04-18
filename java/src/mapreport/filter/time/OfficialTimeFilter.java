@@ -28,7 +28,7 @@ public class OfficialTimeFilter extends TimeFilter {
 
 
 	// DateTimeParseException if the text cannot be parsed
-	public static  OfficialTimeFilter parseDateStr(String dateStr) {
+	public static  OfficialTimeFilter parseDateStr(String dateStr, int nameFilterNm) {
 		OfficialTimeFilter ret = null;
 		
 		LocalDate date;
@@ -45,9 +45,12 @@ public class OfficialTimeFilter extends TimeFilter {
 			if (dateStr.equals(AllTime.ALL_TIME_NAME)) {
 				  ret = new AllTime(); 
 			 } else  if (dateStr.equals(Latest.LATEST)) {
-				  ret = new Latest();  
+				  int futureDays = Latest.buildFutureDays(nameFilterNm); 
+				  Log.info("format as LATEST:" + dateStr + " nameFilterNm=" + nameFilterNm + " futureDays=" + futureDays);
+				  ret = new Latest(futureDays);  
 			 } else  if (dateStr.equals(Future.FUTURE_NAME)) {
 				  ret = new Future(); 
+				  Log.info("format as Future:" + dateStr);
 			 } else {			
 				       Log.log("Can't format as Year:" + dateStr);				  
 				 try {

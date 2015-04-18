@@ -14,6 +14,7 @@ import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.Day;
 import mapreport.filter.time.Decade;
+import mapreport.filter.time.Future;
 import mapreport.filter.time.Month;
 import mapreport.filter.time.Year;
 import mapreport.filter.topic.Topic;
@@ -183,6 +184,12 @@ public class FilterDBQueryBuilder {
 			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth()));
 			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth(), news.getDateTime().getDate()));		
 			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10));
+			
+			if (news.getDateTime().after(new java.util.Date())) {
+				Future futureFilter = new Future();
+				Log.info("addTimeFilters news.getDateTime().after(new java.util.Date() futureFilter.getPriority()=" + futureFilter.getPriority());
+				incrementFilterMapPriority(filterMapResult, futureFilter);
+			}
 		}
 		Log.info("addTimeFilters filterMapResult.size() = " + filterMapResult.size());
 		dbFilters.addAll(filterMapResult.values());
@@ -212,14 +219,20 @@ public class FilterDBQueryBuilder {
 	public static void incrementFilterMapPriority(Map<String, NameFilter> filterMap, NameFilter filter) {
 			 //     Log.log("addLocationTopicFilters incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 			 //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
+		        Log.log("incrementFilterMapPriority filterName=" + filter.getName() + " filter.getPriority()=" + filter.getPriority());
+				
 				String filterName = filter.getName();
 
 				int reversePr = reversePriority(filter.getPriority());
 				
+				if (filter instanceof Future) {
+					reversePr *= 10;
+				}
 				if (filterMap.get(filterName) == null) {
+					  Log.log("incrementFilterMapPriority bef put filterName=" + filterName + " filter.getPriority()=" + filter.getPriority() + " reversePr=" + reversePr);
 					filter.setPriority(reversePr);
 					filterMap.put(filterName, filter);
-					  Log.log("incrementFilterMapPriority put filterName=" + filterName );
+					  Log.log("incrementFilterMapPriority put filterName=" + filterName + " filter.getPriority()=" + filter.getPriority() + " reversePr=" + reversePr);
 				} else {
 					  Log.log("incrementFilterMapPriority get filterName=" + filterName  + " priority=" + filterMap.get(filterName).getPriority());
 					double oldPriority = filterMap.get(filterName).getPriority();

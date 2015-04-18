@@ -60,7 +60,7 @@ public class Endpoints {
 		String date = request.getParameter("date");
 		if (date != null) {
 			date = URLDecoder.decode(date, "UTF-8");
-			nameFilters.add(OfficialTimeFilter.parseDateStr(date));
+			nameFilters.add(OfficialTimeFilter.parseDateStr(date, nameFilters.size()));
 			dateFilterCnt++;
 			Log.info("Endpoints date added:" + date);
 		} 

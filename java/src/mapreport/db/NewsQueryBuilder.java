@@ -168,7 +168,7 @@ public class NewsQueryBuilder extends DBBase {
 
 		 int timeFilterCntr = 0;
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
-		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));  timeFilterCntr++;
+		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011", 3));  timeFilterCntr++;
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));

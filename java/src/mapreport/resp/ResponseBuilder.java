@@ -100,8 +100,9 @@ public class ResponseBuilder {
 		}
 		
 		if (queryBuilder.getFilterNode().getFilterList().size() == 0 || queryBuilder.getFilterNode().getTimeFilter() == null) {   // no filters added, so just global latest
-		     Log.log("Controller buildJson ading Latest");
-		     queryBuilder.addFilter(new Latest());  
+		     Log.info("Controller buildJson adding Latest");
+			 int futureDays = Latest.buildFutureDays(nameFilters.size());
+		     queryBuilder.addFilter(new Latest(futureDays));  
 		}
 	
 		return hasLocationFilter;
