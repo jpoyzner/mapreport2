@@ -3,7 +3,13 @@ package mapreport.controller;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +29,11 @@ public class Endpoints {
     	Log.info("Endpoints news");
 		
     	Rectangle rectangle = null;
+    	
+    	String paramStr = buildParamStr(request);
+
+    	Log.info("ParameterMap:" + paramStr);
+    	
 		String left = request.getParameter("left");
 		String right = request.getParameter("right");
 		String top = request.getParameter("top");
@@ -66,6 +77,27 @@ public class Endpoints {
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		return ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
+	}
+
+	public static String buildParamStr(HttpServletRequest request) {
+		Map<String, String[]> parameterMap = request.getParameterMap();
+    	
+    	Set<String> keys = parameterMap.keySet();
+    	List<String> keyList = new ArrayList<String>(keys);
+    	java.util.Collections.sort(keyList);
+    	
+    	StringBuilder params = new StringBuilder();
+    	
+    	for (String key : keyList) {
+       	    params.append(key);
+    	    params.append('=').append('"');
+    	    params.append(Arrays.toString(parameterMap.get(key)));
+    	    params.append('"');
+    	        params.append(',').append(' ');
+    	}   
+    	
+    	String paramStr = params.toString();
+		return paramStr;
 	}
 	
 	//TODO: extract all params here and pass into functional classes
