@@ -6,15 +6,12 @@ import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByName;
@@ -28,11 +25,21 @@ public class Endpoints {
 	public static final String news(HttpServletRequest request) throws Exception {
     	Log.info("Endpoints news");
 		
+    	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));
+    	
     	Rectangle rectangle = null;
     	
     	String paramStr = buildParamStr(request);
-
     	Log.info("ParameterMap:" + paramStr);
+    	
+    	String jsonCache = Cache.retrieveFromCache(paramStr);
+    	
+    	if (jsonCache != null) {
+    		Log.info("jsonCache found");
+    		return jsonCache;
+    	} else {
+    		Log.info("jsonCache not found:" + paramStr);
+    	}
     	
 		String left = request.getParameter("left");
 		String right = request.getParameter("right");
@@ -76,7 +83,13 @@ public class Endpoints {
 			Log.info("Endpoints date added:" + date);
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
-		return ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
+		
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
+		
+		Cache.putInCache(paramStr, json);
+
+		Log.info("jsonCache Cache.putInCache:" + paramStr);
+		return json;
 	}
 
 	public static String buildParamStr(HttpServletRequest request) {
