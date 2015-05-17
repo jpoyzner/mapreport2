@@ -101,6 +101,19 @@ public class OfficialTimeFilter extends TimeFilter {
 												}
 											} else {
 												Log.info("Can't format as 2 Century:" + dateStr);
+												
+												if (dateStr.length() == 13 && dateStr.substring(dateStr.length() - 10).equalsIgnoreCase(" millenium")) {
+													String milleniumStr = dateStr.substring(0, dateStr.length() - 12);
+													try {
+														int millenium = Integer.parseInt(milleniumStr);  
+														ret = new Millenium(millenium);
+													} catch (NumberFormatException e2) {		
+														    Log.info("Can't format as Millenium:" + milleniumStr);
+													}
+												} else {
+													Log.info("Can't format as 2 millenium:" + dateStr);
+												}
+
 											}
 										}
 								}

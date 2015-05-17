@@ -16,6 +16,7 @@ import mapreport.filter.time.Century;
 import mapreport.filter.time.Day;
 import mapreport.filter.time.Decade;
 import mapreport.filter.time.Future;
+import mapreport.filter.time.Millenium;
 import mapreport.filter.time.Month;
 import mapreport.filter.time.Year;
 import mapreport.filter.topic.Topic;
@@ -186,6 +187,14 @@ public class FilterDBQueryBuilder {
 			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth(), news.getDateTime().getDate()), news.getPriority());
 			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10), news.getPriority());
 			incrementFilterMapPriority(filterMapResult, new Century((news.getDateTime().getYear() + 2000) / 100), news.getPriority());
+			
+			if (news.getDateTime().getYear() < 100) {
+				int millenium = 2;
+				if (news.getDateTime().getYear() < - 900) {
+					millenium = 1;
+				}
+				incrementFilterMapPriority(filterMapResult, new Millenium(millenium), news.getPriority());
+			}
 			
 			if (news.getDateTime().after(new java.util.Date())) {
 				Future futureFilter = new Future();

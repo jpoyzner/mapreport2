@@ -3,12 +3,8 @@ package mapreport.filter.time;
 import java.util.GregorianCalendar;
 
 public class Decade extends Year {
-
-//	private static final String ALL_TIME_NAME = "All Time";
-
 	public Decade(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
 	}
 	
 	public Decade(int year) {
