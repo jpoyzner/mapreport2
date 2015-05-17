@@ -12,6 +12,7 @@ import java.util.Set;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.loc.OfficialLocation;
+import mapreport.filter.time.Century;
 import mapreport.filter.time.Day;
 import mapreport.filter.time.Decade;
 import mapreport.filter.time.Month;
@@ -493,8 +494,11 @@ public class NewsFilterRow implements Comparable<Object>{
 		incrementDateFilterMapPriority(filterMap, filterRow, new Year(filterRow.date.getYear() + 1900), filterRow.name);
 		incrementDateFilterMapPriority(filterMap, filterRow, new Month(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1), filterRow.name);
 		incrementDateFilterMapPriority(filterMap, filterRow, new Day(filterRow.date.getYear() + 1900, filterRow.date.getMonth() + 1, filterRow.date.getDate()), filterRow.name);		
-		incrementDateFilterMapPriority(filterMap, filterRow, new Decade((filterRow.date.getYear() + 1900) / 10 * 10), filterRow.name);
-		   //   Log.log("addDateFilters filterRow.date.getYear()=" + (filterRow.date.getYear()  + 1900) + " decade=" + ((filterRow.date.getYear() + 1900) / 10 * 10) 
+		incrementDateFilterMapPriority(filterMap, filterRow, new Decade((filterRow.date.getYear() + 1900) / 10 * 10), filterRow.name);		
+		incrementDateFilterMapPriority(filterMap, filterRow, new Century((filterRow.date.getYear() + 2000) / 100), filterRow.name);		
+		
+		      Log.info("addDateFilters filterRow.date.getYear()=" + (filterRow.date.getYear()  + 1900) + " decade=" + ((filterRow.date.getYear() + 1900) / 10 * 10)
+		    		  + " Century=" + ((filterRow.date.getYear() + 2000) / 100)); 
 		   //       + " 2006=" + (2006) / 10 * 10);
 	}
 

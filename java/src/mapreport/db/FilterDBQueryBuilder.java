@@ -12,6 +12,7 @@ import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
+import mapreport.filter.time.Century;
 import mapreport.filter.time.Day;
 import mapreport.filter.time.Decade;
 import mapreport.filter.time.Future;
@@ -180,16 +181,21 @@ public class FilterDBQueryBuilder {
 	public List <NameFilter> addTimeFilters(List <NameFilter> dbFilters, Map<Integer, News> newsMap) throws SQLException {
 		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
 		for (News news : newsMap.values()) {
-			incrementFilterMapPriority(filterMapResult, new Year(news.getDateTime().getYear() + 1900));
-			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth()));
-			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth(), news.getDateTime().getDate()));		
-			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10));
+			incrementFilterMapPriority(filterMapResult, new Year(news.getDateTime().getYear() + 1900), news.getPriority());
+			incrementFilterMapPriority(filterMapResult, new Month(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth()), news.getPriority());
+			incrementFilterMapPriority(filterMapResult, new Day(news.getDateTime().getYear() + 1900, news.getDateTime().getMonth(), news.getDateTime().getDate()), news.getPriority());
+			incrementFilterMapPriority(filterMapResult, new Decade((news.getDateTime().getYear() + 1900) / 10 * 10), news.getPriority());
+			incrementFilterMapPriority(filterMapResult, new Century((news.getDateTime().getYear() + 2000) / 100), news.getPriority());
 			
 			if (news.getDateTime().after(new java.util.Date())) {
 				Future futureFilter = new Future();
 				Log.info("addTimeFilters news.getDateTime().after(new java.util.Date() futureFilter.getPriority()=" + futureFilter.getPriority());
-				incrementFilterMapPriority(filterMapResult, futureFilter);
+				incrementFilterMapPriority(filterMapResult, futureFilter, news.getPriority());
 			}
+			
+		      Log.log("addTimeFilters filterRow.date.getYear()=" + (news.getDateTime().getYear()  + 1900) + " decade=" + ((news.getDateTime().getYear() + 1900) / 10 * 10)
+		    		  + " Century=" + ((news.getDateTime().getYear() + 2000) / 100) + " label:" + news.getLabel() + " news priority:" + news.getPriority()); 
+
 		}
 		Log.info("addTimeFilters filterMapResult.size() = " + filterMapResult.size());
 		dbFilters.addAll(filterMapResult.values());
@@ -200,7 +206,7 @@ public class FilterDBQueryBuilder {
 		Map<String, NameFilter> filterMapResult = new HashMap<String, NameFilter> (60);
 		
 		for (NameFilter filter : filterMapSrc) {
-			incrementFilterMapPriority(filterMapResult, filter);
+			incrementFilterMapPriority(filterMapResult, filter, 0);
 		}
 			
 		for (Map.Entry<String, NameFilter> entry : filterMapResult.entrySet()) {
@@ -210,20 +216,20 @@ public class FilterDBQueryBuilder {
 		return filterMapResult;
 	}
 	  
-	public static int reversePriority(int source) {
+	public static int reversePriority(int source, int newsPriority) {
 		int result = source == 0 ? 100000 : 100000 / source;
-		result = (int)Math.pow(result, 1.0/5);
+		result = (int)Math.pow(result, 1.0/5) * (30 - newsPriority) * (30 - newsPriority);
 		return result;
 	}
 	
-	public static void incrementFilterMapPriority(Map<String, NameFilter> filterMap, NameFilter filter) {
+	public static void incrementFilterMapPriority(Map<String, NameFilter> filterMap, NameFilter filter, int newsPriority) {
 			 //     Log.log("addLocationTopicFilters incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown"));
 			 //       if (filterMap.get("San Jose Downtown") != null) Log.log("addLocationTopicFilters bef incrementFilterMapPriority San Jose Downtown=" + filterMap.get("San Jose Downtown").getFilter().getName());
 		        Log.log("incrementFilterMapPriority filterName=" + filter.getName() + " filter.getPriority()=" + filter.getPriority());
 				
 				String filterName = filter.getName();
 
-				int reversePr = reversePriority(filter.getPriority());
+				int reversePr = reversePriority(filter.getPriority(), newsPriority);
 				
 				if (filter instanceof Future) {
 					reversePr *= 10;

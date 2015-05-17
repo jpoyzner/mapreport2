@@ -18,7 +18,7 @@ public class Decade extends Year {
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 9, 11, 31);
 		setName(String.valueOf(year) + "s");
-		parent = new AllTime();	
+		parent = new Century(year / 100);	
 		buildTimeSQL(); 
 	}
 }
