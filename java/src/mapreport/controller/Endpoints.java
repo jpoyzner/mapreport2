@@ -32,7 +32,7 @@ public class Endpoints {
     	String paramStr = buildParamStr(request);
     	Log.info("ParameterMap:" + paramStr);
     	
-    	String jsonCache = Cache.retrieveFromCache(paramStr);
+    	String jsonCache = null; //Cache.retrieveFromCache(paramStr);
     	
     	if (jsonCache != null) {
     		Log.info("jsonCache found");
@@ -86,7 +86,7 @@ public class Endpoints {
 		
 		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
 		
-		Cache.putInCache(paramStr, json);
+		// Cache.putInCache(paramStr, json);
 
 		Log.info("jsonCache Cache.putInCache:" + paramStr);
 		return json;
