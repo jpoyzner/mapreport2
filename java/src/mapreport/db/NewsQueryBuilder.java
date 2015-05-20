@@ -267,7 +267,7 @@ public class NewsQueryBuilder extends DBBase {
 		row.setNewsFilterPriority(Integer.parseInt(nfPriority));
 		row.setUrl(url);
 		row.setVideo(video);
-		row.setImage(image);
+		row.setIcon(image);
 		row.setShortLabel(shortLabel);
 		row.setDescription(description);
 		Log.log("NewsQueryBuilder processResultSet label=" + label + " date=" + date

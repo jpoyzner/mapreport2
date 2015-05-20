@@ -88,14 +88,14 @@ public class FilterDBQueryBuilder {
 			 
 			  News news = newsMap.get(new Integer(newsId));
 			  
-			  String prevImage = news.getImage();			  
+			  String prevImage = news.getIcon();			  
 			  String newImage = image;
 			  if (newImage == null || newImage.isEmpty()) {
 				  newImage = imageParent;
 			  }
 			  
 			  if (prevImage == null || prevImage.isEmpty() || (!newImage.isEmpty() && newImage.length() > prevImage.length())) {
-				  news.setImage(newImage);
+				  news.setIcon(newImage);
 			  }
 			  
 			  Log.log("FilterDBQueryBuilder processResultSet "

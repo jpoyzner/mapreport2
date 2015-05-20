@@ -394,7 +394,7 @@ public class NewsFilterRow implements Comparable<Object>{
 			news.setDateTime(filter.getDate());
 			news.setDescription(filter.getDescription());
 			news.setId(filter.getNewsId());
-			news.setImage(filter.getImage());
+			news.setIcon(filter.getImage());
 			news.setLabel(filter.getName());
 			news.setNewsText(filter.getNewsText());
 			news.setShortLabel(filter.getShortLabel());

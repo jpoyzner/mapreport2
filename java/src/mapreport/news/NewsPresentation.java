@@ -29,7 +29,7 @@ public class NewsPresentation extends News {
 		label = news.getLabel();
 		url = news.getUrl();
 		video = news.getVideo();
-		image = news.getImage();
+		icon = news.getIcon();
 		shortLabel = news.getShortLabel();
 		description = news.getDescription();  
 		newsText = news.getNewsText();
@@ -57,8 +57,8 @@ public class NewsPresentation extends News {
 		sb.append(url);
 		sb.append(", video=");
 		sb.append(video);
-		sb.append(", image=");
-		sb.append(image);
+		sb.append(", icon=");
+		sb.append(icon);
 		sb.append(", description=");
 		sb.append(description);
 		sb.append(", id=");

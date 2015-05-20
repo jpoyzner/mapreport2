@@ -13,7 +13,7 @@ public class News implements Comparable{
 	@Expose String label = null;
 	@Expose String url = null;
 	@Expose String video = null;
-	@Expose String image = null;
+	@Expose String icon = null;
 	@Expose String shortLabel = null;  
 	@Expose String description = null;
 	@Expose String newsText = null;
@@ -155,11 +155,15 @@ public class News implements Comparable{
 	public void setVideo(String video) {
 		this.video = video;
 	}
-	public String getImage() {
-		return image;
+	public String getIcon() {
+		return icon;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setIcon(String icon) {
+		if (icon != null && !icon.isEmpty() && icon.indexOf("mapreport.com") == -1) {
+			this.icon = "http://www.mapreport.com/images/" + icon;
+		} else {
+			this.icon = icon;
+		}
 	}
 	public String getShortLabel() {
 		return shortLabel;
