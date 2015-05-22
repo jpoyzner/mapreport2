@@ -28,8 +28,13 @@ public class NavigationNodeSerializer  implements JsonSerializer<NavigationNode>
 		    Log.log ("NavigationNodeSerializer navigationNode=" + navigationNode);
 		    Log.log ("NavigationNodeSerializer navigationNode.getPageFilters()=" + navigationNode.getPageFilters());
 		    Log.log ("NavigationNodeSerializer navigationNode.getPageFilters().getLink()=" + navigationNode.getPageFilters().getLink());
+		    Log.log ("NavigationNodeSerializer navigationNode.metaData.getImage()=" + navigationNode.metaData.getImage());
 	    final JsonElement jsonLink = context.serialize(navigationNode.getPageFilters().getLink());
 	    jsonObject.add("link", jsonLink);
+	    
+	    final JsonElement jsonIcon = context.serialize(navigationNode.metaData.getImage());
+	    jsonObject.add("icon", jsonIcon );
+
 	    return jsonObject;
 	}
 }
