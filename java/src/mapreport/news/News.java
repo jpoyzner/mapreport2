@@ -160,6 +160,7 @@ public class News implements Comparable{
 	}
 	public void setIcon(String icon) {
 		if (icon != null && !icon.isEmpty() && icon.indexOf("mapreport.com") == -1) {
+			icon = icon.replaceAll("/3/", "/2/"); // TEMPORARY !!!!!!!
 			this.icon = "http://www.mapreport.com/images/" + icon;
 		} else {
 			this.icon = icon;
