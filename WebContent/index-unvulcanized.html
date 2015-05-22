@@ -103,7 +103,7 @@
 		<div id="mr-report">
 			<% _.each(news.models, function(article) { %>
 				<div class="mr-report-article" style="background-color: #<%= article.get('colorHex') %>">
-					<img src="http://www.mapreport.com/images/common/list5.gif"></img>
+					<img src="<%= article.get('icon') %>"></img>
 					<a href="<%= article.get('url') %>" target="_blank"><p><%= article.get('mapLabel') %>: <%= article.get('dateTime') %>: <%= article.get('label') %><p></a>
 				</div>
 			<% }); %>
