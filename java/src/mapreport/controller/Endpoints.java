@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
+import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.topic.Topic;
@@ -46,9 +47,19 @@ public class Endpoints {
 		String top = request.getParameter("top");
 		String bottom = request.getParameter("bottom");		
 
+		String localLong = request.getParameter("local-long");
+		String localLat = request.getParameter("local-lat");
+		
+		// &local-long=-122.00&local-lat=37.519774999999936
+		// localLong = "-115.00"; // bay area: -122.0
+		// localLat = "37.519774999999936";
+		
+		Log.info("Endpoints topic localLong:" + localLong + " localLat:" + localLat);
+
 		String location = request.getParameter("location");
 		
-		if (location == null && left != null && right != null && top != null && bottom != null) {
+		if ((location == null) 
+				&& left != null && right != null && top != null && bottom != null) {
 			rectangle =
 				new Rectangle(
 					new Rectangle.Bounds(
@@ -56,6 +67,16 @@ public class Endpoints {
 						Double.valueOf(right),
 						Double.valueOf(top),
 						Double.valueOf(bottom)));
+		}	
+		
+		if (location != null && location.equals(Local.LOCAL_NAME)) {
+			try {
+				Local local = new Local(localLong, localLat);
+				Log.info("Endpoints local:" + local);
+				rectangle =	local.getRect();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>();
@@ -67,7 +88,7 @@ public class Endpoints {
 			Log.info("Endpoints topic added:" + topic);
 		}
 		
-		if (location != null && !location.equals(Global.GLOBAL)) {
+		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {
 			location = URLDecoder.decode(location, "UTF-8");
 			nameFilters.add(new LocationByName(location));
 			Log.info("Endpoints Location added:" + location);
@@ -84,7 +105,7 @@ public class Endpoints {
 		} 
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500).toString();
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat).toString();
 		
 		// Cache.putInCache(paramStr, json);
 

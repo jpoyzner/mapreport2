@@ -58,8 +58,9 @@ public class NavigationList {
 	public void sort() {
 		Collections.sort(children);
 		for (NavigationNode node : children) {
-			// node.getPageFilters().
+			// node.getPageFilters(). 
 			Log.log("sort header=" + node.metaData.getHeader() + " priority=" + node.priority);
+		//	node.compareTo(null);
 		}
 	}
 	

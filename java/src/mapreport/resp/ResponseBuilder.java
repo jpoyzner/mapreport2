@@ -127,12 +127,12 @@ public class ResponseBuilder {
 		
     	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
 		 
-		String json = buildJson(rect, nameFilters, timeFilterCntr, size);
+		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "");
 		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
 	
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size) {  
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat) {  
 		String json = null;
 		
 		try {
@@ -203,7 +203,7 @@ public class ResponseBuilder {
 			if (newsList.size() > NEWS_LIMIT + 1) {
 				newsList = newsList.subList(0, NEWS_LIMIT);
 			}
-			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap) ;
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat) ;
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());

@@ -15,6 +15,9 @@ import java.util.Map;
 
 
 
+
+
+
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
@@ -66,7 +69,8 @@ public class PagePresentation {
 	public PagePresentation (
 		FilterNode pageFilters,
 		List<News> newsList,	
-		Map<String, NameFilter> childFilters) throws SQLException {    
+		Map<String, NameFilter> childFilters,
+		String localLong, String localLat) throws SQLException {    
 		
 		    Log.info("PagePresentation newsList.size()=" + newsList.size() + " pageFilters=" + pageFilters);
 			
@@ -110,7 +114,7 @@ public class PagePresentation {
 		}
 
 	    newsList = buildIsMapShow(newsList);
-		addChildNodes(pageFilters, childFilters);
+		addChildNodes(pageFilters, childFilters, localLong, localLat);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
@@ -143,7 +147,7 @@ public class PagePresentation {
 	}
 
 	private void addChildNodes(FilterNode pageFilters,
-			Map<String, NameFilter> childFilters) {
+			Map<String, NameFilter> childFilters, String localLong, String localLat) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
 	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
@@ -161,7 +165,14 @@ public class PagePresentation {
 		}
 
 		navLocations.addChildFilter(new Global(), pageFilters);
-		navLocations.addChildFilter(new Local(new Rectangle(0, 0, 0, 0)), pageFilters);
+		
+		Local local = new Local(localLong, localLat);
+		 Log.info("NavigationPath local.getRect().getLeft()=" + local.getRect().getLeft());
+		if (local.getRect().getLeft() != 0) {		
+			navLocations.addChildFilter(local, pageFilters);
+			Log.info("NavigationPath local added");
+		}
+		
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
 		navDates.addChildFilter(new Latest(1), pageFilters);

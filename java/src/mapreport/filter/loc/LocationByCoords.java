@@ -27,7 +27,7 @@ public class LocationByCoords extends NameFilter implements Location {
 	
 	public LocationByCoords (Rectangle rect) {
 		super("lat=" + rect.getXCenter() + ", long=" + rect.getYCenter());
-		this.rect = rect;		
+		this.setRect(rect);		
 		setSelectSQL(selectStringBuilder);
 		
 		String orAnd = rect.getLeft() <= rect.getRight() ? " and " : " or ";
@@ -39,18 +39,18 @@ public class LocationByCoords extends NameFilter implements Location {
 	
 	@Override
 	public String toString() {
-		return "LocationByCoords: " + rect.toString();
+		return "LocationByCoords: " + getRect().toString();
 	}
 	 
 	@Override
 	public int bindQuery(PreparedStatement pst, int col) throws SQLException {
-		Log.log("LocationByCoords bindQuery " + rect.toString());
+		Log.log("LocationByCoords bindQuery " + getRect().toString());
 				
-				pst.setDouble(++col, rect.getBottom() * 1000000);	
-				pst.setDouble(++col, rect.getTop() * 1000000);	
-				pst.setDouble(++col, rect.getLeft() * 1000000);	
-				pst.setDouble(++col, rect.getRight() * 1000000);
-				pst.setDouble(++col, Math.abs(rect.getRight() - rect.getLeft()) * 1000000);
+				pst.setDouble(++col, getRect().getBottom() * 1000000);	
+				pst.setDouble(++col, getRect().getTop() * 1000000);	
+				pst.setDouble(++col, getRect().getLeft() * 1000000);	
+				pst.setDouble(++col, getRect().getRight() * 1000000);
+				pst.setDouble(++col, Math.abs(getRect().getRight() - getRect().getLeft()) * 1000000);
 				
 				return col;
 	}
@@ -62,7 +62,7 @@ public class LocationByCoords extends NameFilter implements Location {
 	}
 	
 	public String getLink() {		
-		return rect.buildLink();
+		return getRect().buildLink();
 	}
 
 	public StringBuilder getFromSQL() {
@@ -102,5 +102,13 @@ public class LocationByCoords extends NameFilter implements Location {
 		filterNode.getFilterList().remove(filterNode.getCoordFilter());
 		filterNode.setCoordFilter(this);
 		filterNode.getFilterList().add(this);
+	}
+
+	public Rectangle getRect() {
+		return rect;
+	}
+
+	public void setRect(Rectangle rect) {
+		this.rect = rect;
 	}
 }
