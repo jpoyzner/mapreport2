@@ -96,11 +96,15 @@ public class FilterDBQueryBuilder {
 			  
 			  if (prevImage == null || prevImage.isEmpty() || (!newImage.isEmpty() && newImage.length() > prevImage.length())) {
 				  news.setIcon(newImage);
+				  news.setIcon2(prevImage);
+			  } else if (!newImage.isEmpty() && newImage.length() <= prevImage.length()) {
+				  news.setIcon2(newImage);
 			  }
 			  
 			  Log.log("FilterDBQueryBuilder processResultSet "
-					  +  " fName=" + fName   +  " image=" + image  +  " imageParent=" + imageParent   +  " newImage=" + newImage  
+					  +  " fName=" + fName   +  " image=" + image  +  " imageParent=" + imageParent   +  " newImage=" + newImage    +  " prevImage=" + prevImage   
 					  +  " newsId=" + newsId 
+					  +  " label=" + news.getLabel()
 					  +  " priority=" + priority 
 					  +  " newsFilterPriority=" + newsFilterPriority 
 					  +  " filterFilterPriority=" + filterFilterPriority 

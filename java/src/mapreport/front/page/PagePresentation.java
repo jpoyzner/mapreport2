@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -17,6 +18,9 @@ import java.util.Map;
 
 
 
+
+
+import java.util.Set;
 
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
@@ -114,6 +118,7 @@ public class PagePresentation {
 		}
 
 	    newsList = buildIsMapShow(newsList);
+	    newsList = addSecondIcon(newsList);
 		addChildNodes(pageFilters, childFilters, localLong, localLat);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -142,6 +147,51 @@ public class PagePresentation {
 				break;
 			}
 		}
+		
+		return newsList;
+	}
+	
+	List<News> addSecondIcon(List<News> newsList) {
+		Map<String, Integer> iconMap = new HashMap<String, Integer>(20);
+		
+		int max = 0;
+		for (News news : newsList) {
+			String icon = news.getIcon();
+			
+			Log.log("addSecondIcon icon:" + icon);
+			if (iconMap.get(icon) == null) {
+				iconMap.put(icon, 1);
+			} else {
+				int newNm = iconMap.get(icon) + 1;
+				iconMap.put(icon, newNm);
+				max = Math.max(newNm, max);
+			}
+		}
+		
+		Log.log("addSecondIcon max:" + max);
+		
+		Set<Map.Entry<String, Integer>> entrySet = iconMap.entrySet();
+	    for (Map.Entry<String, Integer> entry : entrySet) {
+	          Integer cntr = entry.getValue();
+	          
+	          if (cntr == max) {
+	        	  
+	        	  Log.log("addSecondIcon cntr == max");
+	        	  String maxIcon = entry.getKey();
+	        	  
+	        	  boolean isStarted = false;
+	        	  for (News news : newsList) {
+	        			if (news.getIcon() != null && news.getIcon().equals(maxIcon)) {
+	        				if (isStarted && news.getIcon2() != null && !news.getIcon2().isEmpty()) {
+	        					Log.log("addSecondIcon was news.getIcon()=" + news.getIcon() + " news.getIcon2()=" + news.getIcon2() + " label=" + news.getLabel());
+	        					news.setIcon(news.getIcon2());
+	        					Log.log("addSecondIcon after news.getIcon()=" + news.getIcon());
+	        				}
+	        				isStarted = true;
+	        			}
+	        	  }
+	          }
+	    }
 		
 		return newsList;
 	}

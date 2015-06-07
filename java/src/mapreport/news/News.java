@@ -31,8 +31,22 @@ public class News implements Comparable{
 	boolean isPrimary = false;
 	boolean isLocation = false;
 	@Expose boolean isMapShow = false;
-	@Expose String rootTopic = null;
+	@Expose String rootTopic = null;	
+	String icon2 = null;
 	
+	public String getIcon2() {
+		return icon2;
+	}
+
+	public void setIcon2(String icon2) {
+		if (icon2 != null && !icon2.isEmpty() && icon2.indexOf("mapreport.com") == -1) {
+			icon2 = icon2.replaceAll("/3/", "/2/"); // TEMPORARY !!!!!!!
+			this.icon2 = "http://www.mapreport.com/images/" + icon2;
+		} else {
+			this.icon2 = icon2;
+		}
+	}
+
 	public boolean isPrimary() {
 		return isPrimary;
 	}
