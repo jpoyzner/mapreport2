@@ -35,10 +35,10 @@ public class Latest extends OfficialTimeFilter {
 	
 	public static int buildFutureDays(int nameFilterNm) {
 		int futureDays = 1;
-		  
-		  if (nameFilterNm > 0) {
+			  
+		if (nameFilterNm > 0) {
 			  futureDays = nameFilterNm * 3;
-		  }
+		}
 		return futureDays;
 	}
 

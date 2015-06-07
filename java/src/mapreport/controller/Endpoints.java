@@ -17,6 +17,7 @@ import mapreport.filter.loc.Global;
 import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
@@ -96,14 +97,19 @@ public class Endpoints {
 		
 		int dateFilterCnt = 0;
 		
+		String dates[] = request.getParameterValues("date");
 		String date = request.getParameter("date");
-		if (date != null) {
-			date = URLDecoder.decode(date, "UTF-8");
-			nameFilters.add(OfficialTimeFilter.parseDateStr(date, nameFilters.size()));
-			dateFilterCnt++;
-			Log.info("Endpoints date added:" + date);
-		} 
-		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+		
+		if (dates != null) {
+			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
+			for (String singleDate : dates) {
+				dateFilterCnt = TimeFilter.addDate(nameFilters, singleDate, dateFilterCnt);
+			}
+		} else {
+			dateFilterCnt = TimeFilter.addDate(nameFilters, date, dateFilterCnt);
+		}
+		
+		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
 		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat).toString();
 		

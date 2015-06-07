@@ -1,9 +1,12 @@
 package mapreport.filter.time;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Set;
 
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
@@ -115,4 +118,16 @@ public class TimeFilter extends NameFilter {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	public static int addDate(Set<NameFilter> nameFilters, String date, int dateFilterCnt)
+			throws UnsupportedEncodingException {
+		Log.info("TimeFilter date:" + date);
+		if (date != null) {
+			date = URLDecoder.decode(date, "UTF-8");
+			nameFilters.add(OfficialTimeFilter.parseDateStr(date, nameFilters.size()));
+			dateFilterCnt++;
+		}
+		return dateFilterCnt;
+	}
+
 }
