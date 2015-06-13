@@ -302,6 +302,10 @@ public class FilterNode {
 	}
 
 	public StringBuilder getWhereSQL() {
+		return whereSQL;
+	}
+	
+	public StringBuilder buildWhereSQL() {
 		      Log.log("FilterNode getWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
 		if (coordFilter != null) {
 			whereSQL.append(coordFilter.getWhereSQL());
@@ -341,7 +345,6 @@ public class FilterNode {
 			whereSQL.append(filterIds);
 			whereSQL.append("   )) ");
 		}
-
 		
 		if (timeFilter != null) {
 			   Log.log("FilterNode getWhereSQL  timeFilter=" + timeFilter);

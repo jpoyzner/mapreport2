@@ -97,13 +97,16 @@ public class Endpoints {
 		
 		int dateFilterCnt = 0;
 		
-		String dates[] = request.getParameterValues("date");
+		String dates[] = request.getParameterValues("date"); // for test {"May-11-2008", "May-11-2009"}; 
 		String date = request.getParameter("date");
 		
-		if (dates != null) {
+		if (dates != null && dates.length > 1) {
 			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
-			for (String singleDate : dates) {
-				dateFilterCnt = TimeFilter.addDate(nameFilters, singleDate, dateFilterCnt);
+			try {
+				dateFilterCnt = TimeFilter.add2Dates(nameFilters, dates[0], dates[1], dateFilterCnt);
+			} catch (Exception e) {
+				Log.info("Endpoints problem to add 2 dates dates[0]:" + dates[0] + " dates[1]:" + dates[1] + "\n e:" + e.toString());
+				e.printStackTrace();
 			}
 		} else {
 			dateFilterCnt = TimeFilter.addDate(nameFilters, date, dateFilterCnt);

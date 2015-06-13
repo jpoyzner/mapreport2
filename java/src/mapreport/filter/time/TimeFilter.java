@@ -29,7 +29,7 @@ public class TimeFilter extends NameFilter {
 		super(name);	 
 		buildTimeSQL(); 
 	}
-	protected void buildTimeSQL() {
+	public void buildTimeSQL() {
 		whereSQL = new StringBuilder(" \n ");
 		
 		if (orderBySQL.length() == 0) {
@@ -42,7 +42,7 @@ public class TimeFilter extends NameFilter {
 		if (end != null) {
 			whereSQL.append(" and n.dateTime < ?  ");
 		}
-	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + " whereSQL=" + whereSQL.toString().trim());
+	      Log.log("TimeFilter buildTimeSQL begin=" + begin + " end=" + end + "\n whereSQL=" + whereSQL.toString().trim());
 		setWhereSQL(whereSQL); 
 		setOrderBySQL(orderBySQL);
 	}
@@ -98,8 +98,7 @@ public class TimeFilter extends NameFilter {
 	
 	@Override
 	public int bindQuery(PreparedStatement pst, int col)  throws SQLException{		  		
-		Log.log("TimeFilter bindQuery begin1=" + begin);	  		
-		Log.log("TimeFilter bindQuery end1=" + end);
+		Log.log("TimeFilter bindQuery begin=" + begin + " end=" + end);
 	//	pst.setDouble(++col, begin.getTimeInMillis());	
 	//	pst.setDouble(++col, end.getTimeInMillis());	
 		if (begin != null) {
@@ -127,6 +126,16 @@ public class TimeFilter extends NameFilter {
 			nameFilters.add(OfficialTimeFilter.parseDateStr(date, nameFilters.size()));
 			dateFilterCnt++;
 		}
+		return dateFilterCnt;
+	}
+	
+	public static int add2Dates(Set<NameFilter> nameFilters, String dateBegin, String dateEnd, int dateFilterCnt)
+			throws UnsupportedEncodingException {
+		Log.info("TimeFilter add2Dates dateBegin:" + dateBegin + " dateEnd:" + dateEnd);
+		dateBegin = URLDecoder.decode(dateBegin, "UTF-8");
+		dateEnd = URLDecoder.decode(dateEnd, "UTF-8");
+		nameFilters.add(new TimeBetweenFilter(dateBegin, dateEnd));
+		dateFilterCnt++;
 		return dateFilterCnt;
 	}
 

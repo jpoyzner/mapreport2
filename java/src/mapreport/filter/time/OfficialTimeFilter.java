@@ -1,5 +1,6 @@
 package mapreport.filter.time;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,9 +16,9 @@ public class OfficialTimeFilter extends TimeFilter {
 	static DateTimeFormatter formatterDay = DateTimeFormatter.ISO_LOCAL_DATE; // 2008-11-15
     static DateTimeFormatter formatterDayMMM = DateTimeFormatter.ofPattern("MMM-dd-yyyy");  //date/May-11-2008
 	static DateTimeFormatter formatterMonth = DateTimeFormatter.ISO_LOCAL_DATE; 
-	static DateTimeFormatter formatterMonthMMM = DateTimeFormatter.ofPattern("MMM-yyyy-dd");  //date/May-11-2008
+	static DateTimeFormatter formatterMonthMMM = DateTimeFormatter.ofPattern("MMM-yyyy-dd");  //date/May-2008-11
 	static DateTimeFormatter formatterYear = DateTimeFormatter.ofPattern("yyyy");  
-//	static DateTimeFormatter formatterDecade = DateTimeFormatter.ofPattern("MMM-dd-yyyy");  //?????????????
+	public static SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	int year = -1;
 	int month = -1;

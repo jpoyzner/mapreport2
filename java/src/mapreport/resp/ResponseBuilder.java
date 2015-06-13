@@ -75,7 +75,9 @@ public class ResponseBuilder {
 				}
 				
 				if (filter instanceof TimeFilter) {
+					Log.log("\n before queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 					queryBuilder.addFilter(filter);  
+					Log.log("\n after queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 				} else if (filter != null && filter.getName() != null) {
 					// boolean isLocation = true;
 					/*
@@ -167,7 +169,8 @@ public class ResponseBuilder {
 			
 				Log.info("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
-			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
+			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().buildWhereSQL());
+			       Log.log("newsBuilder.getWhereSQL()=" + newsBuilder.getWhereSQL() + " newsBuilder.getFilterNode().getWhereSQL()=" + newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
 			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter);

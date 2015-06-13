@@ -180,6 +180,7 @@ public class FilterDBQueryBuilder {
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
 		List <DBFilter> rows = processResultSet(resultSet, newsMap);
+		Log.info("FilterDBQueryBuilder end processResultSet");
 	    return rows;
 	}
 	

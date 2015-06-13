@@ -58,7 +58,7 @@ public class NewsQueryBuilder extends DBBase {
 			+ "and f.legacyType <> 'KeywordTimeLineFile' "; // and fp.filterId <> nf.topicExcludeId and f.filterId <> nf.topicExcludeId "; // 
 
 	public void addFilter(Filter filter) {
-		Log.info("NewsQueryBuilder addFilter filter=" + filter + " getName=" + filter.getName() + " filter.getOrderBySQL=" + filter.getOrderBySQL());
+		Log.info("NewsQueryBuilder addFilter filter=" + filter + " getName=" + filter.getName() + " isAllFilter()=" + filter.isAllFilter() + " filter.getOrderBySQL=" + filter.getOrderBySQL());
 		filterNode.add(filter);
 		// just for logging
 		if (filter instanceof DBFilter) {
@@ -76,7 +76,8 @@ public class NewsQueryBuilder extends DBBase {
 			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()="
 					+ filter.getWhereSQL());
 			orderBySQL.append(filter.getOrderBySQL());
-			Log.info("NewsQueryBuilder addFilter filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
+			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()=" + filter.getWhereSQL() + " whereSQL=" + whereSQL 
+					+ " filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
 		}
 	}
 
@@ -136,6 +137,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.log("buildSql selectSQL=" + selectSQL);
 		Log.log("buildSql fromSQL=" + fromSQL);
 		Log.log("buildSql whereSQL=" + whereSQL);
+		Log.log("buildSql filterNode.whereSQL=" + filterNode.getWhereSQL());
 		Log.log("buildSql orderBySQL=" + orderBySQL);
 		Log.info("\n\n buildSql() sql=" + sql);
 		return this.sql;
