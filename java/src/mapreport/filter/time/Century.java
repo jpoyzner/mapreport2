@@ -15,9 +15,11 @@ public class Century extends Year {
 		this.year = (century - 1) * 100;
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 99, 11, 31);
-		setName(String.valueOf(century) + getSuffix(century) + " Century");
+		setName(String.valueOf(century) + getSuffix(century) + " Century");	
+		buildPriority();
 		parent = new AllTime();	
 		buildTimeSQL(); 
+		setImage("common/century.jpg");
 	}
 	
 	private static String getSuffix(int num) {

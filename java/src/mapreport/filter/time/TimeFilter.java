@@ -26,9 +26,17 @@ public class TimeFilter extends NameFilter {
 	}
 
 	public TimeFilter(String name) {
-		super(name);	 
+		super(name);	
 		buildTimeSQL(); 
 	}
+	
+	public void buildPriority() {
+		if (end != null) {
+	//		setPriority((int) (end.getTimeInMillis() / 1000000));
+		}
+	//	Log.log("TimeFilter buildPriority name=" + getName() + " Priority=" + getPriority());
+	}
+	
 	public void buildTimeSQL() {
 		whereSQL = new StringBuilder(" \n ");
 		

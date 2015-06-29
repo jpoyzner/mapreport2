@@ -30,7 +30,8 @@ public class Month extends OfficialTimeFilter {
 		setName(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + String.valueOf(year));	
 		           Log.log("Month year=" + year + " month=" + month + " name=" + getName());
 
-		parent = new Year(year);		
+		parent = new Year(year);	
+		buildPriority();		
 		buildTimeSQL(); 	           
 	}
 	

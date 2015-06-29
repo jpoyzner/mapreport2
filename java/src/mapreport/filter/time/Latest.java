@@ -25,6 +25,7 @@ public class Latest extends OfficialTimeFilter {
 		// TEMPORARY !!!!!!!!!!!!!!!!!!!!!
 		// whereSQL.append(" and n.dateTime < '2008-11-17' ");
 		setName(LATEST);
+		setImage("common/latest.jpg");
 	}
 	
 	@Override

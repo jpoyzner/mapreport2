@@ -13,8 +13,10 @@ public class Decade extends Year {
 		this.year = year;
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 9, 11, 31);
-		setName(String.valueOf(year) + "s");
+		setName(String.valueOf(year) + "s");	
+		buildPriority();
 		parent = new Century(year / 100);	
 		buildTimeSQL(); 
+		setImage("common/decade.jpg");
 	}
 }

@@ -12,7 +12,9 @@ public class Future extends OfficialTimeFilter {
 		end = null;  // no need, just for clarification 	
 		buildTimeSQL(); 
 		// setPriority(2000000);
-		setPriority(0);
+		setPriority(0);	
+		buildPriority();
+		setImage("icons/2/g.gif");
 	}
 	
 	public void buildName() {

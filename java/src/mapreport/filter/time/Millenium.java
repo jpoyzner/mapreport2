@@ -15,8 +15,10 @@ public class Millenium extends Year {
 		begin = new GregorianCalendar(year, 1, 1);
 		end = new GregorianCalendar(year + 999, 11, 31);
 		setName(String.valueOf(millenium) + getSuffix(millenium) + " Millenium");
+		buildPriority();
 		parent = new AllTime();	
 		buildTimeSQL(); 
+		setImage("common/millenium.jpg");
 	}
 	
 	private static String getSuffix(int num) {

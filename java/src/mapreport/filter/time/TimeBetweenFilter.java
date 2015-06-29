@@ -15,6 +15,7 @@ public class TimeBetweenFilter extends TimeFilter {
 		OfficialTimeFilter filterEnd = OfficialTimeFilter.parseDateStr(finish, 0);
 		end = filterEnd.getEnd();
 		
+		buildPriority();
 		buildTimeSQL();
 	}
 
