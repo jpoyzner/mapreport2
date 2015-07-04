@@ -55,6 +55,47 @@ public class Options {
 	final String MORE_NEWS_OPTION = "moreNews";
 	final String PAGE_NUM_OPTION = "pageNum";
 	
+
+	DBWhereOption left;
+	DBWhereOption right;
+	DBWhereOption top;
+	DBWhereOption bottom;
+	
+	DBWhereOption zoom;
+	
+	DBWhereFilterOption locationId;
+	DBWhereFilterOption location2Id;
+	DBWhereFilterOption topicId;
+	DBWhereFilterOption topic2Id;
+	TimeOption time;
+
+	BooleanDBWhereOption isDisplayLocColumn;
+	BooleanDBWhereOption isDisplayTimeColumn;
+	BooleanDBWhereOption isDisplayTopicColumn;
+
+	BooleanDBWhereOption isMoreLocations;
+	BooleanDBWhereOption isMoreTime;
+	BooleanDBWhereOption isMoreTopics;
+	BooleanDBWhereOption isMoreNews;
+	
+	Option viewType;
+	BooleanDBWhereOption isShowFuture;
+	BooleanDBWhereOption isShowInternationCountry;
+	DBWhereOption pageNum;	
+
+	DBWhereOption sortDirection;
+	BooleanDBWhereOption isHighlightImportant;
+	DBWhereOption newsNumberLevel;
+	BooleanDBWhereOption isShowImages;
+	
+	Option rowDimension;
+	Option colDimension;
+	
+	DBWhereOption xCoord;
+	DBWhereOption yCoord;
+	DBWhereOption xSpan;
+	DBWhereOption ySpan;
+	
 	Map<String, String> paramMap = new HashMap<String, String>(15);	
 
 	public void addParam(String name, String value) {
@@ -73,10 +114,10 @@ public class Options {
 			case X_SPAN: xSpan = new DBWhereOption(value);	break;
 			case Y_SPAN: ySpan = new DBWhereOption(value);	break;
 			
-			case TOP_OPTION: top = new DBWhereOption(value);	break;
-			case BOTTOM_OPTION: bottom = new DBWhereOption(value);	break;			
-			case LEFT_OPTION: left = new DBWhereOption(value);	break;
-			case RIGHT_OPTION: right = new DBWhereOption(value);	break;		
+			case TOP_OPTION: top = new DBWhereOption(TOP_OPTION, value);	break;
+			case BOTTOM_OPTION: bottom = new DBWhereOption(BOTTOM_OPTION, value);	break;			
+			case LEFT_OPTION: left = new DBWhereOption(LEFT_OPTION, value);	break;
+			case RIGHT_OPTION: right = new DBWhereOption(RIGHT_OPTION, value);	break;		
 			
 			case ZOOM_OPTION: zoom = new DBWhereOption(value);	break;
 			case VIEW_TYPE_OPTION: viewType = new DBWhereOption(value);	break;
@@ -90,6 +131,14 @@ public class Options {
 				Log.info("Options addParam UNKNOWN! name:" + name + " value:" + value);
 				break;
 		}
+	}
+	
+	public String toString() {
+		String ret = "";
+		for (Map.Entry entry : paramMap.entrySet()) {
+		    ret += ' ' + entry.toString();
+		}
+		return ret;
 	}
 	
 	public DBWhereOption getxSpan() {
@@ -111,19 +160,6 @@ public class Options {
 	public void setLocation2Id(DBWhereFilterOption location2Id) {
 		this.location2Id = location2Id;
 	}
-
-	DBWhereOption sortDirection;
-	BooleanDBWhereOption isHighlightImportant;
-	DBWhereOption newsNumberLevel;
-	BooleanDBWhereOption isShowImages;
-	
-	Option rowDimension;
-	Option colDimension;
-	
-	DBWhereOption xCoord;
-	DBWhereOption yCoord;
-	DBWhereOption xSpan;
-	DBWhereOption ySpan;
 	
 	public DBWhereOption getLeft() {
 		return left;
@@ -157,32 +193,6 @@ public class Options {
 		this.bottom = bottom;
 	}
 
-	DBWhereOption left;
-	DBWhereOption right;
-	DBWhereOption top;
-	DBWhereOption bottom;
-	
-	DBWhereOption zoom;
-	
-	DBWhereFilterOption locationId;
-	DBWhereFilterOption location2Id;
-	DBWhereFilterOption topicId;
-	DBWhereFilterOption topic2Id;
-	TimeOption time;
-
-	BooleanDBWhereOption isDisplayLocColumn;
-	BooleanDBWhereOption isDisplayTimeColumn;
-	BooleanDBWhereOption isDisplayTopicColumn;
-
-	BooleanDBWhereOption isMoreLocations;
-	BooleanDBWhereOption isMoreTime;
-	BooleanDBWhereOption isMoreTopics;
-	BooleanDBWhereOption isMoreNews;
-	
-	Option viewType;
-	BooleanDBWhereOption isShowFuture;
-	BooleanDBWhereOption isShowInternationCountry;
-	DBWhereOption pageNum;
 	
 	public String getParam(String name) {
 		return paramMap.get(name);

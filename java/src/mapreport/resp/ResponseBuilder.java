@@ -4,12 +4,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import mapreport.controller.Endpoints;
 import mapreport.db.DBQueryBuilder;
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
@@ -109,14 +113,11 @@ public class ResponseBuilder {
 	
 		return hasLocationFilter;
 	}
-
 	
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 	        Log.info("ResponseBuilder buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
-		pageURL.parseUrlParameters(url);
-		pageURL.parseParams();
-		Options options = pageURL.getOptions();
+		Options options = buildOptionsFromUrl(url, pageURL);
 		
 		Set<NameFilter> nameFilters = pageURL.getFilters();
 		
@@ -129,12 +130,40 @@ public class ResponseBuilder {
 		
     	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
 		 
-		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "");
+		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "", options);
 		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
+
+	public static final Options buildOptionsFromRequest(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
+		Options options = new Options();
+		Map<String, String[]> parameterMap = request.getParameterMap();    	
+    	Set<String> keys = parameterMap.keySet();
+    	List<String> keyList = new ArrayList<String>(keys);
+    	
+    	for (String key : keyList) {
+    		options.addParam(key, request.getParameter(key));
+    	} 
+    	return options;
+	}
+
+	public static Options buildOptionsFromUrl(String url, PageURL pageURL)
+			throws UnsupportedEncodingException {
+		Log.info("ResponseBuilder buildOptionsFromUrl url=" + url);
+		pageURL.parseUrlParameters(url);
+		pageURL.parseParams();
+		Options options = pageURL.getOptions();
+		return options;
+	}
+
+	public static Options buildOptionsFromUrl(String url)
+			throws UnsupportedEncodingException, MalformedURLException {
+		PageURL pageURL = new PageURL(url);
+		return buildOptionsFromUrl(url, pageURL);
+	}
 	
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat) {  
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat, Options options) {  
+		Log.info("buildJson  options=" + options);
 		String json = null;
 		
 		try {

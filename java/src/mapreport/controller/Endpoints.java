@@ -5,6 +5,7 @@ import java.net.MalformedURLException;
 import java.net.URLDecoder;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +20,7 @@ import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
+import mapreport.front.option.Options;
 import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
@@ -56,7 +58,14 @@ public class Endpoints {
 		// localLat = "37.519774999999936";
 		
 		Log.info("Endpoints topic localLong:" + localLong + " localLat:" + localLat);
-
+		
+		Enumeration<String> params = request.getParameterNames();
+		
+		while(params.hasMoreElements()){
+			String param = (String) params.nextElement();
+			Log.info("Endpoints param:" + param);
+		}
+		
 		String location = request.getParameter("location");
 		
 		if ((location == null) 
@@ -114,7 +123,8 @@ public class Endpoints {
 		
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat).toString();
+		Options options = ResponseBuilder.buildOptionsFromRequest(request);
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options).toString();
 		
 		// Cache.putInCache(paramStr, json);
 
@@ -149,8 +159,7 @@ public class Endpoints {
 		return ResponseBuilder.buildJson(getFullURL(request)).toString();
 	}
 	
-	//TODO: remove
-	private static String getFullURL(HttpServletRequest request) {
+	public static String getFullURL(HttpServletRequest request) {
 	    StringBuffer requestURL = request.getRequestURL();
 	    String queryString = request.getQueryString();
 

@@ -7,6 +7,10 @@ public class DBWhereOption extends Option {
 		// TODO Auto-generated constructor stub
 	}
 
+	public DBWhereOption(String name, String value) {
+		super(name, value);
+	}
+
 	public String getWhereSql() {
 		return whereSql;
 	}
