@@ -186,7 +186,7 @@ public class NewsQueryBuilder extends DBBase {
 		filterNode.bindFilters(pst);
 	}
 
-	public List<News> processResultSet(ResultSet res, int nameFilterNo, boolean hasLocationFilter) throws SQLException {
+	public List<News> processResultSet(ResultSet res, int nameFilterNo, boolean hasLocationFilter, Options options) throws SQLException {
 		List<News> rows = new ArrayList<News>(100);
 		
 		Set<Integer> excludedNesIds = new HashSet<Integer>(5); 
@@ -199,7 +199,12 @@ public class NewsQueryBuilder extends DBBase {
 					excludedNesIds.add(row.getNewsId());
 				}
 			} else {
-				rows.add(row);
+				Log.info("processResultSet  row:" + row.getLabel() + " options.getIsShowFuture():" + options.getIsShowFuture() );
+					//	+ " options.getIsShowFuture().getBoolValue():" + options.getIsShowFuture().getBoolValue()
+					//	+ " !row.getDateTime().after(new java.util.Date():" + !row.getDateTime().after(new java.util.Date()));
+				if (options.getIsShowFuture() == null || options.getIsShowFuture().getBoolValue() || !row.getDateTime().after(new java.util.Date())) {
+					rows.add(row);
+				}
 			}
 		}
 
@@ -287,7 +292,7 @@ public class NewsQueryBuilder extends DBBase {
 		return row;
 	}
 
-	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter, boolean hasLocationFilter) throws SQLException {
+	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter, boolean hasLocationFilter, Options options) throws SQLException {
 		Log.info("NewsQueryBuilder runQuery nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		begin(nameFilterNo, isCoordFilter);
 		Log.log("start startBindQuery");
@@ -298,7 +303,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("NewsQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");
-		List<News> rows = processResultSet(resultSet, nameFilterNo, hasLocationFilter);
+		List<News> rows = processResultSet(resultSet, nameFilterNo, hasLocationFilter, options);
 		return rows;
 	}
 

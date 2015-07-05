@@ -124,9 +124,9 @@ public class ResponseBuilder {
 		Rectangle rect = Rectangle.getRectangle(options);
 		int size = 200;
 		
-		if (options.getParam("size") != null) {
-			size = Integer.parseInt(options.getParam("size"));
-		}
+	//	if (options.get != null) {
+	//		size = Integer.parseInt(options.getParam("size"));
+	//	}
 		
     	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
 		 
@@ -144,6 +144,7 @@ public class ResponseBuilder {
     	for (String key : keyList) {
     		options.addParam(key, request.getParameter(key));
     	} 
+    //	options.addParam("isShowFuture", "false");
     	return options;
 	}
 
@@ -202,7 +203,7 @@ public class ResponseBuilder {
 			       Log.log("newsBuilder.getWhereSQL()=" + newsBuilder.getWhereSQL() + " newsBuilder.getFilterNode().getWhereSQL()=" + newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter);
+			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter, options);
 		
 			
 			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);

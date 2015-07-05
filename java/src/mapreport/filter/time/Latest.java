@@ -38,7 +38,7 @@ public class Latest extends OfficialTimeFilter {
 		int futureDays = 1;
 			  
 		if (nameFilterNm > 0) {
-			  futureDays = nameFilterNm * 3;
+			  futureDays = nameFilterNm * 10;
 		}
 		return futureDays;
 	}
