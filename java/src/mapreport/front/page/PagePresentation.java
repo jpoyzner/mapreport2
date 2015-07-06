@@ -36,6 +36,7 @@ import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
+import mapreport.front.option.Options;
 import mapreport.nav.NavigationList;
 import mapreport.nav.NavigationPath;
 import mapreport.news.News;
@@ -74,7 +75,7 @@ public class PagePresentation {
 		FilterNode pageFilters,
 		List<News> newsList,	
 		Map<String, NameFilter> childFilters,
-		String localLong, String localLat) throws SQLException {    
+		String localLong, String localLat, Options options) throws SQLException {    
 		
 		    Log.info("PagePresentation newsList.size()=" + newsList.size() + " pageFilters=" + pageFilters);
 			
@@ -119,7 +120,7 @@ public class PagePresentation {
 
 	    newsList = buildIsMapShow(newsList);
 	    newsList = addSecondIcon(newsList);
-		addChildNodes(pageFilters, childFilters, localLong, localLat);
+		addChildNodes(pageFilters, childFilters, localLong, localLat, options);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
@@ -197,7 +198,7 @@ public class PagePresentation {
 	}
 
 	private void addChildNodes(FilterNode pageFilters,
-			Map<String, NameFilter> childFilters, String localLong, String localLat) {
+			Map<String, NameFilter> childFilters, String localLong, String localLat, Options options) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
 	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
@@ -231,9 +232,9 @@ public class PagePresentation {
         navTopics.sort();
         navDates.sort();
         
-        navLocations.limitChildren();
-        navTopics.limitChildren();
-        navDates.limitChildren();    
+        navLocations.limitChildren(options.getIsMoreLocations() != null && options.getIsMoreLocations().getBoolValue());
+        navTopics.limitChildren(options.getIsMoreTopics() != null && options.getIsMoreTopics().getBoolValue());
+        navDates.limitChildren(options.getIsMoreTime() != null && options.getIsMoreTime().getBoolValue());
         
         navLocations.setChildrenMap(null);
         navTopics.setChildrenMap(null);

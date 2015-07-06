@@ -144,7 +144,8 @@ public class ResponseBuilder {
     	for (String key : keyList) {
     		options.addParam(key, request.getParameter(key));
     	} 
-    //	options.addParam("isShowFuture", "false");
+        //	options.addParam("isShowFuture", "false");
+       // 	options.addParam("moreTopic", "true");
     	return options;
 	}
 
@@ -236,7 +237,7 @@ public class ResponseBuilder {
 			if (newsList.size() > NEWS_LIMIT + 1) {
 				newsList = newsList.subList(0, NEWS_LIMIT);
 			}
-			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat) ;
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat, options);
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
