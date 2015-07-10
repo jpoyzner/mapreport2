@@ -32,7 +32,8 @@ public class Month extends OfficialTimeFilter {
 
 		parent = new Year(year);	
 		buildPriority();		
-		buildTimeSQL(); 	           
+		buildTimeSQL(); 	
+		setImage("common/month.jpg");           
 	}
 	
 	@Override
