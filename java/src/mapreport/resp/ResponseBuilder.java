@@ -40,6 +40,7 @@ import mapreport.view.map.Rectangle;
 
 public class ResponseBuilder {
 	static int NEWS_LIMIT = 20;	
+	static int NEWS_LIMIT_MORE = 50;	
 
 	public static boolean addFiltersToQueryBuilder(Rectangle rect,
 			Set<NameFilter> nameFilters, NewsQueryBuilder queryBuilder)
@@ -145,7 +146,8 @@ public class ResponseBuilder {
     		options.addParam(key, request.getParameter(key));
     	} 
         //	options.addParam("isShowFuture", "false");
-       // 	options.addParam("moreTopic", "true");
+        // 	options.addParam("moreTopic", "true");
+        // 	options.addParam("moreNews", "true");
     	return options;
 	}
 
@@ -234,9 +236,12 @@ public class ResponseBuilder {
 			
 			newsList = NewsQueryBuilder.buildNewsList(newsMap, newsBuilder.getFilterNode().getTimeFilter()); 
 			
-			if (newsList.size() > NEWS_LIMIT + 1) {
-				newsList = newsList.subList(0, NEWS_LIMIT);
+			int newsLimit = options.getIsMoreNews() != null && options.getIsMoreNews().getBoolValue() ? NEWS_LIMIT_MORE : NEWS_LIMIT;			
+			if (newsList.size() > newsLimit + 1) {
+				newsList = newsList.subList(0, newsLimit);
 			}
+			Log.info("buildJson options.getIsMoreNews()=" + options.getIsMoreNews() + " newsList.size()=" + newsList.size());
+			
 			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat, options);
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
