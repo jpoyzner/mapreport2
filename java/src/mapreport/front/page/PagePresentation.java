@@ -33,6 +33,7 @@ import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.ThisDayInHistory;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
@@ -227,6 +228,7 @@ public class PagePresentation {
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
 		navDates.addChildFilter(new Latest(1), pageFilters);
+		navDates.addChildFilter(new ThisDayInHistory(), pageFilters);
         
         navLocations.sort();
         navTopics.sort();

@@ -52,6 +52,9 @@ public class OfficialTimeFilter extends TimeFilter {
 			 } else  if (dateStr.equals(Future.FUTURE_NAME)) {
 				  ret = new Future(); 
 				  Log.info("format as Future:" + dateStr);
+			 } else  if (dateStr.equals(ThisDayInHistory.THIS_DAY_IN_HISTORY_NAME)) {
+				  ret = new ThisDayInHistory(); 
+				  Log.info("format as ThisDayInHistory:" + dateStr);
 			 } else {			
 				       Log.log("Can't format as Year:" + dateStr);				  
 				 try {

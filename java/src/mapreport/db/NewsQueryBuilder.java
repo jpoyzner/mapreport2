@@ -199,7 +199,7 @@ public class NewsQueryBuilder extends DBBase {
 					excludedNesIds.add(row.getNewsId());
 				}
 			} else {
-				Log.info("processResultSet  row:" + row.getLabel() + " options.getIsShowFuture():" + options.getIsShowFuture() );
+				Log.log("processResultSet  row:" + row.getLabel() + " options.getIsShowFuture():" + options.getIsShowFuture() );
 					//	+ " options.getIsShowFuture().getBoolValue():" + options.getIsShowFuture().getBoolValue()
 					//	+ " !row.getDateTime().after(new java.util.Date():" + !row.getDateTime().after(new java.util.Date()));
 				if (options.getIsShowFuture() == null || options.getIsShowFuture().getBoolValue() || !row.getDateTime().after(new java.util.Date())) {
