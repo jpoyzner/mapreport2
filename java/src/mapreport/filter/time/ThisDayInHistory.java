@@ -2,14 +2,16 @@ package mapreport.filter.time;
 
 import mapreport.util.Log;
 
-public class ThisDayInHistory extends AllTime {
+public class ThisDayInHistory extends OfficialTimeFilter {
 
     final static public String THIS_DAY_IN_HISTORY_NAME = "This Day In History";
     
 	public ThisDayInHistory() {
-		super();
+		super(THIS_DAY_IN_HISTORY_NAME);
 		setName(THIS_DAY_IN_HISTORY_NAME);
 		setImage("common/thisdayinhistory.jpg");
+		setAllFilter(true);
+		setPriority(1000000);	
 	}	
 	
 	public void buildName() {
