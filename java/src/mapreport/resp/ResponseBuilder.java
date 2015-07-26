@@ -145,9 +145,12 @@ public class ResponseBuilder {
     	for (String key : keyList) {
     		options.addParam(key, request.getParameter(key));
     	} 
+    	
+    	// just for testing
         //	options.addParam("isShowFuture", "false");
         // 	options.addParam("moreTopic", "true");
         // 	options.addParam("moreNews", "true");
+        // 	options.addParam("hints", "false");
     	return options;
 	}
 
@@ -207,14 +210,13 @@ public class ResponseBuilder {
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
 			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter, options);
-		
-			
-			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
-			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);
-			
+			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);			
 
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
-			List <DBFilter> dbFilters = filterBuilder.runQuery(newsMap);
+			
+			List <DBFilter> dbFilters = options.getHints() == null || options.getHints().getBoolValue() ?
+					filterBuilder.runQuery(newsMap) : new ArrayList <DBFilter> (0);
+			
 			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
 
 			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());

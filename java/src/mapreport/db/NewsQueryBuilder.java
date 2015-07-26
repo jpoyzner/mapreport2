@@ -369,8 +369,7 @@ public class NewsQueryBuilder extends DBBase {
 				Log.log("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
 						+ " isMapShow=" + existNews.isMapShow() + " news.getNewsId()=" +news.getNewsId() + " get isMapShow=" + newsMap.get(news.getNewsId()).isMapShow());
 				
-				int nfPriority = newsMap.get(news.getNewsId())
-						.getNewsFilterPriority();
+				int nfPriority = newsMap.get(news.getNewsId()).getNewsFilterPriority();
 				if (news.getNewsFilterPriority() < nfPriority) { 
 					// lower better: 'Berlin','Khodorkovsky vows to help prisoners', '100'
 					nfPriority = news.getNewsFilterPriority();

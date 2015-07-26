@@ -52,6 +52,7 @@ public class Options {
 	final String MORE_TOPIC_OPTION = "moreTopic";
 	final String MORE_NEWS_OPTION = "moreNews";
 	final String PAGE_NUM_OPTION = "pageNum";	
+	final String HINTS_OPTION = "hints";	
 
 	NumberOption left;
 	NumberOption right;
@@ -69,6 +70,8 @@ public class Options {
 	BooleanOption isMoreTopics;
 	BooleanOption isMoreNews;
 	
+	BooleanOption hints;
+
 	Option viewType;
 	BooleanOption isShowFuture;
 	BooleanOption isShowInternationalCountry;
@@ -118,6 +121,7 @@ public class Options {
 			case MORE_TOPIC_OPTION: isMoreTopics = new BooleanOption(name, value);	break;
 			case MORE_NEWS_OPTION: isMoreNews = new BooleanOption(name, value);	break;
 			case PAGE_NUM_OPTION: pageNum = new NumberOption(name, value);	break;
+			case HINTS_OPTION: hints = new BooleanOption(name, value);	break;
 			default: 
 				Log.info("Options addParam UNKNOWN! name:" + name + " value:" + value);
 				break;
@@ -347,5 +351,13 @@ public class Options {
 
 	public Map<String, String> getParamMap() {
 		return paramMap;
+	}
+		
+	public BooleanOption getHints() {
+		return hints;
+	}
+
+	public void setHints(BooleanOption hints) {
+		this.hints = hints;
 	}
 }
