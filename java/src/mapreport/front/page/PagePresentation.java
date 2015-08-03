@@ -3,6 +3,9 @@ package mapreport.front.page;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -10,19 +13,31 @@ import java.util.Map;
 
 
 
+
+
+
+
+
+
+
+import java.util.Set;
+
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
+import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
+import mapreport.filter.time.ThisDayInHistory;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
+import mapreport.front.option.Options;
 import mapreport.nav.NavigationList;
 import mapreport.nav.NavigationPath;
 import mapreport.news.News;
@@ -31,6 +46,7 @@ import mapreport.util.Log;
 import mapreport.view.View;
 import mapreport.view.map.MapNewsList;
 import mapreport.view.map.MapView;
+import mapreport.view.map.Rectangle;
 
 public class PagePresentation {
 	//private String value2 = "abc";
@@ -59,30 +75,131 @@ public class PagePresentation {
 	public PagePresentation (
 		FilterNode pageFilters,
 		List<News> newsList,	
-		Map<String, NameFilter> childFilters) throws SQLException {    
+		Map<String, NameFilter> childFilters,
+		String localLong, String localLat, Options options) throws SQLException {    
 		
-		    Log.info("PagePresentation newsList=" + newsList + " pageFilters=" + pageFilters);
+		    Log.info("PagePresentation newsList.size()=" + newsList.size() + " pageFilters=" + pageFilters);
 			
 		//	for (NewsFilterRow filter : filters) {
 		//		 Log.log("PagePresentation getParentId=" + filter.getParentId()  + " filter.getParentLevel()=" + filter.getParentLevel());
 		//	}			  
 		
-	//	addParentNodes(pageFilters, parents); 	
+		if (pageFilters.getTimeFilter() != null && pageFilters.getTimeFilter() instanceof Latest) {
+			 Log.info("PagePresentation getTimeFilter() instanceof Latest");
+				Collections.sort(newsList, new Comparator() {
+		            public int compare(Object o1, Object o2) 
+		            {
+		                News news1 = (News)o1;
+		                News news2 = (News)o2; 
+		                return news1.getDateTime().after(news2.getDateTime()) ? 1 : 0;
+		                // it can also return 0, and 1
+		            }
+		 		});
+		} else {		
+			 Log.info("PagePresentation getTimeFilter() NOT instanceof Latest");
+			Collections.sort(newsList, new Comparator() {
+	            public int compare(Object o1, Object o2) 
+	            {
+	                News news1 = (News)o1;
+	                News news2 = (News)o2; 
+	                
+	                if (news1.getDateTime().after(news2.getDateTime())) {
+	                	return 1;
+	                } else if (news1.getDateTime().before(news2.getDateTime())) {
+	                	return -1;
+	                }
+	                return 0;
+	             //   return news1.getDateTime().after(news2.getDateTime()) ? 0 : 1;
+	                // it can also return 0, and 1
+	            }
+	 		});
+		}
 
-		addChildNodes(pageFilters, childFilters);
+		for (News n : newsList) {
+			Log.log("PagePresentation after sort getDateTime=" + n.getDateTime());
+		}
+
+	    newsList = buildIsMapShow(newsList);
+	    newsList = addSecondIcon(newsList);
+		addChildNodes(pageFilters, childFilters, localLong, localLat, options);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
 		//view.setNewsList(new NewsList(newsList, pageFilters));
 		metaData = new PageMetaData(pageFilters);
 		navigationPath = new NavigationPath(pageFilters, childFilters);
 		view = new MapView(new MapNewsList(newsList, pageFilters)); // MapView  just is one of the view, extend later
-		   Log.log("PagePresentation view.getNewsList()=" + view.getNewsList());
-	//			(Coordinates coords, Rectangle rect, NewsList newsList, String mapUrl, List<MapZoomLink> mapZoomLinks);
+		   Log.info("PagePresentation view.getNewsList()=" + view.getNewsList());
+		   
+				for (News news : newsList) {
+					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + "  isMapShow=" + news.isMapShow());
+				}			  
+  	}
+	
+	List<News> buildIsMapShow(List<News> newsList) {
+		int notMapShowCntr = 0;
 		
+		for (News news : newsList) {
+			if (!news.isMapShow()) {
+				notMapShowCntr++;
+			} 
+			if (notMapShowCntr > newsList.size() * 0.4) {
+				for (News newsToChange : newsList) {
+					newsToChange.setMapShow(true);
+				}
+				break;
+			}
+		}
+		
+		return newsList;
+	}
+	
+	List<News> addSecondIcon(List<News> newsList) {
+		Map<String, Integer> iconMap = new HashMap<String, Integer>(20);
+		
+		int max = 0;
+		for (News news : newsList) {
+			String icon = news.getIcon();
+			
+			Log.log("addSecondIcon icon:" + icon);
+			if (iconMap.get(icon) == null) {
+				iconMap.put(icon, 1);
+			} else {
+				int newNm = iconMap.get(icon) + 1;
+				iconMap.put(icon, newNm);
+				max = Math.max(newNm, max);
+			}
+		}
+		
+		Log.log("addSecondIcon max:" + max);
+		
+		Set<Map.Entry<String, Integer>> entrySet = iconMap.entrySet();
+	    for (Map.Entry<String, Integer> entry : entrySet) {
+	          Integer cntr = entry.getValue();
+	          
+	          if (cntr == max) {
+	        	  
+	        	  Log.log("addSecondIcon cntr == max");
+	        	  String maxIcon = entry.getKey();
+	        	  
+	        	  boolean isStarted = false;
+	        	  for (News news : newsList) {
+	        			if (news.getIcon() != null && news.getIcon().equals(maxIcon)) {
+	        				if (isStarted && news.getIcon2() != null && !news.getIcon2().isEmpty()) {
+	        					Log.log("addSecondIcon was news.getIcon()=" + news.getIcon() + " news.getIcon2()=" + news.getIcon2() + " label=" + news.getLabel());
+	        					news.setIcon(news.getIcon2());
+	        					Log.log("addSecondIcon after news.getIcon()=" + news.getIcon());
+	        				}
+	        				isStarted = true;
+	        			}
+	        	  }
+	          }
+	    }
+		
+		return newsList;
 	}
 
 	private void addChildNodes(FilterNode pageFilters,
-			Map<String, NameFilter> childFilters) {
+			Map<String, NameFilter> childFilters, String localLong, String localLat, Options options) {
 		for (String filterName : childFilters.keySet()) {
 				NameFilter filter = childFilters.get(filterName);
 	                      Log.log("PagePresentation filter=" + filter + " page filterName=" + filterName  + " filter.getName()=" + filter.getName() );
@@ -100,17 +217,26 @@ public class PagePresentation {
 		}
 
 		navLocations.addChildFilter(new Global(), pageFilters);
+		
+		Local local = new Local(localLong, localLat);
+		 Log.info("NavigationPath local.getRect().getLeft()=" + local.getRect().getLeft());
+		if (local.getRect().getLeft() != 0) {		
+			navLocations.addChildFilter(local, pageFilters);
+			Log.info("NavigationPath local added");
+		}
+		
 		navTopics.addChildFilter(new AllTopics(AllTopics.ALL_TOPICS), pageFilters);
 		navDates.addChildFilter(new AllTime(), pageFilters);
-		navDates.addChildFilter(new Latest(), pageFilters);
+		navDates.addChildFilter(new Latest(1), pageFilters);
+		navDates.addChildFilter(new ThisDayInHistory(), pageFilters);
         
         navLocations.sort();
         navTopics.sort();
         navDates.sort();
         
-        navLocations.limitChildren();
-        navTopics.limitChildren();
-        navDates.limitChildren();    
+        navLocations.limitChildren(options.getIsMoreLocations() != null && options.getIsMoreLocations().getBoolValue());
+        navTopics.limitChildren(options.getIsMoreTopics() != null && options.getIsMoreTopics().getBoolValue());
+        navDates.limitChildren(options.getIsMoreTime() != null && options.getIsMoreTime().getBoolValue());
         
         navLocations.setChildrenMap(null);
         navTopics.setChildrenMap(null);

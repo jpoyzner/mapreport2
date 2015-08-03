@@ -21,6 +21,7 @@ public class Year extends OfficialTimeFilter {
 		parent = new Decade((year - 5) / 10 * 10);	
 		buildTimeSQL(); 
 		setPriority(400);	
+		setImage("common/year.jpg");
 	}
 	
 

@@ -17,7 +17,16 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 			"\n from filter f" + 
 		"\n where f.name  in (";
 	private static String sqlEnd = ")";
+	private boolean hasLocationByName = false;
 	
+	public boolean isHasLocationByName() {
+		return hasLocationByName;
+	}
+
+	public void setHasLocationByName(boolean hasLocationByName) {
+		this.hasLocationByName = hasLocationByName;
+	}
+
 	public Map <String, DBFilter> buildFilters(ResultSet res) throws SQLException{ 
 		Map <String, DBFilter> rows = new HashMap<String, DBFilter>(3);
 		
@@ -26,6 +35,9 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 			String filterId = res.getString("filterId");
 			boolean isLocation = res.getBoolean("isLocation");
 			DBFilter row = isLocation ? new LocationByName(fName) : new Topic(fName);
+			
+			if (!hasLocationByName) hasLocationByName = isLocation;
+			
 			row.setFilterId(filterId);  
 			  Log.info("URLFilterQueryBuilder processResultSet "
 					  +  " fName=" + fName   

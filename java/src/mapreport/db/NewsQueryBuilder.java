@@ -20,6 +20,7 @@ import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.Topic;
+import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
 import mapreport.news.News;
 import mapreport.resp.ResponseBuilder;
@@ -43,7 +44,7 @@ public class NewsQueryBuilder extends DBBase {
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
 			+ " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText , n.dateTime as dateTime ";
 
-	static final String SELECT_EXTERNAL = "select n.addressText as addressText,"
+	static final String SELECT_EXTERNAL = "select nf.isPrimary as isPrimary, f.isLocation as isLocation, n.addressText as addressText,"
 			+ " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority, " 
 			+ " nf.priority as nfPriority, nf.topicExcludeId as topicExcludeId, "
 			+ " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText,"
@@ -58,7 +59,7 @@ public class NewsQueryBuilder extends DBBase {
 			+ "and f.legacyType <> 'KeywordTimeLineFile' "; // and fp.filterId <> nf.topicExcludeId and f.filterId <> nf.topicExcludeId "; // 
 
 	public void addFilter(Filter filter) {
-		Log.info("NewsQueryBuilder addFilter filter=" + filter + " getName=" + filter.getName() + " filter.getOrderBySQL=" + filter.getOrderBySQL());
+		Log.info("NewsQueryBuilder addFilter filter=" + filter + " getName=" + filter.getName() + " isAllFilter()=" + filter.isAllFilter() + " filter.getOrderBySQL=" + filter.getOrderBySQL());
 		filterNode.add(filter);
 		// just for logging
 		if (filter instanceof DBFilter) {
@@ -76,7 +77,8 @@ public class NewsQueryBuilder extends DBBase {
 			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()="
 					+ filter.getWhereSQL());
 			orderBySQL.append(filter.getOrderBySQL());
-			Log.info("NewsQueryBuilder addFilter filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
+			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()=" + filter.getWhereSQL() + " whereSQL=" + whereSQL 
+					+ " filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
 		}
 	}
 
@@ -136,6 +138,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.log("buildSql selectSQL=" + selectSQL);
 		Log.log("buildSql fromSQL=" + fromSQL);
 		Log.log("buildSql whereSQL=" + whereSQL);
+		Log.log("buildSql filterNode.whereSQL=" + filterNode.getWhereSQL());
 		Log.log("buildSql orderBySQL=" + orderBySQL);
 		Log.info("\n\n buildSql() sql=" + sql);
 		return this.sql;
@@ -166,13 +169,14 @@ public class NewsQueryBuilder extends DBBase {
 	//	nameFilters.add(new DBFilter("San Francisco Bay Area"));
 		 nameFilters.add(new DBFilter("France"));
 
+		 int timeFilterCntr = 0;
 		// OfficialTimeFilter timeFilter = parseDateStr(partPath);
-		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011"));
+		 nameFilters.add(OfficialTimeFilter.parseDateStr("2011", 3));  timeFilterCntr++;
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2010s"));
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-		json = ResponseBuilder.buildJson(null, nameFilters, 200);
+		json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200, "", "", new Options());
 		// json = ResponseBuilder.buildJson(
 			//	new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
 		Log.log("end main");
@@ -182,12 +186,12 @@ public class NewsQueryBuilder extends DBBase {
 		filterNode.bindFilters(pst);
 	}
 
-	public List<News> processResultSet(ResultSet res, int nameFilterNo) throws SQLException {
+	public List<News> processResultSet(ResultSet res, int nameFilterNo, boolean hasLocationFilter, Options options) throws SQLException {
 		List<News> rows = new ArrayList<News>(100);
 		
 		Set<Integer> excludedNesIds = new HashSet<Integer>(5); 
 		while (res.next()) {
-			News row = createNewsRow(res, nameFilterNo);
+			News row = createNewsRow(res, nameFilterNo, hasLocationFilter);
 			
 			if (dbFilterMap.get(row.getTopicExcludeId()) != null || excludedNesIds.contains(row.getNewsId())){
 				Log.info("dbFilterMap.get(row.getTopicExcludeId() row:" + row.getLabel());
@@ -195,14 +199,19 @@ public class NewsQueryBuilder extends DBBase {
 					excludedNesIds.add(row.getNewsId());
 				}
 			} else {
-				rows.add(row);
+				Log.log("processResultSet  row:" + row.getLabel() + " options.getIsShowFuture():" + options.getIsShowFuture() );
+					//	+ " options.getIsShowFuture().getBoolValue():" + options.getIsShowFuture().getBoolValue()
+					//	+ " !row.getDateTime().after(new java.util.Date():" + !row.getDateTime().after(new java.util.Date()));
+				if (options.getIsShowFuture() == null || options.getIsShowFuture().getBoolValue() || !row.getDateTime().after(new java.util.Date())) {
+					rows.add(row);
+				}
 			}
 		}
 
 		return rows;
 	}
 
-	private News createNewsRow(ResultSet res, int nameFilterNo) throws SQLException {
+	private News createNewsRow(ResultSet res, int nameFilterNo, boolean hasLocationFilter) throws SQLException {
 		News row = new News();
 
 		String newsId = res.getString("newsId");
@@ -214,7 +223,31 @@ public class NewsQueryBuilder extends DBBase {
 			nfPriority = res.getString("nfPriority");
 			String topicExcludeId = res.getString("topicExcludeId");
 			row.setTopicExcludeId(topicExcludeId);
-			Log.log("processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId);
+			
+			if (hasLocationFilter) {
+				boolean isPrimary = res.getBoolean("isPrimary");
+				boolean isLocation = res.getBoolean("isLocation");
+				row.setLocation(isLocation);
+				row.setPrimary(isPrimary);
+				
+				if (isPrimary && isLocation) {
+					row.setMapShow(true);
+				} else {			
+					if (DBBase.hasColumn(res, "isPrimary2")) {
+						isPrimary = res.getBoolean("isPrimary2");
+						isLocation = res.getBoolean("isLocation2");
+						row.setLocation(isLocation);
+						row.setPrimary(isPrimary);
+						
+						if (isPrimary && isLocation) {
+							row.setMapShow(true);
+						}
+					}
+				}
+				Log.log("NewsQueryBuilder processResultSet label=" + label + " newsId=" + newsId + " topicExcludeId=" + topicExcludeId + " isLocation=" + isLocation + " isPrimary=" + isPrimary + " isMapShow=" + row.isMapShow());
+			} else {
+				row.setMapShow(true);
+			}
 		}
 		
 		Date date = res.getDate("dateTime");
@@ -230,7 +263,7 @@ public class NewsQueryBuilder extends DBBase {
 		double y = res.getDouble("addressY");
 
 		String addressText = res.getString("addressText");
-
+		
 		row.setAddress(addressText);
 		row.setX(x);
 		row.setY(y);
@@ -242,10 +275,10 @@ public class NewsQueryBuilder extends DBBase {
 		row.setNewsFilterPriority(Integer.parseInt(nfPriority));
 		row.setUrl(url);
 		row.setVideo(video);
-		row.setImage(image);
+		row.setIcon(image);
 		row.setShortLabel(shortLabel);
 		row.setDescription(description);
-		Log.log("processResultSet label=" + label + " date=" + date
+		Log.log("NewsQueryBuilder processResultSet label=" + label + " date=" + date
 				+ " newsId=" + newsId + " nPriority=" + nPriority
 				+ " addressText=" + addressText);
 		
@@ -259,7 +292,7 @@ public class NewsQueryBuilder extends DBBase {
 		return row;
 	}
 
-	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter) throws SQLException {
+	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter, boolean hasLocationFilter, Options options) throws SQLException {
 		Log.info("NewsQueryBuilder runQuery nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		begin(nameFilterNo, isCoordFilter);
 		Log.log("start startBindQuery");
@@ -270,30 +303,50 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("NewsQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");
-		List<News> rows = processResultSet(resultSet, nameFilterNo);
+		List<News> rows = processResultSet(resultSet, nameFilterNo, hasLocationFilter, options);
 		return rows;
 	}
 
 	public static List<News> buildNewsList(Map<Integer, News> newsMap, TimeFilter timeFilter) {
-		Log.log("buildNewsList newsMap.size()=" + newsMap.size());
+		Log.info("buildNewsList newsMap.size()=" + newsMap.size());
 		List<News> newsList = new ArrayList<News>(300);
 
 		for (Integer key : newsMap.keySet()) {
+			Log.log("buildNewsList key=" + key);
+			
+			News newsTest = newsMap.get(158150); //news.getNewsId()); //"14-year-old middle school student killed by car");
+			
+			if (newsTest != null) {
+				Log.log("buildNewsList newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+			}
+
 			newsList.add(newsMap.get(key));
 		}
+		
+		Log.info("buildNewsList timeFilter instanceof Latest=" + (timeFilter != null && timeFilter instanceof Latest));
 		
 		if (timeFilter != null && timeFilter instanceof Latest) {
 			Collections.sort(newsList, new Comparator() {
 	            public int compare(Object o1, Object o2) 
-	            {
-	                News news1 = (News)o1;
-	                News news2 = (News)o2; 
-	                return news1.getDateTime().after(news2.getDateTime()) ? 1 : 0;
+	            {       
+	            	News news1 = (News)o1;
+	            	News news2 = (News)o2;                 
+
+	                if (news1.getDateTime().after(news2.getDateTime())) {
+	                	return -1;
+	                } else if (news1.getDateTime().before(news2.getDateTime())) {
+	                	return 1;
+	                }
+	                return 0;
 	                // it can also return 0, and 1
 	            }
 	 		});
 		} else {		
 			Collections.sort(newsList);
+		}
+
+		for (News n : newsList) {
+			Log.log("buildNewsList getDateTime=" + n.getDateTime());
 		}
 		return newsList;
 	}
@@ -306,17 +359,36 @@ public class NewsQueryBuilder extends DBBase {
 			if (newsMap.get(news.getNewsId()) == null) {
 				newsMap.put(news.getNewsId(), news);
 			} else {
-				int nfPriority = newsMap.get(news.getNewsId())
-						.getNewsFilterPriority();
+				News existNews = newsMap.get(news.getNewsId());
+				
+				if (news.isLocation() && news.isPrimary()) {
+					existNews.setMapShow(true);
+					newsMap.put(news.getNewsId(), existNews);
+				}
+
+				Log.log("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
+						+ " isMapShow=" + existNews.isMapShow() + " news.getNewsId()=" +news.getNewsId() + " get isMapShow=" + newsMap.get(news.getNewsId()).isMapShow());
+				
+				int nfPriority = newsMap.get(news.getNewsId()).getNewsFilterPriority();
 				if (news.getNewsFilterPriority() < nfPriority) { 
 					// lower better: 'Berlin','Khodorkovsky vows to help prisoners', '100'
 					nfPriority = news.getNewsFilterPriority();
-					News existNews = newsMap.get(news.getNewsId());
 					existNews.setNewsFilterPriority(nfPriority);
 					newsMap.put(news.getNewsId(), existNews);
 				}
 			}
+			
+			News newsTest = newsMap.get("158150"); //news.getNewsId()); //"14-year-old middle school student killed by car");
+			if (newsTest != null) {
+				Log.info("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+			}
 		}
+		
+		News newsTest = newsMap.get("158150"); //news.getNewsId()); //"14-year-old middle school student killed by car");
+		if (newsTest != null) {
+			Log.info("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+		}
+
 		return newsMap;
 	}
 

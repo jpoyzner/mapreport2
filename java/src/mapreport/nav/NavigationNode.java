@@ -52,6 +52,7 @@ public class NavigationNode implements Comparable{
 		} 
 		metaData = new PageMetaData(pageFilters);
 		metaData.setHeader(filter.getName());
+		metaData.setImage(filter.getImage());
 		priority = filter.getPriority();
                  Log.log("NavigationNode filter.getName()=" + filter.getName() + " priority=" + priority + " pageFilters.getLink()=" + this.pageFilters.getLink());
 	}

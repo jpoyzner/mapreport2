@@ -43,10 +43,10 @@ public class Rectangle {
 	}
 	
 	public Rectangle(Options options) {
-		left = getValue(options.getLeft());
-		right = getValue(options.getRight());
-		top = getValue(options.getTop());
-		bottom = getValue(options.getBottom());
+		left = options.getLeft().getNumberValue();
+		right = options.getRight().getNumberValue();
+		top = options.getTop().getNumberValue();
+		bottom = options.getBottom().getNumberValue();
 		
 		this.xCenter = (this.left + this.right) / 2;
 		this.yCenter = (this.top + this.bottom) / 2;

@@ -4,11 +4,16 @@ import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
+import mapreport.controller.Endpoints;
 import mapreport.db.DBQueryBuilder;
 import mapreport.db.FilterDBQueryBuilder;
 import mapreport.db.NewsFilterRow;
@@ -35,8 +40,9 @@ import mapreport.view.map.Rectangle;
 
 public class ResponseBuilder {
 	static int NEWS_LIMIT = 20;	
+	static int NEWS_LIMIT_MORE = 50;	
 
-	public static void addFiltersToQueryBuilder(Rectangle rect,
+	public static boolean addFiltersToQueryBuilder(Rectangle rect,
 			Set<NameFilter> nameFilters, NewsQueryBuilder queryBuilder)
 			throws SQLException {
 		LocationByCoords coordFilter;
@@ -47,6 +53,7 @@ public class ResponseBuilder {
 		}		
 		
 	//	List<NewsFilterRow> parents = new ArrayList<NewsFilterRow>();
+		boolean hasLocationFilter = false;
 		
 		if (nameFilters != null) {
 		//	List<String> filterIds = new ArrayList<String>(nameFilters.size());
@@ -62,7 +69,9 @@ public class ResponseBuilder {
 		//		parents = filterDBQueryBuilder.runQuery(filterIds);
 		//	}
 			
-			Map <String, DBFilter> filterMap = new URLFilterQueryBuilder().runQuery(nameFilters); 
+			URLFilterQueryBuilder urlFilterQueryBuilder = new URLFilterQueryBuilder();			
+			Map <String, DBFilter> filterMap = urlFilterQueryBuilder.runQuery(nameFilters); 
+			hasLocationFilter = urlFilterQueryBuilder.isHasLocationByName();
 			
 			for (NameFilter filter: nameFilters) {
 				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
@@ -71,7 +80,9 @@ public class ResponseBuilder {
 				}
 				
 				if (filter instanceof TimeFilter) {
+					Log.log("\n before queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 					queryBuilder.addFilter(filter);  
+					Log.log("\n after queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 				} else if (filter != null && filter.getName() != null) {
 					// boolean isLocation = true;
 					/*
@@ -96,35 +107,70 @@ public class ResponseBuilder {
 		}
 		
 		if (queryBuilder.getFilterNode().getFilterList().size() == 0 || queryBuilder.getFilterNode().getTimeFilter() == null) {   // no filters added, so just global latest
-		     Log.log("Controller buildJson ading Latest");
-		     queryBuilder.addFilter(new Latest());  
+		     Log.info("Controller buildJson adding Latest");
+			 int futureDays = Latest.buildFutureDays(nameFilters.size());
+		     queryBuilder.addFilter(new Latest(futureDays));  
 		}
 	
-		return;
+		return hasLocationFilter;
 	}
-
 	
 	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
 	        Log.info("ResponseBuilder buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
-		pageURL.parseUrlParameters(url);
-		pageURL.parseParams();
-		Options options = pageURL.getOptions();
+		Options options = buildOptionsFromUrl(url, pageURL);
 		
 		Set<NameFilter> nameFilters = pageURL.getFilters();
 		
 		Rectangle rect = Rectangle.getRectangle(options);
 		int size = 200;
 		
-		if (options.getParam("size") != null) {
-			size = Integer.parseInt(options.getParam("size"));
-		}
-		String json = buildJson(rect, nameFilters, size);
+	//	if (options.get != null) {
+	//		size = Integer.parseInt(options.getParam("size"));
+	//	}
+		
+    	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
+		 
+		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "", options);
 		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
+
+	public static final Options buildOptionsFromRequest(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
+		Options options = new Options();
+		Map<String, String[]> parameterMap = request.getParameterMap();    	
+    	Set<String> keys = parameterMap.keySet();
+    	List<String> keyList = new ArrayList<String>(keys);
+    	
+    	for (String key : keyList) {
+    		options.addParam(key, request.getParameter(key));
+    	} 
+    	
+    	// just for testing
+        //	options.addParam("isShowFuture", "false");
+        // 	options.addParam("moreTopic", "true");
+        // 	options.addParam("moreNews", "true");
+        // 	options.addParam("hints", "false");
+    	return options;
+	}
+
+	public static Options buildOptionsFromUrl(String url, PageURL pageURL)
+			throws UnsupportedEncodingException {
+		Log.info("ResponseBuilder buildOptionsFromUrl url=" + url);
+		pageURL.parseUrlParameters(url);
+		pageURL.parseParams();
+		Options options = pageURL.getOptions();
+		return options;
+	}
+
+	public static Options buildOptionsFromUrl(String url)
+			throws UnsupportedEncodingException, MalformedURLException {
+		PageURL pageURL = new PageURL(url);
+		return buildOptionsFromUrl(url, pageURL);
+	}
 	
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int size) {  
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat, Options options) {  
+		Log.info("buildJson  options=" + options);
 		String json = null;
 		
 		try {
@@ -143,46 +189,62 @@ public class ResponseBuilder {
 			NewsQueryBuilder newsBuilder = new NewsQueryBuilder(size);
 		
 				Log.info("buildJson  isDBFilterExists=" + isDBFilterExists + " size=" + size  + " rect=" + rect + " nameFilters=" + nameFilters);
-				if (nameFilters != null) {
+			Set<String> filterNameSet = new HashSet<String>(nameFilters.size()); 
+				
+			if (nameFilters != null) {
 					for (NameFilter filter: nameFilters) {
 						Log.info("buildJson NameFilter: " + filter);
-						if (filter != null) Log.info("buildJson NameFilter.getName(): " + filter.getName());
+						if (filter != null) {
+							Log.info("buildJson NameFilter.getName(): " + filter.getName());
+							filterNameSet.add(filter.getName());
+						}
 					}
-				}
-
+			}
 		
-			addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
+			boolean hasLocationFilter = addFiltersToQueryBuilder(rect, nameFilters,	newsBuilder);
 			
 				Log.info("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
-			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().getWhereSQL());
+			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().buildWhereSQL());
+			       Log.log("newsBuilder.getWhereSQL()=" + newsBuilder.getWhereSQL() + " newsBuilder.getFilterNode().getWhereSQL()=" + newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
-			List<News> newsList = newsBuilder.runQuery(nameFilters.size(), rect != null);
-		
-			
-			// List<NewsFilterRow> newsFilters = NewsFilterRow.buildNewsFilterPriority(rows);
-			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);
-			
+			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter, options);
+			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);			
 
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
-			List <DBFilter> dbFilters = filterBuilder.runQuery(newsMap);
+			
+			List <DBFilter> dbFilters = options.getHints() == null || options.getHints().getBoolValue() ?
+					filterBuilder.runQuery(newsMap) : new ArrayList <DBFilter> (0);
+			
 			Map<String, NameFilter> dbFiltersResult = filterBuilder.incrementFilterMapPriority(dbFilters);
 
 			List<NameFilter> filterList = new ArrayList<NameFilter>(dbFiltersResult.values());
 			List <NameFilter> allHintList = filterBuilder.addTimeFilters(filterList, newsMap);
 			
+			Log.info("buildJson filterNameSet.size()=" + filterNameSet.size());
+			
+			for (String filterName: filterNameSet) {
+				Log.info("buildJson filterName=" + filterName);
+			}
+				
 			Map<String, NameFilter> allHintMap = new HashMap<String, NameFilter>(111); 
 			for (NameFilter filter : allHintList) {
-				allHintMap.put(filter.getName(), filter);
+				Log.log("buildJson filter.getName()=" + filter.getName() + " filterNameSet.contains(filter.getName()=" + filterNameSet.contains(filter.getName()));
+				if (!filterNameSet.contains(filter.getName())) {
+					allHintMap.put(filter.getName(), filter);
+				}
 			}
 			
 			newsList = NewsQueryBuilder.buildNewsList(newsMap, newsBuilder.getFilterNode().getTimeFilter()); 
 			
-			if (newsList.size() > NEWS_LIMIT + 1) {
-				newsList = newsList.subList(0, NEWS_LIMIT);
+			int newsLimit = options.getIsMoreNews() != null && options.getIsMoreNews().getBoolValue() ? NEWS_LIMIT_MORE : NEWS_LIMIT;			
+			if (newsList.size() > newsLimit + 1) {
+				newsList = newsList.subList(0, newsLimit);
 			}
-			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap) ;
+			Log.info("buildJson options.getIsMoreNews()=" + options.getIsMoreNews() + " newsList.size()=" + newsList.size());
+			
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat, options);
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());

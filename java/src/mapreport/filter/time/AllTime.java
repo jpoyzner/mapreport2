@@ -9,7 +9,9 @@ public class AllTime extends OfficialTimeFilter {
 	public AllTime() {
 		super(ALL_TIME_NAME);
 		setAllFilter(true);
-		setPriority(1000000);
+		setPriority(1000000);	
+		buildPriority();
+		setImage("icons/2/p/h.gif");
 	}
 	
 	public void buildName() {
@@ -26,11 +28,10 @@ public class AllTime extends OfficialTimeFilter {
 		Log.log("AllTime name=" + getName());
 		filterNode.setTimeFilter(null);
 	}
-
 	
 	@Override
 	public String getLink() {
-		Log.log("Filter getLink() Latest");
+		Log.log("AllTime getLink()");
 		return ALL_TIME_NAME;
 	}
 }

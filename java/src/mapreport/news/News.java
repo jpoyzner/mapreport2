@@ -13,7 +13,7 @@ public class News implements Comparable{
 	@Expose String label = null;
 	@Expose String url = null;
 	@Expose String video = null;
-	@Expose String image = null;
+	@Expose String icon = null;
 	@Expose String shortLabel = null;  
 	@Expose String description = null;
 	@Expose String newsText = null;
@@ -26,8 +26,52 @@ public class News implements Comparable{
 	double y = 0;
 	int newsId = 0;
 	int newsFilterPriority = 0;
-	String topicExcludeId = null;
-	@Expose String rootTopic = null;
+	String topicExcludeId = null;	
+	
+	boolean isPrimary = false;
+	boolean isLocation = false;
+	@Expose boolean isMapShow = false;
+	@Expose String rootTopic = null;	
+	String icon2 = null;
+	
+	public String getIcon2() {
+		return icon2;
+	}
+
+	public void setIcon2(String icon2) {
+		if (icon2 != null && !icon2.isEmpty() && icon2.indexOf("mapreport.com") == -1) {
+			icon2 = icon2.replaceAll("/3/", "/2/"); // TEMPORARY !!!!!!!
+			this.icon2 = "http://www.mapreport.com/images/" + icon2;
+		} else {
+			this.icon2 = icon2;
+		}
+	}
+
+	public boolean isPrimary() {
+		return isPrimary;
+	}
+
+	public void setPrimary(boolean isPrimary) {
+		this.isPrimary = isPrimary;
+	}
+
+	public boolean isLocation() {
+		return isLocation;
+	}
+
+	public void setLocation(boolean isLocation) {
+		this.isLocation = isLocation;
+	}
+
+	public boolean isMapShow() {
+		return isMapShow;
+	}
+
+	public void setMapShow(boolean isMapShow) {
+		this.isMapShow = isMapShow;
+	}
+
+
 	
 	public String getRootTopic() {
 		return rootTopic;
@@ -125,11 +169,16 @@ public class News implements Comparable{
 	public void setVideo(String video) {
 		this.video = video;
 	}
-	public String getImage() {
-		return image;
+	public String getIcon() {
+		return icon;
 	}
-	public void setImage(String image) {
-		this.image = image;
+	public void setIcon(String icon) {
+		if (icon != null && !icon.isEmpty() && icon.indexOf("mapreport.com") == -1) {
+			icon = icon.replaceAll("/3/", "/2/"); // TEMPORARY !!!!!!!
+			this.icon = "http://www.mapreport.com/images/" + icon;
+		} else {
+			this.icon = icon;
+		}
 	}
 	public String getShortLabel() {
 		return shortLabel;

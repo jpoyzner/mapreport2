@@ -32,12 +32,14 @@ public class Day extends OfficialTimeFilter {
 		end = new GregorianCalendar(year, month, day);
 		end.setTimeInMillis(begin.getTimeInMillis() + 24 * 60 * 60 * 1000);
 		// end.add(Calendar.DAY_OF_YEAR, 2);
-		// end = new GregorianCalendar(year, month, day, 11, 59, 59);
+		// end = new GregorianCalendar(year, month, day, 11, 59, 59);	
+		buildPriority();
 		parent = new Month(year, month);
 		           Log.log("Day year=" + year + " month=" + month + " day=" + day + 
 		        		    " name=" + getName() + " begin:" + begin + "\n  end:" + end + " begin:" + begin.getTimeInMillis() + "  end:" + end.getTimeInMillis());
 		
 		setWhereSQL(new StringBuilder(" \n and datetime BETWEEN '" + year + "-" + month + "-" + day + "' AND '" + year + "-" + month + "-" + day + " 23:59:59' ")); 
+		setImage("common/day.jpg");
 	}
 	
 	@Override

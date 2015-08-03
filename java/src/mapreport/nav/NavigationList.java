@@ -58,14 +58,16 @@ public class NavigationList {
 	public void sort() {
 		Collections.sort(children);
 		for (NavigationNode node : children) {
-			// node.getPageFilters().
-			Log.log("sort header=" + node.metaData.getHeader() + " priority=" + node.priority);
+			// node.getPageFilters(). 
+			Log.log("NavigationList sort header=" + node.metaData.getHeader() + " priority=" + node.priority);
+		//	node.compareTo(null);
 		}
 	}
 	
-	public void limitChildren() {		
-		if (children.size() > 20) {
-			children = children.subList(0, 20);
+	public void limitChildren(boolean isMore) {		
+		int childrenSizelimit = isMore ? 50 : 20;
+		if (children.size() > childrenSizelimit) {
+			children = children.subList(0, childrenSizelimit);
 		}
 	}
 	

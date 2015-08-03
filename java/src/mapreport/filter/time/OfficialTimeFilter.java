@@ -1,5 +1,6 @@
 package mapreport.filter.time;
 
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -15,9 +16,9 @@ public class OfficialTimeFilter extends TimeFilter {
 	static DateTimeFormatter formatterDay = DateTimeFormatter.ISO_LOCAL_DATE; // 2008-11-15
     static DateTimeFormatter formatterDayMMM = DateTimeFormatter.ofPattern("MMM-dd-yyyy");  //date/May-11-2008
 	static DateTimeFormatter formatterMonth = DateTimeFormatter.ISO_LOCAL_DATE; 
-	static DateTimeFormatter formatterMonthMMM = DateTimeFormatter.ofPattern("MMM-yyyy-dd");  //date/May-11-2008
+	static DateTimeFormatter formatterMonthMMM = DateTimeFormatter.ofPattern("MMM-yyyy-dd");  //date/May-2008-11
 	static DateTimeFormatter formatterYear = DateTimeFormatter.ofPattern("yyyy");  
-//	static DateTimeFormatter formatterDecade = DateTimeFormatter.ofPattern("MMM-dd-yyyy");  //?????????????
+	public static SimpleDateFormat dayFormat = new SimpleDateFormat("yyyy-MM-dd");
 	
 	int year = -1;
 	int month = -1;
@@ -28,7 +29,7 @@ public class OfficialTimeFilter extends TimeFilter {
 
 
 	// DateTimeParseException if the text cannot be parsed
-	public static  OfficialTimeFilter parseDateStr(String dateStr) {
+	public static  OfficialTimeFilter parseDateStr(String dateStr, int nameFilterNm) {
 		OfficialTimeFilter ret = null;
 		
 		LocalDate date;
@@ -45,9 +46,15 @@ public class OfficialTimeFilter extends TimeFilter {
 			if (dateStr.equals(AllTime.ALL_TIME_NAME)) {
 				  ret = new AllTime(); 
 			 } else  if (dateStr.equals(Latest.LATEST)) {
-				  ret = new Latest();  
+				  int futureDays = Latest.buildFutureDays(nameFilterNm); 
+				  Log.info("format as LATEST:" + dateStr + " nameFilterNm=" + nameFilterNm + " futureDays=" + futureDays);
+				  ret = new Latest(futureDays);  
 			 } else  if (dateStr.equals(Future.FUTURE_NAME)) {
 				  ret = new Future(); 
+				  Log.info("format as Future:" + dateStr);
+			 } else  if (dateStr.equals(ThisDayInHistory.THIS_DAY_IN_HISTORY_NAME)) {
+				  ret = new ThisDayInHistory(); 
+				  Log.info("format as ThisDayInHistory:" + dateStr);
 			 } else {			
 				       Log.log("Can't format as Year:" + dateStr);				  
 				 try {
@@ -77,21 +84,42 @@ public class OfficialTimeFilter extends TimeFilter {
 										ret = new Month(date.getYear(), date.getMonthValue());
 										  Log.info("format as Month:" + dateStr + "-01");
 					
-									} catch (DateTimeParseException me2) {
-								// de.printStackTrace();
-			
-									   Log.info("Can't format as Month 2:" + dateStr + "-01");
-									if (dateStr.length() == 5 && dateStr.endsWith("0s")) {
-										String yearStr = dateStr.substring(0, 4);
-										try {
-											int year = Integer.parseInt(yearStr);  
-											ret = new Decade(year);
-										} catch (NumberFormatException e1) {
-											// e1.printStackTrace();
-				
-											    Log.log("Can't format as Decade:" + dateStr);
+									} catch (DateTimeParseException me2) {			
+										   Log.info("Can't format as Month 2:" + dateStr + "-01");
+										if (dateStr.length() == 5 && dateStr.endsWith("0s")) {
+											String yearStr = dateStr.substring(0, 4);
+											try {
+												int year = Integer.parseInt(yearStr);  
+												ret = new Decade(year);
+											} catch (NumberFormatException e1) {				
+												    Log.info("Can't format as Decade:" + dateStr);		
+											}
+										} else {
+											if ((dateStr.length() == 12 || dateStr.length() == 11) && dateStr.substring(dateStr.length() - 8).equalsIgnoreCase(" century")) {
+												String centuryStr = dateStr.substring(0, dateStr.length() - 10);
+												try {
+													int century = Integer.parseInt(centuryStr);  
+													ret = new Century(century);
+												} catch (NumberFormatException e2) {		
+													    Log.info("Can't format as Century:" + centuryStr);
+												}
+											} else {
+												Log.info("Can't format as 2 Century:" + dateStr);
+												
+												if (dateStr.length() == 13 && dateStr.substring(dateStr.length() - 10).equalsIgnoreCase(" millenium")) {
+													String milleniumStr = dateStr.substring(0, dateStr.length() - 12);
+													try {
+														int millenium = Integer.parseInt(milleniumStr);  
+														ret = new Millenium(millenium);
+													} catch (NumberFormatException e2) {		
+														    Log.info("Can't format as Millenium:" + milleniumStr);
+													}
+												} else {
+													Log.info("Can't format as 2 millenium:" + dateStr);
+												}
+
+											}
 										}
-									}	
 								}
 							}
 						 }
