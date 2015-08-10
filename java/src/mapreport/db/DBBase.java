@@ -81,7 +81,7 @@ public class DBBase {
 
 	protected static ResultSet resultSet = null;
 
-	static String url = "jdbc:mysql://localhost:3306/new_schema2"; // testdb";
+	static String url = "jdbc:mysql://mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com:3306/new_schema2"; // testdb";
 	static String user = "root";
 	static String password = "hadera90";
 	static Connection con;
