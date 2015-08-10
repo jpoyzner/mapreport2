@@ -83,7 +83,7 @@ public class DBBase {
 
 	static String url = "jdbc:mysql://localhost:3306/new_schema2"; // testdb";
 	static String user = "root";
-	static String password = "hadera";
+	static String password = "hadera90";
 	static Connection con;
 
 	static {
