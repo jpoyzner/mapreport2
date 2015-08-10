@@ -42,8 +42,8 @@ public abstract class Filter {
 	}
 
 	
-	private StringBuilder selectSQL = new StringBuilder("");
-	private StringBuilder fromSQL = new StringBuilder("");
+	protected StringBuilder selectSQL = new StringBuilder("");
+	protected StringBuilder fromSQL = new StringBuilder("");
 	protected StringBuilder whereSQL = new StringBuilder("");
 	protected StringBuilder orderBySQL = new StringBuilder("");
 	

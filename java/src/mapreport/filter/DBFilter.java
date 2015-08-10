@@ -1,5 +1,7 @@
 package mapreport.filter;
 
+import java.text.MessageFormat;
+
 import mapreport.front.page.FilterNode;
 import mapreport.util.Log;
 
@@ -7,40 +9,27 @@ import mapreport.util.Log;
 public class DBFilter extends NameFilter {
 
 	int dbFilterCntr = 0;
+	String dbFilterCntrStr = "";
 	String filterId = null;
+	
+	public DBFilter(String name) {
+		super(name);
+		Log.log("DBFilter 2 name = " + name);
+	}
 
 	public String getFilterId() {
 		return filterId;
 	}
 
-
 	public void setFilterId(String filterId) {
 		this.filterId = filterId;
 	}
 
-	final static String SECOND_SELECT_SQL = " \n , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.pLevel as pLevel2, f2.nfPriority as nfPriority2,  f2.isPrimary2, f2.isLocation2 \n ";
-	final static String SECOND_FROM_SQL_START = ", \n (select nf.isPrimary as isPrimary2, f.isLocation as isLocation2, " 
-			+ " n.newsId, f.priority as filterPriority,  f.name as fName, fp.name as pName, ff.level as pLevel, nf.priority as nfPriority," + ""
-			+ "	 nf.isPrimary as isPrimary, n.addressText as addressText \n "
-			+ "from news n, filter f, filter fp, newsfilter nf , filterfilter ff \n "
-			+ "where n.newsId = nf.newsId \n "
-			+ "and nf.filterId = f.filterId \n "
-			+ "and nf.filterId = ff.childfilterId \n "
-			+ "and fp.filterId = ff.parentfilterId \n "
-			+ "and f.legacyType <> 'KeywordTimeLineFile' \n "
-			+ "and (fp.name = '"; // Africa') f2"
-	final static String SECOND_FROM_SQL_MIDDLE = "' or f.name = '";
-	final static String SECOND_FROM_SQL_END = "')) f2 \n ";
-	
-	final static String SECOND_WHERE_SQL = "  and n.newsId = f2.newsId ";
+	final static String SELECT_SQL = " f{0}.priority as filterPriority{0}, f{0}.name as fName{0}, fp{0}.name as pName{0}, ff{0}.level as pLevel{0}, f{0}.priority as nfPriority{0},  nf{0}.isPrimary as isPrimary{0}, nf{0}.isLocation as isLocation{0}, nf{0}.topicExcludeId as topicExcludeId{0}";
+	final static String FROM_SQL = " filter f{0}, filter fp{0}, newsfilter nf{0}, filterfilter ff{0} ";
+	final static String WHERE_SQL = "  f{0}.filterId = nf{0}.filterId  and nf{0}.newsId = n.newsId and f{0}.filterId = ff{0}.childFilterId  and fp{0}.filterId = ff{0}.parentFilterId and f{0}.legacyType <> KeywordTimeLineFile \n" 
+			+ " and (fp{0}.name ='namePlaceHolder' or f{0}.name = 'namePlaceHolder') ";
 
-
-	public DBFilter(String name) {
-		super(name);
-		Log.log("DBFilter 2 name = " + name);
-	}
-	
-	
 	public int getDbFilterCntr() {
 		return dbFilterCntr;
 	}
@@ -48,49 +37,39 @@ public class DBFilter extends NameFilter {
 	public void setDbFilterCntr(int dbFilterCntr) { 
 		 Log.log("DBFilter setDbFilterCntr name=" + name + " dbFilterCntr=" + dbFilterCntr);
 		this.dbFilterCntr = dbFilterCntr;
+		if (dbFilterCntr > 0) {
+			dbFilterCntrStr = "" + dbFilterCntr;
+		}
 	}
 
 
 	@Override
 	public StringBuilder getSelectSQL() {
-		StringBuilder sql = null;
-		Log.log("DBFilter getSelectSQL name=" + name + " dbFilterCntr=" + dbFilterCntr);
-		if (dbFilterCntr < 2) {
-			sql = super.getSelectSQL();
-		} else {
-			sql = new StringBuilder(SECOND_SELECT_SQL);
-		}
+		StringBuilder sql = new StringBuilder(MessageFormat.format(SELECT_SQL, dbFilterCntrStr));
 		return sql;
 	}
 
-	@Override
-	public StringBuilder getFromSQL() {
-		StringBuilder sql = null;
-
-		Log.log("DBFilter getFromSQL name=" + name + " dbFilterCntr=" + dbFilterCntr);
-		if (dbFilterCntr < 2) {
-			sql = super.getFromSQL();
-		} else {
-			sql = new StringBuilder(SECOND_FROM_SQL_START);
-			sql.append(name);
-			sql.append(SECOND_FROM_SQL_MIDDLE);
-			sql.append(name);
-			sql.append(SECOND_FROM_SQL_END);
-		}
+	@Override	public StringBuilder getFromSQL() {
+		StringBuilder sql = new StringBuilder(MessageFormat.format(FROM_SQL, dbFilterCntrStr));
+		Log.info("DBFilter getFromSQL getName()=" + getName() + " from sql=" + sql);   
 		return sql;
 	}
 
 
 	@Override
 	public StringBuilder getWhereSQL() {
-		StringBuilder sql = null;
-
-		Log.log("DBFilter getWhereSQL name=" + name + " dbFilterCntr=" + dbFilterCntr);
-		if (dbFilterCntr < 2) {
-			sql = super.getWhereSQL();
-		} else {
-			sql = new StringBuilder(SECOND_WHERE_SQL);
-		}
+	//	Object[] msgArgs = {dbFilterCntrStr, name.replaceAll("\'", "\'\'")};
+		
+	//	for (Object msgArg : msgArgs) {
+	//		Log.info("DBFilter getWhereSQL msgArg=" + msgArg.toString());  
+	//	} 
+		String sqlStr = MessageFormat.format(WHERE_SQL, dbFilterCntrStr);
+		sqlStr = sqlStr.replaceAll("namePlaceHolder", '\'' + name.replaceAll("\'", "\'\'") + '\'');
+		sqlStr = sqlStr.replaceFirst("KeywordTimeLineFile", '\'' + "KeywordTimeLineFile" + '\'');
+		StringBuilder sql = new StringBuilder(sqlStr);		
+		
+		Log.info("DBFilter getWhereSQL sql=" + sql);  
+		 
 		return sql;
 	}
 	

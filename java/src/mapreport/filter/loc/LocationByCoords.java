@@ -16,7 +16,7 @@ public class LocationByCoords extends NameFilter implements Location {
 	@Expose Rectangle rect;
 	final StringBuilder selectStringBuilder = new StringBuilder(" ");
 	
-	final StringBuilder whereStringBuilder = new StringBuilder(" \n  \n and ( \n " + 
+	final StringBuilder whereStringBuilder = new StringBuilder(" \n  and ( \n " + 
             "n.addressX <> 0 and n.addressY <> 0 and n.addressX <> -1 and n.addressY <> -1  \n" + 
             "and n.addressY > ? and n.addressY < ? and (n.addressX > ? ");
 	

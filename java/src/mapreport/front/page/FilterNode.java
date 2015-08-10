@@ -13,6 +13,7 @@ import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
+import mapreport.filter.topic.SecondTopicFilter;
 import mapreport.filter.topic.Topic;
 import mapreport.util.Log;
 
@@ -21,14 +22,21 @@ public class FilterNode {
 	TimeFilter timeFilter = null;
 	
 	Topic topicFilter = null;
-	Topic topicFilter2 = null;
+	SecondTopicFilter topicFilter2 = null;
 
 	LocationByCoords coordFilter = null;
 	LocationByName locationFilter = null;
 	LocationByName locationFilter2 = null;
 	
 	String link = "";
-	int dbFilterNo = 0;
+	int dbFilterNo = 0;	
+
+	private StringBuilder whereSQL = new StringBuilder("");
+	private StringBuilder fromSQL = new StringBuilder("\n from news n ");
+	private StringBuilder selectSQL = new StringBuilder("\n select  n.dateTime, n.addressText as addressText," +
+			 " \n (n.addressX / 1000000) as addressX, (n.addressY / 1000000) as addressY,  n.newsId, n.label, n.priority as nPriority," + 
+			 " \n n.url as url, n.video as video, n.image as image, n.addressText as addressText," + 
+			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ");
 
 	public List<Filter> getFilterList() {
 		return filterList;
@@ -115,9 +123,23 @@ public class FilterNode {
 	public FilterNode() {
 		// TODO Auto-generated constructor stub
 	}
-
-	private StringBuilder whereSQL = new StringBuilder("");
 	
+	public StringBuilder getSelectSQL() {
+		return selectSQL;
+	}
+
+	public void setSelectSQL(StringBuilder selectSQL) {
+		this.selectSQL = selectSQL;
+	}
+
+	public StringBuilder getFromSQL() {
+		return fromSQL;
+	}
+
+	public void setFromSQL(StringBuilder fromSQL) {
+		this.fromSQL = fromSQL;
+	}
+
 	public String getHeader() {
 		return header;
 	}
@@ -200,14 +222,18 @@ public class FilterNode {
 
 	public void addFilterType(Topic filter) {
                  //      Log.log("addFilterType(Topic filter) filter=" + filter);
-		   if (filter != null) Log.log("addFilterType(Topic filter) filter.getName=" + filter.getName());
-		incrementDBFilterCntr(filter);
-		if (topicFilter == null) {
-			topicFilter = filter;		
-		} else {
-			topicFilter2 = filter;	
+		if (filter != null) { 
+				   Log.log("addFilterType(Topic filter) filter.getName=" + filter.getName());
+			incrementDBFilterCntr(filter);
+			if (topicFilter == null) {
+				topicFilter = filter;		
+				filterList.add(filter);
+			} else {
+				 Log.log("addFilterType(Topic filter) topicFilter2 = new SecondTopicFilter  filter.getName=" + filter.getName());
+				topicFilter2 = new SecondTopicFilter(filter.getName());	
+				filterList.add(topicFilter2);
+			}
 		}
-		filterList.add(filter);
 	}
 
 	private void incrementDBFilterCntr(DBFilter filter) {
@@ -246,7 +272,7 @@ public class FilterNode {
 	public Topic getTopicFilter2() {
 		return topicFilter2;
 	}
-	public void setTopicFilter2(Topic topicFilter2) {
+	public void setTopicFilter2(SecondTopicFilter topicFilter2) {
 		this.topicFilter2 = topicFilter2;
 	}
 
@@ -306,53 +332,88 @@ public class FilterNode {
 	}
 	
 	public StringBuilder buildWhereSQL() {
-		      Log.log("FilterNode getWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
+		      Log.log("FilterNode buildWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
+		
+		whereSQL.append("\n where 1=1 ");
+		
 		if (coordFilter != null) {
 			whereSQL.append(coordFilter.getWhereSQL());
-		}		
+		//	whereSQL.append("\n and ");
+		}
 		
 		boolean anyIdFilter = false;
-	    StringBuilder filterIds = new StringBuilder("");
 		for (Filter filter : filterList) {
-			// and (fp.name IN ('Angola') || f.name IN ('Angola'))
-				Log.log("FilterNode getWhereSQL filter=" + filter);			
+				Log.log("FilterNode buildWhereSQL filter=" + filter);			
 		    
 			if (filter instanceof DBFilter) {
 					String filterName = ((DBFilter) filter).getName();
-					Log.log("FilterNode getWhereSQL filter.getName()=" + filterName);
+					Log.log("FilterNode buildWhereSQL filter.getName()=" + filterName);
 					if (filterName == null || filterName.equals("news") || filterName.isEmpty()) {
 						continue;
 					}
-					if (anyIdFilter) {
-						whereSQL.append(((DBFilter) filter).getWhereSQL());
-						continue;
-					}
+		
+					whereSQL.append("\n and ");
+					whereSQL.append(((DBFilter) filter).getWhereSQL());
 					//  and  f.name='Farallon Islands, San Francisco, California, USA' 
 
-					if (anyIdFilter) {
-						filterIds.append(", ");
-					} 
-					filterIds.append("'" + filterName.replaceAll("\'", "\'\'") + "'");
 					anyIdFilter = true;
 			}			
 		}
-		Log.log("FilterNode getWhereSQL filterIds=" + filterIds + " anyIdFilter=" + anyIdFilter);
-		
-		if (anyIdFilter) {           // and (fp.name IN ('Bush' ) or  f.name IN ('Bush' )) 
-			whereSQL.append(" and (fp.name IN (");		
-			whereSQL.append(filterIds);
-			whereSQL.append("  ) or  f.name IN ( ");		
-			whereSQL.append(filterIds);
-			whereSQL.append("   )) ");
-		}
+		Log.log("FilterNode buildWhereSQL anyIdFilter=" + anyIdFilter);
 		
 		if (timeFilter != null) {
-			   Log.log("FilterNode getWhereSQL  timeFilter=" + timeFilter);
-			   Log.log("FilterNode getWhereSQL  timeFilter.getWhereSQL()=" + timeFilter.getWhereSQL());
+			   Log.log("FilterNode buildWhereSQL  timeFilter=" + timeFilter + " timeFilter.getWhereSQL()=" + timeFilter.getWhereSQL());
 			whereSQL.append(timeFilter.getWhereSQL());
 		}
-		      Log.log("FilterNode getWhereSQL whereSQL=" + whereSQL);
+		      Log.info("FilterNode buildWhereSQL whereSQL=" + whereSQL);
 		return whereSQL;
+	}
+	
+	public StringBuilder buildFromSQL() {
+	      Log.log("FilterNode buildFromSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
+		boolean anyIdFilter = false;
+		for (Filter filter : filterList) {
+				Log.log("FilterNode buildFromSQL filter=" + filter);			
+		    
+			if (filter instanceof DBFilter) {
+					String filterName = ((DBFilter) filter).getName();
+					Log.log("FilterNode buildFromSQL filter.getName()=" + filterName);
+					if (filterName == null || filterName.equals("news") || filterName.isEmpty()) {
+						continue;
+					}
+					fromSQL.append("\n, ");
+
+					fromSQL.append(((DBFilter) filter).getFromSQL());
+					//  and  f.name='Farallon Islands, San Francisco, California, USA' 
+	
+					anyIdFilter = true;
+			}			
+		}
+		Log.info("FilterNode buildFromSQL anyIdFilter=" + anyIdFilter + " fromSQL=" + fromSQL);
+		return fromSQL;
+	}
+
+	public StringBuilder buildSelectSQL() {
+	      Log.log("FilterNode buildSelectSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
+		boolean anyIdFilter = false;
+		for (Filter filter : filterList) {
+				Log.log("FilterNode buildSelectSQL filter=" + filter);			
+		    
+			if (filter instanceof DBFilter) {
+					String filterName = ((DBFilter) filter).getName();
+					Log.log("FilterNode buildSelectSQL filter.getName()=" + filterName);
+					if (filterName == null || filterName.equals("news") || filterName.isEmpty()) {
+						continue;
+					}
+					selectSQL.append("\n, ");
+					selectSQL.append(((DBFilter) filter).getSelectSQL());
+					//  and  f.name='Farallon Islands, San Francisco, California, USA' 
+	
+					anyIdFilter = true;
+			}			
+		}
+		Log.info("FilterNode buildSelectSQL anyIdFilter=" + anyIdFilter + " selectSQL=" + selectSQL);
+		return selectSQL;
 	}
 
 	public void setWhereSQL(StringBuilder whereSQL) {

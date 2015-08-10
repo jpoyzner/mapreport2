@@ -42,9 +42,7 @@ public class DBQueryBuilder extends DBBase{
 			 " \n n.shortLabel as shortLabel, n.description as description, n.newsText as newsText ";
 
   static final String FROM_EXTERNAL_COORD_FILTER = "\n from   filter f, newsfilter nf, \n ( ";
-  static final String FROM_EXTERNAL = "\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ";
   static final String FROM_EXTERNAL_END_COORD_FILTER = "\n ) nl ";
-  static final String FROM_EXTERNAL_END = "";
   static final String WHERE_EXTERNAL_COORD_FILTER = "\n where  f.filterId = nf.filterId  and nl.newsId = nf.newsId   and f.filterId = nf.filterId";
   static final String WHERE_EXTERNAL = "\n where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId ";
   
@@ -169,31 +167,49 @@ public class DBQueryBuilder extends DBBase{
 		while (res.next()) {
 			//	select  f.priority as filterPriority, 
 			//     f.name as fName, n.newsId, n.label, n.priority as nPriority, nf.priority as nfPriority, 
-			  String fName = res.getString("fName");
-			  int filterPriority = res.getInt("filterPriority");
-			  String pName = res.getString("pName");
-			  int pLevel = res.getInt("pLevel");
-			  int nfPriority = res.getInt("nfPriority");
-			  NewsFilterRow row = createNewsFilterRow(res, filterPriority, fName, pName, pLevel, nfPriority);	
-			  rows.add(row);	
-
-			  //  , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.nfPriority as nfPriority2 		  
-			  if (hasColumn(res, "fName2")) {	  			  
-				  String fName2 = res.getString("fName2");
-				  int filterPriority2 = res.getInt("filterPriority2");
-				  String pName2 = res.getString("pName2");
-				  int pLevel2 = res.getInt("pLevel2");
-				  int nfPriority2 = res.getInt("nfPriority2");
-				  NewsFilterRow row2 = createNewsFilterRow(res, filterPriority2, fName2, pName2, pLevel2, nfPriority2);	
-				  rows.add(row2);	
-			  }
+			 if (hasColumn(res, "fName1")) {	  
+				  String fName = res.getString("fName1");
+				  int filterPriority = res.getInt("filterPriority1");
+				  String pName = res.getString("pName1");
+				  int pLevel = res.getInt("pLevel1");
+				  int nfPriority = res.getInt("nfPriority1");
+				  boolean isLocation = res.getBoolean("isLocation1");
+				  boolean isPrimary = res.getBoolean("isPrimary1");
+				  NewsFilterRow row = createNewsFilterRow(res, filterPriority, fName, pName, pLevel, nfPriority, isLocation, isPrimary);	
+				  rows.add(row);	
+	
+				  //  , f2.filterPriority as filterPriority2, f2.fName as fName2, f2.pName as pName2, f2.nfPriority as nfPriority2 		  
+				  if (hasColumn(res, "fName2")) {	  			  
+					  String fName2 = res.getString("fName2");
+					  int filterPriority2 = res.getInt("filterPriority2");
+					  String pName2 = res.getString("pName2");
+					  int pLevel2 = res.getInt("pLevel2");
+					  int nfPriority2 = res.getInt("nfPriority2");
+					  boolean isLocation2 = res.getBoolean("isLocation2");
+					  boolean isPrimary2 = res.getBoolean("isPrimary3");
+					  NewsFilterRow row2 = createNewsFilterRow(res, filterPriority2, fName2, pName2, pLevel2, nfPriority2, isLocation2, isPrimary2);	
+					  rows.add(row2);	
+					  
+					  if (hasColumn(res, "fName3")) {	  			  
+						  String fName3 = res.getString("fName3");
+						  int filterPriority3 = res.getInt("filterPriority3");
+						  String pName3 = res.getString("pName3");
+						  int pLevel3 = res.getInt("pLevel3");
+						  int nfPriority3 = res.getInt("nfPriority3");
+						  boolean isLocation3 = res.getBoolean("isLocation3");
+						  boolean isPrimary3 = res.getBoolean("isPrimary3");
+						  NewsFilterRow row3 = createNewsFilterRow(res, filterPriority3, fName3, pName3, pLevel3, nfPriority3, isLocation3, isPrimary3);	
+						  rows.add(row3);	
+					  }
+				  }
+			 }
 		}
 		
 		return rows;
 	}
 
 	private NewsFilterRow createNewsFilterRow(ResultSet res,
-			int filterPriority, String fName, String pName, int pLevel, int nfPriority)
+			int filterPriority, String fName, String pName, int pLevel, int nfPriority, boolean isLocation, boolean isPrimary)
 			throws SQLException {
 		  NewsFilterRow row = new NewsFilterRow();
 		  
@@ -202,7 +218,6 @@ public class DBQueryBuilder extends DBBase{
 		  String nPriority = res.getString("nPriority");
 		  Date date = res.getDate("dateTime");
 
-		  boolean isLocation = res.getBoolean("isLocation");
 		  boolean isParentLocation = res.getBoolean("isPLocation");
 		  // 			 "n.url as url, n.video as video, n.image as image, n.addressText as addressText, n.shortLabel as shortLabel, n.description as description,
 		  // n.newsText as newsText \n "
@@ -217,7 +232,6 @@ public class DBQueryBuilder extends DBBase{
 		  double y = res.getDouble("addressY");
 		  
 		  //  isPrimary, n.addressText as addressText
-		  boolean isPrimary = res.getBoolean("isPrimary");
 		  String addressText = res.getString("addressText");
 
 		  row.isPrimary = isPrimary;

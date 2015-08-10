@@ -101,14 +101,13 @@ public class NewsQueryBuilder extends DBBase {
 		Log.info("NewsQueryBuilder buildSql nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
 		StringBuilder sql = new StringBuilder();
 		
+		/*
 		if (nameFilterNo == 0) {
 			sql.append(SELECT_EXTERNAL_COORD_FILTER);
 		} else  {
 			sql.append(SELECT_EXTERNAL);
 		}
 
-		sql.append(selectSQL);
-		
 		if (nameFilterNo == 0) {
 			sql.append(FROM_EXTERNAL_COORD_FILTER);
 		} else  {
@@ -121,14 +120,15 @@ public class NewsQueryBuilder extends DBBase {
 		} else  {
 			sql.append(WHERE_EXTERNAL);
 		}
+		*/
 
+		sql.append(selectSQL);
+		sql.append(fromSQL);
+		
 		sql.append("\n");
 		sql.append(whereSQL);
 		sql.append("\r\n\r\n");
 		
-	//	if (nameFilterNo > 0) {
-	//		orderBySQL.append(", topicExcludeId desc ");
-	//	}
 		sql.append(orderBySQL);
 		sql.append(" limit ");
 		sql.append(limit);
@@ -220,13 +220,13 @@ public class NewsQueryBuilder extends DBBase {
 		String nfPriority = "0";
 		
 		if (nameFilterNo > 0) {
-			nfPriority = res.getString("nfPriority");
-			String topicExcludeId = res.getString("topicExcludeId");
+			nfPriority = res.getString("nfPriority1");
+			String topicExcludeId = res.getString("topicExcludeId1");
 			row.setTopicExcludeId(topicExcludeId);
 			
 			if (hasLocationFilter) {
-				boolean isPrimary = res.getBoolean("isPrimary");
-				boolean isLocation = res.getBoolean("isLocation");
+				boolean isPrimary = res.getBoolean("isPrimary1");
+				boolean isLocation = res.getBoolean("isLocation1");
 				row.setLocation(isLocation);
 				row.setPrimary(isPrimary);
 				

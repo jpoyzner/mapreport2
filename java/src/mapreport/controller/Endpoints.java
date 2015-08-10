@@ -19,6 +19,7 @@ import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
+import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
 import mapreport.resp.ResponseBuilder;
@@ -89,13 +90,25 @@ public class Endpoints {
 			}
 		}
 		
-		Set<NameFilter> nameFilters = new HashSet<NameFilter>();
+		Set<NameFilter> nameFilters = new HashSet<NameFilter>();			
 		
 		String topic = request.getParameter("topic");
-		if (topic != null) {
+		      Log.log("Endpoints topic to add:" + topic);
+		if (topic != null) {	
 			topic = URLDecoder.decode(topic, "UTF-8");
-			nameFilters.add(new Topic(topic));
-			Log.info("Endpoints topic added:" + topic);
+
+			if (!topic.equals(AllTopics.ALL_TOPICS)) {		
+				int delimeterIndex = topic.indexOf(';');
+				if (delimeterIndex > 1) {
+					nameFilters.add(new Topic(topic.substring(0, delimeterIndex)));
+					Log.info("Endpoints topic added:" + topic.substring(0, delimeterIndex));
+					nameFilters.add(new Topic(topic.substring(delimeterIndex + 1)));
+					Log.info("Endpoints topic added:" + topic.substring(delimeterIndex + 1));
+				} else {
+					nameFilters.add(new Topic(topic));
+					Log.info("Endpoints topic added:" + topic + " ALL_TOPICS=" + AllTopics.ALL_TOPICS + " !topic.equals(AllTopics.ALL_TOPICS)=" + !topic.equals(AllTopics.ALL_TOPICS));
+				}
+			}
 		}
 		
 		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {

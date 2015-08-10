@@ -205,8 +205,10 @@ public class ResponseBuilder {
 			
 				Log.info("queryBuilder.filterNode.getFilterList().size()=" + newsBuilder.getFilterNode().getFilterList().size());
 				
+			newsBuilder.setSelectSQL(newsBuilder.getFilterNode().buildSelectSQL());
+			newsBuilder.setFromSQL(newsBuilder.getFilterNode().buildFromSQL());
 			newsBuilder.setWhereSQL(newsBuilder.getFilterNode().buildWhereSQL());
-			       Log.log("newsBuilder.getWhereSQL()=" + newsBuilder.getWhereSQL() + " newsBuilder.getFilterNode().getWhereSQL()=" + newsBuilder.getFilterNode().getWhereSQL());
+			       Log.info("newsBuilder.getWhereSQL()=" + newsBuilder.getWhereSQL() + " newsBuilder.getFilterNode().getWhereSQL()=" + newsBuilder.getFilterNode().getWhereSQL());
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
 			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter, options);
