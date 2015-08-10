@@ -12,11 +12,7 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    	$('body').html(Templates['mr-template']({platform: Detector.phone() ? 'mobile' : 'desktop'}));
 
 	    	var rootDomain = document.domain + ":8080";
-	    	switch (document.domain) {
-	    		case "50.62.80.222": this.pathPrefix = "/mapreport/"; break;
-	    		case "localhost": this.pathPrefix = "/mapreport-stable/"; break;
-	    		default: this.pathPrefix = ""; //is this actually needed?
-	    	}
+	    	this.pathPrefix = document.domain.indexOf('amazon') === -1 ? "/mapreport-stable/" : "/mapreport/";
 
 	    	var path = location.pathname.split('/');
 	    	
