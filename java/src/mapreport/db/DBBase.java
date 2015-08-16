@@ -6,7 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Map;
 
 import mapreport.util.Log;
 
@@ -81,7 +81,13 @@ public class DBBase {
 
 	protected static ResultSet resultSet = null;
 
-	static String url = "jdbc:mysql://mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com:3306/new_schema2"; // testdb";
+//	static String url = "jdbc:mysql://mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com:3306/new_schema2"; // localhost";
+//	static String url = "jdbc:mysql://localhost:3306/new_schema2"; 
+// set DBHOST=localhost
+	
+	static Map<String, String> env = System.getenv();
+	
+	static String url = "jdbc:mysql://" + env.get("DBHOST") + ":3306/new_schema2"; 
 	static String user = "root";
 	static String password = "hadera90";
 	static Connection con;

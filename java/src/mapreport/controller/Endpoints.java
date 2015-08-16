@@ -1,5 +1,7 @@
 package mapreport.controller;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
@@ -27,11 +29,33 @@ import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class Endpoints {
+	/*  code for the future 
+    static  
+    {    	 
+        java.util.Properties properties = new java.util.Properties();
+        FileInputStream fis = null;
+   
+        try {
+        	  fis = new FileInputStream("../properties.txt");
+              properties.load(fis);
+              dbHost = properties.getProperty("db-host"); 
+              // db-host=localhost  or mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com
+              
+              Log.info("Endpoints dbHost:" + dbHost);
+            } catch (IOException e) {
+            	Log.info("Trouble to read properties file:" + fis);
+            	e.printStackTrace();
+            }
+    }
+    */
+    
 	public static final String news(HttpServletRequest request) throws Exception {
     	Log.info("Endpoints news");
 		
-    	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));
-    	
+    	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));  
+    	Log.info("Endpoints news 	System.getenv().toString:" + 	System.getenv().toString());
+    	Log.info("Endpoints news 	System.getenv().get(DBHOST):" + 	System.getenv().get("DBHOST"));    	
+    
     	Rectangle rectangle = null;
     	
     	String paramStr = buildParamStr(request);
