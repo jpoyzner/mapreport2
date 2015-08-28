@@ -213,6 +213,9 @@ public class NewsQueryBuilder extends DBBase {
 
 	private News createNewsRow(ResultSet res, int nameFilterNo, boolean hasLocationFilter) throws SQLException {
 		News row = new News();
+		
+		double x = res.getDouble("addressX");
+		double y = res.getDouble("addressY");
 
 		String newsId = res.getString("newsId");
 		String label = res.getString("label");
@@ -230,7 +233,7 @@ public class NewsQueryBuilder extends DBBase {
 				row.setLocation(isLocation);
 				row.setPrimary(isPrimary);
 				
-				if (isPrimary && isLocation) {
+				if (isPrimary && isLocation && y != 0) {
 					row.setMapShow(true);
 				} else {			
 					if (DBBase.hasColumn(res, "isPrimary2")) {
@@ -258,9 +261,6 @@ public class NewsQueryBuilder extends DBBase {
 		// String addressText = res.getString("addressText");
 		String shortLabel = res.getString("shortLabel");
 		String description = res.getString("description");
-
-		double x = res.getDouble("addressX");
-		double y = res.getDouble("addressY");
 
 		String addressText = res.getString("addressText");
 		
@@ -362,7 +362,9 @@ public class NewsQueryBuilder extends DBBase {
 				News existNews = newsMap.get(news.getNewsId());
 				
 				if (news.isLocation() && news.isPrimary()) {
-					existNews.setMapShow(true);
+					if (news.getX() != 0) {					
+						existNews.setMapShow(true);
+					}
 					newsMap.put(news.getNewsId(), existNews);
 				}
 
