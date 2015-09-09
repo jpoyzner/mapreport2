@@ -1,3 +1,5 @@
+//TODO: I DONT KNOW IF THIS IS EFFICIENT, PROBABLY WILL REPLACE WITH WEBPACK OR OTHER BUNDLING
+
 define(['utils/detector', 'jquery'], function(Detector) {
 	var headElement = $('head');
 	

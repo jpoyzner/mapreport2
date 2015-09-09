@@ -1,3 +1,4 @@
+//include this file on your page for the console to work
 (function() {
     var fileref = document.createElement('script');
     fileref.setAttribute('type', 'text/javascript');

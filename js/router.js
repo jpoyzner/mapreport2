@@ -1,5 +1,4 @@
-define(['utils/detector', 'templates', 'collections/news', 'views/Map', 'views/Options', 'views/Report', 'jquery', 'backbone'],
-function (Detector, Templates, News, Map, Options, Report) {
+define(['backbone'], function (Detector) {
 	return new (Backbone.Router.extend({
 	    initialize: function() {
 	    	var usePushStates = "pushState" in history;
@@ -9,9 +8,7 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    	'*path': 'homePage'
 	    },
 	    homePage: function(options) {
-	    	$('body').html(Templates['mr-template']({platform: Detector.phone() ? 'mobile' : 'desktop'}));
-
-	    	var rootDomain = document.domain + ":8080";
+	    	this.rootDomain = document.domain + ":8080";
 	    	this.pathPrefix = document.domain.indexOf('amazon') === -1 ? "/mapreport-stable/" : "/mapreport/";
 
 	    	var path = location.pathname.split('/');
@@ -48,17 +45,11 @@ function (Detector, Templates, News, Map, Options, Report) {
 	    		}
 	    	});
 	    	
-	    	var settings = {topic: topic, loc: loc, date: date};
+	    	this.settings = {topic: topic, loc: loc, date: date};
 	    	
 	    	if (left && right && top && bottom) {
-	    		settings.mapBounds = {left: left, right: right, top: top, bottom: bottom};
+	    		this.settings.mapBounds = {left: left, right: right, top: top, bottom: bottom};
 	    	}
-	    	
-	    	var news = new News("http://" + rootDomain + this.pathPrefix, settings);
-	    	
-	    	new Map({news: news, latitude: 37.759753, longitude: -122.50232699999998}); //won't need coordinates probably
-	    	new Options({news: news});	    	
-	    	new Report({news: news});
 	    },
 	    redirectTo: function(path) {
 	        location.href = path;
