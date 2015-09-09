@@ -1,0 +1,122 @@
+<polymer-element name="nested-submenu" attributes="expanded options direction">
+  <template>
+    <style type="text/css">
+      :host {
+        user-select: none;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        touch-action: none;
+        display: none;
+        position: absolute;
+        z-index: 1000001;
+        top:0;
+        left: 0;
+      }
+      :host(.expanded:not(.empty)) {
+        display: block;
+      }
+    </style>
+    <template repeat="{{option in options}}">
+      <menu-option label="{{option.label}}" icon="{{option.icon}}" action="{{option.action}}" arguments="{{option.arguments}}" options="{{option.options}}">
+      </menu-option>
+    </template>
+    <content></content>
+  </template>
+  <script type="text/javascript">
+    (function() {
+
+      var MARGIN = 8;
+      
+      Polymer({
+        top: 0,
+        left: 0,
+        parentWidth: 0,
+        parentHeight: 0,
+        expanded: false,
+        direction: 'right',
+        ready: function() {
+          var scope = this;
+
+          this.addEventListener('submenu-expanded', function(event){
+            event.stopPropagation();
+            scope.rect = scope.getBoundingClientRect();
+            if (scope == event.detail) {
+              event.detail.nudge();
+              return;
+            }
+            event.detail.nudge();
+            this.rect = this.getBoundingClientRect();
+          });
+
+          scope.optionElems = [];
+          this.addEventListener('option-attached', function(event){
+            event.stopPropagation();
+            scope.optionElems.push(event.detail);
+            event.detail.bind('listen', new PathObserver(scope, 'expanded'));
+          });
+          // this.addEventListener('down-pressed', function(event){
+          //   event.stopPropagation();
+          //   var index = ( scope.optionElems.indexOf(event.detail) + 1) % (scope.optionElems.length);
+          //   scope.optionElems[index].focus();
+          // });
+          // this.addEventListener('up-pressed', function(event){
+          //   event.stopPropagation();
+          //   var index = ( scope.optionElems.indexOf(event.detail) - 1) % (scope.optionElems.length);
+          //   scope.optionElems[index].focus();
+          // });
+
+          this.addEventListener('option-expanded', function(event){
+            event.stopPropagation();
+            // unexpand all except the one just expanded
+            for (var i = this.optionElems.length; i--;){
+              if (this.optionElems[i] != event.detail) {
+                this.optionElems[i].collapse();
+              }
+            }
+          });
+
+        },
+        nudge: function() {
+          // Todo: check scroll
+          if (this.direction == 'right') {
+            // nudge up
+            var bottomDist = (this.rect.bottom + MARGIN) - window.innerHeight;
+            if (bottomDist > 0) this.top = - bottomDist;
+            // nudge left
+            var rightDist = (this.rect.right - this.left) - window.innerWidth;
+            if (rightDist > 0 && this.parentWidth === 0) this.left = - rightDist;
+            else if (rightDist > - this.parentWidth) this.left = - this.rect.width;
+            else this.left = this.parentWidth;
+          } else if (this.direction == 'down') {
+            this.top = this.parentHeight;
+          }
+          
+        },
+        resetItems: function() {
+          for (var i = this.optionElems.length; i--;){
+            this.optionElems[i].collapse();
+          }
+        },
+        expandedChanged: function() {
+          this.classList.toggle('expanded', this.expanded);
+          this.classList.toggle('empty', this.optionElems.length === 0);
+
+          this.resetItems();
+          if (this.expanded) {
+            this.fire('submenu-expanded', this);
+          } else {
+            // this.fire('submenu-collapsed', this);
+            this.top = 0;
+          }
+        },
+        topChanged: function() {
+          this.style.top = this.top + 'px';
+        },
+        leftChanged: function() {
+          this.style.left = this.left + 'px';
+        }
+      });
+    })();
+  </script>
+</polymer-element>
