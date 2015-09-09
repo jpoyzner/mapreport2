@@ -5,7 +5,7 @@ gulp.task('default', ['bundle'], function() {
     console.log("deploying MapReport JavaScript!");
 });
 
-gulp.task('bundle', ['clean', 'vulcanize'], function() {
+gulp.task('bundle', ['clean'], function() {
 	var bundle =
 		require('gulp-requirejs')({
 	        baseUrl: 'js',
@@ -31,15 +31,9 @@ gulp.task('bundle', ['clean', 'vulcanize'], function() {
     gulp.src('./js/components/**/*').pipe(gulp.dest('./WebContent/js/components/'));
 });
 
-gulp.task('debug', ['clean', 'vulcanize'], function() {
+gulp.task('debug', ['clean'], function() {
 	gulp.src('./js/**/*').pipe(gulp.dest('./WebContent/js/'));
 });
-
-//TODO: redo using https://www.npmjs.com/package/grunt-vulcanize
-gulp.task('vulcanize', require('gulp-shell').task([
-	"vulcanize -o index-temp.html index.html",
-	"mv index-temp.html WebContent/index.html"
-]));
 
 gulp.task('clean', function(callback) {
 	require('del')(["WebContent/js/**/*"], callback);
