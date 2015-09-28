@@ -89,12 +89,12 @@ public class DBBase {
 	
 	static String url = "jdbc:mysql://" + env.get("DBHOST") + ":3306/new_schema2"; 
 	static String user = "root";
-	static String password = "hadera90";
+	static String password = env.get("DBPASSWORD");
 	static Connection con;
 
 	static {
-		try {
-			Log.info("com.mysql.jdbc.Driver starts");
+		try { 
+			Log.info("com.mysql.jdbc.Driver starts url;" + url + " user:" + user + " password:" + password);
 			Class.forName("com.mysql.jdbc.Driver");
 
 		} catch (ClassNotFoundException e) {
