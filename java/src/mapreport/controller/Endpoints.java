@@ -168,7 +168,7 @@ public class Endpoints {
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
 		Options options = ResponseBuilder.buildOptionsFromRequest(request);
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options).toString();
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options, paramStr).toString();
 		
 		// Cache.putInCache(paramStr, json);
 
@@ -200,7 +200,8 @@ public class Endpoints {
 	//TODO: extract all params here and pass into functional classes
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
     	Log.log("api(HttpServletRequest request)");
-		return ResponseBuilder.buildJson(getFullURL(request)).toString();
+    	String paramStr = buildParamStr(request);
+		return ResponseBuilder.buildJson(getFullURL(request), paramStr).toString();
 	}
 	
 	public static String getFullURL(HttpServletRequest request) {

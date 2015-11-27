@@ -13,6 +13,7 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import mapreport.controller.Cache;
 import mapreport.controller.Endpoints;
 import mapreport.db.DBQueryBuilder;
 import mapreport.db.FilterDBQueryBuilder;
@@ -115,7 +116,7 @@ public class ResponseBuilder {
 		return hasLocationFilter;
 	}
 	
-	public static String buildJson(String url) throws MalformedURLException, UnsupportedEncodingException {
+	public static String buildJson(String url, String paramStr) throws MalformedURLException, UnsupportedEncodingException {
 	        Log.info("ResponseBuilder buildJson url=" + url);
 		PageURL pageURL = new PageURL(url);
 		Options options = buildOptionsFromUrl(url, pageURL);
@@ -131,7 +132,7 @@ public class ResponseBuilder {
 		
     	int timeFilterCntr = url.indexOf("date/") > -1 ? 1 : 0;
 		 
-		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "", options);
+		String json = buildJson(rect, nameFilters, timeFilterCntr, size, "", "", options, paramStr);
 		   Log.log("ResponseBuilder buildJson json=" + json);
 		return json;
 	}
@@ -169,7 +170,7 @@ public class ResponseBuilder {
 		return buildOptionsFromUrl(url, pageURL);
 	}
 	
-	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat, Options options) {  
+	public static String buildJson(Rectangle rect, Set<NameFilter> nameFilters, int dateFilterCnt, int size, String localLong, String localLat, Options options, String paramStr) {  
 		Log.info("buildJson  options=" + options);
 		String json = null;
 		
@@ -212,7 +213,23 @@ public class ResponseBuilder {
 			newsBuilder.setOrderBySQL(new StringBuilder(newsBuilder.getFilterNode().getOrderSQL())); 
 			  
 			List<News> newsList = newsBuilder.runQuery(nameFilters.size() - dateFilterCnt, rect != null, hasLocationFilter, options);
-			Map<Integer, News> newsMap = NewsQueryBuilder.buildNewsMap(newsList);			
+			Map<Integer, News> newsMap = null;	
+			
+			String newsMapCacheKey = "newsMap " + paramStr;
+			if (options.getNewsOnly() != null && (options.getNewsOnly().getBoolValue())) {
+				newsMap = NewsQueryBuilder.buildNewsMap(newsList);	
+				Cache.putInCache(newsMapCacheKey, newsMap);
+			} else {
+				Object newsMapObj = Cache.retrieveFromCache(newsMapCacheKey);
+				
+				if (newsMapObj != null) {
+					Log.info("buildJson newsMap exists in cache");
+					newsMap = (Map<Integer, News>)newsMapObj;
+				} else {		
+					Log.info("buildJson newsMap NOT in cache");		
+					newsMap = NewsQueryBuilder.buildNewsMap(newsList);	
+				}
+			}
 
 			FilterDBQueryBuilder filterBuilder = new FilterDBQueryBuilder();
 			
