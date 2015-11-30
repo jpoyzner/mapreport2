@@ -18,12 +18,20 @@ define(['react', 'utils/css'], function(React, Css) {
 				    var zoomChangeBoundsListener = 
 				        google.maps.event.addListener(mapComponent.map, 'bounds_changed', function(event) {
 				            if (this.getZoom() < 1) {
-				                this.setZoom(1);
+				            	mapComponent.readjustingZoom = true;
+				            	this.setZoom(1);
+				            	mapComponent.readjustingZoom = false;
 				            }
 				            
 				            google.maps.event.removeListener(zoomChangeBoundsListener);
 				        });
+				    
+				    if (!mapComponent.props.loading && !mapComponent.readjustingZoom && !mapComponent.fittingBounds) {
+				    	mapComponent.fetchDataForNewBounds();
+				    }
 				});
+				
+				google.maps.event.addListener(mapComponent.map, 'dragend', mapComponent.fetchDataForNewBounds);
 			};
 			
 			require(['gmaps']);
@@ -48,20 +56,24 @@ define(['react', 'utils/css'], function(React, Css) {
 //				this.map.attr('fitToMarkers', '');
 //			}
 //	
-			
-			
-			
-//			this.map[0].clear();
-			
-			if (!this.props.news) {
+
+			if (this.props.loading) {
 				return;
 			}
+			
+			if (this.markers && this.markers.length) {
+				this.markers.map(function(marker) {
+					marker.setMap(null);
+				}.bind(this));	
+			}
+			
+			this.markers = [];
 			
 			var bounds = new google.maps.LatLngBounds();
 			this.props.news.models.map(function(article) {
 				var marker =
 					new google.maps.Marker({
-						position: new google.maps.LatLng(article.get('x'), article.get('y')),
+						position: new google.maps.LatLng(article.get('y'), article.get('x')),
 						map: this.map,
 						icon: article.get('icon'),
 						title: article.get('label')
@@ -79,19 +91,32 @@ define(['react', 'utils/css'], function(React, Css) {
 					    	'</a>'
 					}).open(this.map, marker);
 				}.bind(this));
+				
+				this.markers.push(marker);
 			}.bind(this));
 			
-			if (this.props.news.models.length) {
+			if (!this.mapMoved && this.props.news.models.length) {
+				this.fittingBounds = true;
 				this.map.fitBounds(bounds);
+				this.fittingBounds = false;
 			}
 			
-			//EVENTS ARE HERE: https://developers.google.com/maps/documentation/javascript/reference#MapsEventListener
+			this.mapMoved = false;
+		},
+		fetchDataForNewBounds: function() {
+//			if (this.props.loading || this.props.news.fetches) {
+//				return;
+//			}
 			
-//			this.map.on('google-map-ready', _.bind(function(event) {
-//				var boundLoadFunc = _.bind(this.mapUpdated, this, event);
-//				window.google.maps.event.addListener(event.target.map, 'dragend', boundLoadFunc);
-//				window.google.maps.event.addListener(event.target.map, 'zoom_changed', _.after(3, boundLoadFunc));
-//			}, this));
+			this.mapMoved = true;
+
+			var bounds = this.map.getBounds();
+		    var ne = bounds.getNorthEast();
+		    var sw = bounds.getSouthWest();
+		    this.props.news.mapBounds = {left: sw.lng(), right: ne.lng(), top: ne.lat(), bottom: sw.lat()};
+		    this.props.news.loc = undefined;
+
+		    this.props.news.fetch();
 		}
 	});
 });
