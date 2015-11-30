@@ -9,7 +9,7 @@ define(['react', 'utils/css', 'utils/color'], function(React, Css, Color) {
 				<div id="mr-report">
 					{this.props.news.models.map(function(article) {
 						return (
-							<div className="mr-report-article" style={{"background-color": article.get('colorHex')}}>
+							<div className='mr-report-article' style={{'backgroundColor': '#' + article.get('colorHex')}}>
 								<img src={article.get('icon')}></img>
 								<a href={article.get('url')} target="_blank"><p />{article.get('mapLabel')}: {article.get('dateTime')}: {article.get('label')}<p /></a>
 							</div>
