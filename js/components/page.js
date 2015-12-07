@@ -18,7 +18,7 @@ function(React, Detector, News, Options, Map, Report, Router) {
 		render: function() {
 			return (
 				<div id="mr-buckets" className={Detector.phone() ? 'mobile' : 'desktop'}>
-					<Options news={this.state.news} />
+					<Options news={this.state.news} loading={this.state.loading} />
 					<Map news={this.state.news}
 						latitude={this.state.latitude}
 						longitude={this.state.longitude}
