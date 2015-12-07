@@ -11,6 +11,8 @@ define(['react', 'utils/css'], function(React, Css) {
 					longitude = this.props.longitude;
 				}
 				
+				console.log(this.props);
+				
 				mapComponent.map =
 					new google.maps.Map(document.getElementById('mr-map'), {center: {lat: latitude, lng: longitude}, zoom: 8});
 				
@@ -47,16 +49,6 @@ define(['react', 'utils/css'], function(React, Css) {
 			);
 		},
 		componentDidUpdate: function() {
-//			if (this.news.fetches) {
-//				return;
-//			}
-//			
-//			//if (this.news.optionMapUpdates && this.news.optionMapUpdates != 1) {
-//			if (!this.news.mapReloading) {
-//				this.map.attr('fitToMarkers', '');
-//			}
-//	
-
 			if (this.props.loading) {
 				return;
 			}
@@ -104,10 +96,6 @@ define(['react', 'utils/css'], function(React, Css) {
 			this.mapMoved = false;
 		},
 		fetchDataForNewBounds: function() {
-//			if (this.props.loading || this.props.news.fetches) {
-//				return;
-//			}
-			
 			this.mapMoved = true;
 
 			var bounds = this.map.getBounds();

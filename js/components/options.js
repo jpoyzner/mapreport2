@@ -45,34 +45,24 @@ define(['react', 'utils/css'], function(React, Css) {
 			);
 		},
 		componentDidUpdate: function() {
-//			if (this.news.fetches) {
-//				return;
-//			}
-			
 			var menus = $('.mr-option');
 			
 			menus.click(function(e) {
-				if ($(e.currentTarget).toggleClass('mr-expanded')) {
-					this.expanded = !this.expanded; //'this' is the element here
-					return;
-				}
+				$(e.currentTarget).toggleClass('mr-expanded')
 			});
 			
 			$(menus[0]).find('div').click(function(event) {
 				this.props.news.topic = $(event.target).html();
-				this.props.news.optionsChanging();
 				this.props.news.fetch();
 			}.bind(this));
 			
 			$(menus[1]).find('div').click(function(event) {
 				this.props.news.loc = $(event.target).html();
-				this.props.news.optionsChanging();
 				this.props.news.fetch();
 			}.bind(this));
 			
 			$(menus[2]).find('div').click(function(event) {
 				this.props.news.date = $(event.target).html();
-				this.props.news.optionsChanging();
 				this.props.news.fetch();
 			}.bind(this));
 		}
