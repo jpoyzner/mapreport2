@@ -53,6 +53,7 @@ public class Options {
 	final String MORE_NEWS_OPTION = "moreNews";
 	final String PAGE_NUM_OPTION = "pageNum";	
 	final String HINTS_OPTION = "hints";	
+	final String NEWS_ONLY_OPTION = "newsOnly";	
 
 	NumberOption left;
 	NumberOption right;
@@ -69,8 +70,17 @@ public class Options {
 	BooleanOption isMoreTime;
 	BooleanOption isMoreTopics;
 	BooleanOption isMoreNews;
-	
+
 	BooleanOption hints;
+	BooleanOption newsOnly;
+
+	public BooleanOption getNewsOnly() {
+		return newsOnly;
+	}
+
+	public void setNewsOnly(BooleanOption newsOnly) {
+		this.newsOnly = newsOnly;
+	}
 
 	Option viewType;
 	BooleanOption isShowFuture;
@@ -122,6 +132,7 @@ public class Options {
 			case MORE_NEWS_OPTION: isMoreNews = new BooleanOption(name, value);	break;
 			case PAGE_NUM_OPTION: pageNum = new NumberOption(name, value);	break;
 			case HINTS_OPTION: hints = new BooleanOption(name, value);	break;
+			case NEWS_ONLY_OPTION: newsOnly = new BooleanOption(name, value);	break;
 			default: 
 				Log.info("Options addParam UNKNOWN! name:" + name + " value:" + value);
 				break;

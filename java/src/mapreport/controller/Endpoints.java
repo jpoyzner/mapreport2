@@ -1,7 +1,5 @@
 package mapreport.controller;
 
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URLDecoder;
@@ -15,11 +13,14 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.owasp.encoder.Encoders;
+
+import com.sun.xml.internal.fastinfoset.Encoder;
+
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
-import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
 import mapreport.filter.topic.AllTopics;
 import mapreport.filter.topic.Topic;
@@ -48,16 +49,21 @@ public class Endpoints {
             }
     }
     */
+	
+	public static String getCleanParam(HttpServletRequest request, String paramName) {
+		String unClean = request.getParameter(paramName);
+		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
+		Log.info("Endpoints getCleanParam paramName=" + paramName + " unClean=" + unClean + " clean=" + clean);
+		return clean;
+	}
     
 	public static final String news(HttpServletRequest request) throws Exception {
-    	Log.info("Endpoints news");
-		
+    	Log.info("Endpoints news");		
     	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));  
     	Log.info("Endpoints news 	System.getenv().toString:" + 	System.getenv().toString());
-    	Log.info("Endpoints news 	System.getenv().get(DBHOST):" + 	System.getenv().get("DBHOST"));    	
+    	Log.info("Endpoints news 	System.getenv().get(DBHOST):" + 	System.getenv().get("DBHOST"));    
     
-    	Rectangle rectangle = null;
-    	
+    	Rectangle rectangle = null;    	
     	String paramStr = buildParamStr(request);
     	Log.info("ParameterMap:" + paramStr);
     	
@@ -70,13 +76,13 @@ public class Endpoints {
     		Log.info("jsonCache not found:" + paramStr);
     	}
     	
-		String left = request.getParameter("left");
-		String right = request.getParameter("right");
-		String top = request.getParameter("top");
-		String bottom = request.getParameter("bottom");		
+		String left = getCleanParam(request, "left");
+		String right = getCleanParam(request, "right");
+		String top = getCleanParam(request, "top");
+		String bottom = getCleanParam(request, "bottom");		
 
-		String localLong = request.getParameter("local-long");
-		String localLat = request.getParameter("local-lat");
+		String localLong = getCleanParam(request, "local-long");
+		String localLat = getCleanParam(request, "local-lat");
 		
 		// &local-long=-122.00&local-lat=37.519774999999936
 		// localLong = "-115.00"; // bay area: -122.0
@@ -91,7 +97,7 @@ public class Endpoints {
 			Log.info("Endpoints param:" + param);
 		}
 		
-		String location = request.getParameter("location");
+		String location = getCleanParam(request, "location");
 		
 		if ((location == null) 
 				&& left != null && right != null && top != null && bottom != null) {
@@ -116,7 +122,7 @@ public class Endpoints {
 		
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>();			
 		
-		String topic = request.getParameter("topic");
+		String topic = getCleanParam(request, "topic");
 		      Log.log("Endpoints topic to add:" + topic);
 		if (topic != null) {	
 			topic = URLDecoder.decode(topic, "UTF-8");
@@ -136,6 +142,7 @@ public class Endpoints {
 		}
 		
 		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {
+			Log.info("Endpoints Location:" + location);
 			location = URLDecoder.decode(location, "UTF-8");
 			nameFilters.add(new LocationByName(location));
 			Log.info("Endpoints Location added:" + location);
@@ -144,7 +151,7 @@ public class Endpoints {
 		int dateFilterCnt = 0;
 		
 		String dates[] = request.getParameterValues("date"); // for test {"May-11-2008", "May-11-2009"}; 
-		String date = request.getParameter("date");
+		String date = getCleanParam(request, "date");
 		
 		if (dates != null && dates.length > 1) {
 			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
@@ -161,7 +168,7 @@ public class Endpoints {
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
 		Options options = ResponseBuilder.buildOptionsFromRequest(request);
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options).toString();
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options, paramStr).toString();
 		
 		// Cache.putInCache(paramStr, json);
 
@@ -193,7 +200,8 @@ public class Endpoints {
 	//TODO: extract all params here and pass into functional classes
 	public static final String api(HttpServletRequest request) throws MalformedURLException, UnsupportedEncodingException {	
     	Log.log("api(HttpServletRequest request)");
-		return ResponseBuilder.buildJson(getFullURL(request)).toString();
+    	String paramStr = buildParamStr(request);
+		return ResponseBuilder.buildJson(getFullURL(request), paramStr).toString();
 	}
 	
 	public static String getFullURL(HttpServletRequest request) {
