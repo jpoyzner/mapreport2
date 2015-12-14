@@ -57,6 +57,12 @@ public class Endpoints {
 		return clean;
 	}
     
+	public static String getCleanParam(String unClean) {
+		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
+		Log.info("Endpoints getCleanParam unClean=" + unClean + " clean=" + clean);
+		return clean;
+	}
+    
 	public static final String news(HttpServletRequest request) throws Exception {
     	Log.info("Endpoints news");		
     	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));  
@@ -156,7 +162,7 @@ public class Endpoints {
 		if (dates != null && dates.length > 1) {
 			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
 			try {
-				dateFilterCnt = TimeFilter.add2Dates(nameFilters, dates[0], dates[1], dateFilterCnt);
+				dateFilterCnt = TimeFilter.add2Dates(nameFilters, getCleanParam(dates[0]), getCleanParam(dates[1]), dateFilterCnt);
 			} catch (Exception e) {
 				Log.info("Endpoints problem to add 2 dates dates[0]:" + dates[0] + " dates[1]:" + dates[1] + "\n e:" + e.toString());
 				e.printStackTrace();
