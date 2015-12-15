@@ -144,7 +144,7 @@ public class ResponseBuilder {
     	List<String> keyList = new ArrayList<String>(keys);
     	
     	for (String key : keyList) {
-    		options.addParam(key, Endpoints.getCleanParam(request, key));
+    		options.addParam(Endpoints.getCleanParam(key), Endpoints.getCleanParam(request, key));
     	} 
     	
     	// just for testing
