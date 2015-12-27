@@ -50,9 +50,3 @@ gulp.task('debug', ['clean'], function() {
 gulp.task('clean', function(callback) {
 	del(["WebContent/js/**/*"], callback);
 });
-
-
-//Does gulp-war work?
-gulp.task('deploy', require('gulp-shell').task([
- "scp -i ../PoyznerKey.pem ../mapreport.war ec2-user@52.8.176.59:mapreport.war"
-]));
