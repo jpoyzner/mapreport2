@@ -176,7 +176,7 @@ public class NewsQueryBuilder extends DBBase {
 	//	nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));
 	//	 nameFilters.add(OfficialTimeFilter.parseDateStr("2011-02-03"));
 		// nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));
-		json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200, "", "", new Options());
+		json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200, "", "", new Options(), "");
 		// json = ResponseBuilder.buildJson(
 			//	new Rectangle(-65.0, -15.0, 27.0, 20.0), nameFilters, 20);
 		Log.log("end main");

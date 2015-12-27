@@ -144,7 +144,7 @@ public class ResponseBuilder {
     	List<String> keyList = new ArrayList<String>(keys);
     	
     	for (String key : keyList) {
-    		options.addParam(key, Endpoints.getCleanParam(request, key));
+    		options.addParam(Endpoints.getCleanParam(key), Endpoints.getCleanParam(request, key));
     	} 
     	
     	// just for testing
@@ -220,7 +220,8 @@ public class ResponseBuilder {
 				newsMap = NewsQueryBuilder.buildNewsMap(newsList);	
 				Cache.putInCache(newsMapCacheKey, newsMap);
 			} else {
-				Object newsMapObj = Cache.retrieveFromCache(newsMapCacheKey);
+				Object newsMapObj = null;
+				// newsMapObj = Cache.retrieveFromCache(newsMapCacheKey);
 				
 				if (newsMapObj != null) {
 					Log.info("buildJson newsMap exists in cache");
