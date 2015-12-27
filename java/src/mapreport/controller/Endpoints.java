@@ -13,10 +13,6 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
-import org.owasp.encoder.Encoders;
-
-import com.sun.xml.internal.fastinfoset.Encoder;
-
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.Local;
@@ -30,39 +26,6 @@ import mapreport.util.Log;
 import mapreport.view.map.Rectangle;
 
 public class Endpoints {
-	/*  code for the future 
-    static  
-    {    	 
-        java.util.Properties properties = new java.util.Properties();
-        FileInputStream fis = null;
-   
-        try {
-        	  fis = new FileInputStream("../properties.txt");
-              properties.load(fis);
-              dbHost = properties.getProperty("db-host"); 
-              // db-host=localhost  or mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com
-              
-              Log.info("Endpoints dbHost:" + dbHost);
-            } catch (IOException e) {
-            	Log.info("Trouble to read properties file:" + fis);
-            	e.printStackTrace();
-            }
-    }
-    */
-	
-	public static String getCleanParam(HttpServletRequest request, String paramName) {
-		String unClean = request.getParameter(paramName);
-		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
-		Log.info("Endpoints getCleanParam paramName=" + paramName + " unClean=" + unClean + " clean=" + clean);
-		return clean;
-	}
-    
-	public static String getCleanParam(String unClean) {
-		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
-		Log.info("Endpoints getCleanParam unClean=" + unClean + " clean=" + clean);
-		return clean;
-	}
-    
 	public static final String news(HttpServletRequest request) throws Exception {
     	Log.info("Endpoints news");		
     	Log.info("Endpoints java.class.path:" + System.getProperty("java.class.path"));  
@@ -73,14 +36,14 @@ public class Endpoints {
     	String paramStr = buildParamStr(request);
     	Log.info("ParameterMap:" + paramStr);
     	
-    	String jsonCache = null; //Cache.retrieveFromCache(paramStr);
+//    	String jsonCache = null; //Cache.retrieveFromCache(paramStr);
     	
-    	if (jsonCache != null) {
-    		Log.info("jsonCache found");
-    		return jsonCache;
-    	} else {
-    		Log.info("jsonCache not found:" + paramStr);
-    	}
+//    	if (jsonCache != null) {
+//    		Log.info("jsonCache found");
+//    		return jsonCache;
+//    	} else {
+//    		Log.info("jsonCache not found:" + paramStr);
+//    	}
     	
 		String left = getCleanParam(request, "left");
 		String right = getCleanParam(request, "right");
@@ -215,5 +178,18 @@ public class Endpoints {
 	    String queryString = request.getQueryString();
 
 	    return queryString == null ? requestURL.toString() : requestURL.append('?').append(queryString).toString();
+	}
+	
+	public static String getCleanParam(HttpServletRequest request, String paramName) {
+		String unClean = request.getParameter(paramName);
+		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
+		Log.info("Endpoints getCleanParam paramName=" + paramName + " unClean=" + unClean + " clean=" + clean);
+		return clean;
+	}
+    
+	public static String getCleanParam(String unClean) {
+		String clean = unClean == null ? null : org.owasp.encoder.Encode.forJava(unClean);
+		Log.info("Endpoints getCleanParam unClean=" + unClean + " clean=" + clean);
+		return clean;
 	}
 }
