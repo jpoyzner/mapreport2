@@ -83,7 +83,7 @@ public class DBBase {
 
 //	static String url = "jdbc:mysql://mapreportdb.cd9pgtzoc8c0.us-west-1.rds.amazonaws.com:3306/new_schema2"; // localhost";
 //	static String url = "jdbc:mysql://localhost:3306/new_schema2"; 
-// set DBHOST=localhost
+// set DBHOST=localhost // just a test
 	
 	static Map<String, String> env = System.getenv();
 	
