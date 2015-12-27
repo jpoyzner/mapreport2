@@ -70,15 +70,12 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				            : ""));
 			}
 			
-			this.optionsChanging();
-			
 			return response.news;
 		},
 		url: function() {
 			console.log("fetching map");
 			
-			var params;
-			params = []; //to avoid stupid syntax warning;
+			var params = [];
 			
 			if (this.mapBounds) {
 				params.push(
@@ -101,12 +98,6 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			}
 			
 			return BuildURL(this.rootUrl + 'news', params);
-        },
-        optionsChanging: function() {
-        	this.mapReloading = true;
-        	setTimeout(_.bind(function() {
-        		this.mapReloading = false;
-        	}, this), 500);
         }
 	});
 });

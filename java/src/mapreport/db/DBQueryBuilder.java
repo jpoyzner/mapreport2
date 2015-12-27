@@ -150,7 +150,7 @@ public class DBQueryBuilder extends DBBase{
 	   // nameFilters.add(OfficialTimeFilter.parseDateStr(AllTime.ALL_TIME_NAME));  timeFilterCntr++;
 	   //  nameFilters.add(OfficialTimeFilter.parseDateStr("2011-12-03"));  timeFilterCntr++;
 	//    nameFilters.add(OfficialTimeFilter.parseDateStr("2011-04"));  timeFilterCntr++;
-	    json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200, "", "", new Options());
+	    json = ResponseBuilder.buildJson(null, nameFilters, timeFilterCntr, 200, "", "", new Options(), "");
 	 //   json = buildJson(new Rectangle(-65.0, -15.0, 17.0, 10.0), nameFilters, 20);
         	Log.log("end main");
 	}

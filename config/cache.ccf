@@ -1,5 +1,5 @@
 # DEFAULT CACHE REGION
-jcs.default=DC
+jcs.default=DC,LTCP
 jcs.default.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
 jcs.default.cacheattributes.MaxObjects=1000
 jcs.default.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache
@@ -15,7 +15,7 @@ jcs.default.elementattributes.IsRemote=true
 jcs.default.elementattributes.IsLateral=true
 
 # PRE-DEFINED CACHE REGIONS
-jcs.region.testCache1=DC
+jcs.region.testCache1=DC,LTCP
 jcs.region.testCache1.cacheattributes=org.apache.commons.jcs.engine.CompositeCacheAttributes
 jcs.region.testCache1.cacheattributes.MaxObjects=1000
 jcs.region.testCache1.cacheattributes.MemoryCacheName=org.apache.commons.jcs.engine.memory.lru.LRUMemoryCache

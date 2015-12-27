@@ -7,7 +7,7 @@ function(React, Detector, News, Options, Map, Report, Router) {
 			new News("http://" + Router.rootDomain + Router.pathPrefix, Router.settings)
 				.on('sync', function(news) {
 					//won't need coordinates probably
-			    	this.setState({loading: false, news: news, latitude: 37.759753, longitude: -122.50232699999998});
+			    	this.setState({loading: news.fetches, news: news, latitude: 37.759753, longitude: -122.50232699999998});
 			    }.bind(this))
 			    .on('request', function() {
 			    	this.setState({loading: true});
@@ -18,10 +18,13 @@ function(React, Detector, News, Options, Map, Report, Router) {
 		render: function() {
 			return (
 				<div id="mr-buckets" className={Detector.phone() ? 'mobile' : 'desktop'}>
-					<Options news={this.state.news} />
-					<Map news={this.state.news} latitude={this.state.latitude} longitude={this.state.longitude} />
+					<Options news={this.state.news} loading={this.state.loading} />
+					<Map news={this.state.news}
+						latitude={this.state.latitude}
+						longitude={this.state.longitude}
+						loading={this.state.loading} />
 					<div id="mr-report-bucket">
-						{(this.state.loading || this.state.news.fetches) ?
+						{this.state.loading ?
 							"LOADER"
 							: <Report news={this.state.news} />
 						}

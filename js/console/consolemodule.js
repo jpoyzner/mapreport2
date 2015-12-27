@@ -1,3 +1,5 @@
+//A BIT OLD, ESPECIALLY SINCE REACT HAS BEEN ADDED:
+
 requirejs.config({
     paths: {
     	baseURL: '//50.62.80.222/MapReport/js', //or wherever it's hosted currently
@@ -9,7 +11,7 @@ requirejs.config({
     }
 });
 
-//TODO: you need to make sure pages which might have these libs already wont crash!!!
+//TODO: you need to make sure pages which might have these libs already won't crash!!!
 //TODO: NO CONFLICT OUT THIS JQUERY AND USE IT THROUGHOUT MODULE!
 
 requirejs(['jquery', 'views/Console'], function($, Console) { 
