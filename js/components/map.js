@@ -4,17 +4,22 @@ define(['react', 'utils/css'], function(React, Css) {
 			window.mapComponent = this;
 			
 			window.initMap = function() {
+				//default is SF :)
 				var latitude = 37.7576793;
 	        	var longitude = -122.5076404;
-				if (this.props) {
-					latitude = this.props.latitude;
-					longitude = this.props.longitude;
-				}
-				
-				console.log(this.props);
+//				if (this.props) {
+//					latitude = this.props.latitude;
+//					longitude = this.props.longitude;
+//				}
 				
 				mapComponent.map =
-					new google.maps.Map(document.getElementById('mr-map'), {center: {lat: latitude, lng: longitude}, zoom: 8});
+					new google.maps.Map(
+						document.getElementById('mr-map'),
+						{
+							center: {lat: latitude, lng: longitude},
+							streetViewControl: false,
+							zoom: 8
+						});
 				
 				google.maps.event.addListener(mapComponent.map, 'zoom_changed', function() {
 				    var zoomChangeBoundsListener = 
@@ -34,6 +39,13 @@ define(['react', 'utils/css'], function(React, Css) {
 				});
 				
 				google.maps.event.addListener(mapComponent.map, 'dragend', mapComponent.fetchDataForNewBounds);
+				
+				if (navigator.geolocation) {
+	                navigator.geolocation.getCurrentPosition(function(position) {
+	                	mapComponent.curlat = position.coords.latitude;
+	                	mapComponent.curlong = position.coords.longitude;
+	                });
+	            }
 			};
 			
 			require(['gmaps']);
@@ -45,8 +57,14 @@ define(['react', 'utils/css'], function(React, Css) {
 			return (
 				<div id="mr-map-bucket">
 					<div id="mr-map" />
+					<div id="mr-curloc-button" />
 				</div>
 			);
+		},
+		componentDidMount: function() {
+			$('#mr-curloc-button').show().click(function() {
+				alert(this.curlat + " " + this.curlong);
+			}.bind(this));
 		},
 		componentDidUpdate: function() {
 			if (this.props.loading) {

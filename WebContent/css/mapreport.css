@@ -51,44 +51,19 @@ body {
 	top: 5%;
 }
 
+#mr-curloc-button {
+	background: red;
+	display: none;
+    height: 6%;
+    left: 1%;
+    position: fixed;
+    top: 92%;
+    width: 3%;
+}
+
 .mobile #mr-report-bucket {
 	height: 40%;
 	position: fixed;
 	top: 60%;
 	width: 100%;
-}
-
-/* #mr-options-bucket web-loader {
-	position: absolute;
-	top: 1%;
-	z-index: -1;
-}
-
-#mr-options-bucket web-loader:nth-of-type(1) {
-	left: 14.7%;
-}
-
-#mr-options-bucket web-loader:nth-of-type(2) {
-	left: 48%;
-}
-
-#mr-options-bucket web-loader:nth-of-type(3) {
-	left: 81.3%;
-} */
-
-#mr-map-bucket web-loader {
-	position: absolute;
-	left: 22%;
-	top: 40%;
-}
-
-#mr-report-bucket web-loader {
-	position: absolute;
-	left: 72%;
-	top: 40%;
-}
-
-.mobile #mr-report-bucket web-loader {
-	left: 37%;
-	top: 28%;
 }
