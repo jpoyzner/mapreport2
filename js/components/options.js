@@ -12,7 +12,7 @@ define(['react', 'utils/css'], function(React, Css) {
 						: <div id="mr-options">
 							<div className="mr-option mr-topic-option">
 								<span className="mr-option-cell">
-									<span>TOPIC: {this.state.topicTitle || 'All Topics'}</span>
+									<span>TOPIC: {this.props.news.topic || 'All Topics'}</span>
 									{this.props.news.topics.models.map(function(topic) {
 										return (
 											<div>{topic.get('node')}</div>
@@ -22,7 +22,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-location-option">
 								<span className="mr-option-cell">
-									<span>LOCATION: {this.state.locationTitle || 'Global'}</span>
+									<span>LOCATION: {this.props.news.loc || 'Global'}</span>
 									{this.props.news.locations.models.map(function(location) {
 										return (
 											<div>{location.get('node')}</div>
@@ -32,7 +32,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-time-option">
 								<span className="mr-option-cell">
-									<span>TIME: {this.state.dateTitle || 'All Time'}</span>
+									<span>TIME: {this.props.news.date || 'All Time'}</span>
 									{this.props.news.dates.models.map(function(date) {
 										return (
 											<div>{date.get('node')}</div>
