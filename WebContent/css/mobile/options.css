@@ -1,14 +1,30 @@
 #mr-options {
 	background-color: black;
 	height: 100%;
+	font-size: 12px;
 }
 
 .mr-option {
 	background-color: black;
 	cursor: pointer;
 	display: table;
-	height: 100%;
+	height: 3%;
+	position: fixed;
 	text-align: center;
+	width: 33.3%;
+	z-index: 1;
+}
+
+.mr-option div {
+    display: none;
+}
+ 
+.mr-option.mr-expanded div {
+    display: block;
+}
+ 
+.mr-option div:hover {
+    background-color: lightgray;
 }
 
 .mr-option-cell {
@@ -25,5 +41,9 @@
 .mr-location-option {
 	border-right: 1px solid black;
 	float: left;
-	width: 33.3%;
+	left: 33.3%;
+}
+ 
+.mr-time-option {
+    left: 66.6%;
 }
