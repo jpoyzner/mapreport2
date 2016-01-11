@@ -22,7 +22,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-location-option">
 								<span className="mr-option-cell">
-									<span>LOCATION: {this.props.news.loc || 'Global'}</span>
+									<span>LOCATION: {this.props.news.loc || 'All Locations'}</span>
 									{this.props.news.locations.models.map(function(location) {
 										return (
 											<div>{location.get('node')}</div>

@@ -52,12 +52,12 @@ body {
 }
 
 #mr-curloc-button {
-	background: red;
+	background-color: white;
+	cursor: pointer;
 	display: none;
-    height: 6%;
     left: 1%;
     position: fixed;
-    top: 92%;
+    top: 90%;
     width: 3%;
 }
 

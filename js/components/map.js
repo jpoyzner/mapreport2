@@ -18,6 +18,7 @@ define(['react', 'utils/css'], function(React, Css) {
 						{
 							center: {lat: latitude, lng: longitude},
 							streetViewControl: false,
+							mapTypeControl: false,
 							zoom: 8
 						});
 				
@@ -57,13 +58,16 @@ define(['react', 'utils/css'], function(React, Css) {
 			return (
 				<div id="mr-map-bucket">
 					<div id="mr-map" />
-					<div id="mr-curloc-button" />
+					<img id="mr-curloc-button" src="images/curloc.png" />
 				</div>
 			);
 		},
 		componentDidMount: function() {
 			$('#mr-curloc-button').show().click(function() {
-				alert(this.curlat + " " + this.curlong);
+				this.props.news.loc = "Local";
+				this.props.news.localLat = this.curlat;
+				this.props.news.localLong = this.curlong;
+				this.props.news.fetch();
 			}.bind(this));
 		},
 		componentDidUpdate: function() {

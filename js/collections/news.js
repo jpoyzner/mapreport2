@@ -85,6 +85,12 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
             		"bottom=" + this.mapBounds.bottom);
 			}
 			
+			if (this.localLat && this.localLong) {
+				params.push(	
+					"local-lat=" + this.localLat,
+		    		"local-long=" + this.localLong);
+			}
+			
 			if (this.topic) {
 				params.push("topic=" + encodeURI(this.topic));
 			}
