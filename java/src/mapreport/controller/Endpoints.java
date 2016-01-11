@@ -68,6 +68,81 @@ public class Endpoints {
 		
 		String location = getCleanParam(request, "location");
 		
+		rectangle = buildRectangle(rectangle, left, right, top, bottom,
+				localLong, localLat, location);
+		
+		Set<NameFilter> nameFilters = new HashSet<NameFilter>();			
+		
+		String topic = getCleanParam(request, "topic");
+		      Log.log("Endpoints topic to add:" + topic);
+		topic = addTopicFilters(nameFilters, topic);
+		
+		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {
+			Log.info("Endpoints Location:" + location);
+			location = URLDecoder.decode(location, "UTF-8");
+			nameFilters.add(new LocationByName(location));
+			Log.info("Endpoints Location added:" + location);
+		}
+		
+		int dateFilterCnt = 0;
+		
+		String dates[] = request.getParameterValues("date"); // for test {"May-11-2008", "May-11-2009"}; 
+		String date = getCleanParam(request, "date");
+		
+		dateFilterCnt = addDateFilters(nameFilters, dateFilterCnt, dates, date);
+		
+		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
+		
+		Options options = ResponseBuilder.buildOptionsFromRequest(request);
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options, paramStr).toString();
+		
+		// Cache.putInCache(paramStr, json);
+
+		Log.info("jsonCache Cache.putInCache:" + paramStr);
+		return json;
+	}
+
+	public static int addDateFilters(Set<NameFilter> nameFilters,
+			int dateFilterCnt, String[] dates, String date)
+			throws UnsupportedEncodingException {
+		if (dates != null && dates.length > 1) {
+			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
+			try {
+				dateFilterCnt = TimeFilter.add2Dates(nameFilters, getCleanParam(dates[0]), getCleanParam(dates[1]), dateFilterCnt);
+			} catch (Exception e) {
+				Log.info("Endpoints problem to add 2 dates dates[0]:" + dates[0] + " dates[1]:" + dates[1] + "\n e:" + e.toString());
+				e.printStackTrace();
+			}
+		} else {
+			dateFilterCnt = TimeFilter.addDate(nameFilters, date, dateFilterCnt);
+		}
+		return dateFilterCnt;
+	}
+
+	public static String addTopicFilters(Set<NameFilter> nameFilters,
+			String topic) throws UnsupportedEncodingException {
+		if (topic != null) {	
+			topic = URLDecoder.decode(topic, "UTF-8");
+
+			if (!topic.equals(AllTopics.ALL_TOPICS)) {		
+				int delimeterIndex = topic.indexOf(';');
+				if (delimeterIndex > 1) {
+					nameFilters.add(new Topic(topic.substring(0, delimeterIndex)));
+					Log.info("Endpoints topic added:" + topic.substring(0, delimeterIndex));
+					nameFilters.add(new Topic(topic.substring(delimeterIndex + 1)));
+					Log.info("Endpoints topic added:" + topic.substring(delimeterIndex + 1));
+				} else {
+					nameFilters.add(new Topic(topic));
+					Log.info("Endpoints topic added:" + topic + " ALL_TOPICS=" + AllTopics.ALL_TOPICS + " !topic.equals(AllTopics.ALL_TOPICS)=" + !topic.equals(AllTopics.ALL_TOPICS));
+				}
+			}
+		}
+		return topic;
+	}
+
+	public static Rectangle buildRectangle(Rectangle rectangle, String left,
+			String right, String top, String bottom, String localLong,
+			String localLat, String location) {
 		if ((location == null) 
 				&& left != null && right != null && top != null && bottom != null) {
 			rectangle =
@@ -88,61 +163,7 @@ public class Endpoints {
 				e.printStackTrace();
 			}
 		}
-		
-		Set<NameFilter> nameFilters = new HashSet<NameFilter>();			
-		
-		String topic = getCleanParam(request, "topic");
-		      Log.log("Endpoints topic to add:" + topic);
-		if (topic != null) {	
-			topic = URLDecoder.decode(topic, "UTF-8");
-
-			if (!topic.equals(AllTopics.ALL_TOPICS)) {		
-				int delimeterIndex = topic.indexOf(';');
-				if (delimeterIndex > 1) {
-					nameFilters.add(new Topic(topic.substring(0, delimeterIndex)));
-					Log.info("Endpoints topic added:" + topic.substring(0, delimeterIndex));
-					nameFilters.add(new Topic(topic.substring(delimeterIndex + 1)));
-					Log.info("Endpoints topic added:" + topic.substring(delimeterIndex + 1));
-				} else {
-					nameFilters.add(new Topic(topic));
-					Log.info("Endpoints topic added:" + topic + " ALL_TOPICS=" + AllTopics.ALL_TOPICS + " !topic.equals(AllTopics.ALL_TOPICS)=" + !topic.equals(AllTopics.ALL_TOPICS));
-				}
-			}
-		}
-		
-		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {
-			Log.info("Endpoints Location:" + location);
-			location = URLDecoder.decode(location, "UTF-8");
-			nameFilters.add(new LocationByName(location));
-			Log.info("Endpoints Location added:" + location);
-		}
-		
-		int dateFilterCnt = 0;
-		
-		String dates[] = request.getParameterValues("date"); // for test {"May-11-2008", "May-11-2009"}; 
-		String date = getCleanParam(request, "date");
-		
-		if (dates != null && dates.length > 1) {
-			Log.info("Endpoints dates:" + dates.toString() + " dates.length:" + dates.length);
-			try {
-				dateFilterCnt = TimeFilter.add2Dates(nameFilters, getCleanParam(dates[0]), getCleanParam(dates[1]), dateFilterCnt);
-			} catch (Exception e) {
-				Log.info("Endpoints problem to add 2 dates dates[0]:" + dates[0] + " dates[1]:" + dates[1] + "\n e:" + e.toString());
-				e.printStackTrace();
-			}
-		} else {
-			dateFilterCnt = TimeFilter.addDate(nameFilters, date, dateFilterCnt);
-		}
-		
-		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
-		
-		Options options = ResponseBuilder.buildOptionsFromRequest(request);
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options, paramStr).toString();
-		
-		// Cache.putInCache(paramStr, json);
-
-		Log.info("jsonCache Cache.putInCache:" + paramStr);
-		return json;
+		return rectangle;
 	}
 
 	public static String buildParamStr(HttpServletRequest request) {
