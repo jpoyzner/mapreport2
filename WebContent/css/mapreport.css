@@ -61,6 +61,12 @@ body {
     width: 3%;
 }
 
+.mobile #mr-curloc-button {
+    left: 2%;
+    top: 52%;
+    width: 10%;
+}
+
 .mobile #mr-report-bucket {
 	height: 40%;
 	position: fixed;
