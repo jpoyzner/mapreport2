@@ -85,6 +85,10 @@ define(['react', 'utils/css'], function(React, Css) {
 			
 			var bounds = new google.maps.LatLngBounds();
 			this.props.news.models.map(function(article) {
+				if (!article.get('isMapShow')) {
+					return;
+				}
+				
 				var marker =
 					new google.maps.Marker({
 						position: new google.maps.LatLng(article.get('y'), article.get('x')),

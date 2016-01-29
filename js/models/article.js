@@ -5,16 +5,18 @@ define(['utils/color', 'underscore', 'backbone'], function(Color) {
 			
 			//DOC here:https://developers.google.com/chart/image/docs/gallery/dynamic_icons
 			
+			var color = 'black';
 			var colorHex;
 			switch(data.rootTopic) {
-				case 'Business': colorHex = Color.blue; break;
+				case 'Business': color = 'white'; colorHex = Color.blue; break;
 				case 'Disasters': colorHex = Color.yellow; break;
-				case 'Politics': colorHex = Color.gray; break;
+				case 'Politics': color = 'white'; colorHex = Color.gray; break;
 				case 'Crime': colorHex = Color.orange; break;
 				case 'Sports': colorHex = Color.green; break;
 				case 'Science & Education': colorHex = Color.purple; break;
 				default: colorHex = Color.white;
-			}			
+			}
+			this.set('color', color);
 			this.set('colorHex', colorHex);
 			
 //			this.set(

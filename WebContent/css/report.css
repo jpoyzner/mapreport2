@@ -6,13 +6,22 @@
 	background-color: black;
 	border: 1px solid black;
 	border-radius: 3px;
-	padding: 20px;
+	cursor: pointer;
+	font-size: 20px;
+	padding: 0 5px;
 }
 
 .mr-report-article img {
+	border-radius: 10px;
+	float: left;
+	height: 50px;
+	position: relative;
 	margin-right: 10px;
+	top: 6px;
 }
 
 .mr-report-article p {
-	display: inline;
+	overflow: hidden;
+    text-overflow: ellipsis;
+	white-space: nowrap;
 }
