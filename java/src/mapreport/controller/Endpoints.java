@@ -79,6 +79,7 @@ public class Endpoints {
 		topic = addTopicFilters(nameFilters, topic);
 
 		String keywords = getCleanParam(request, "keywords");
+	//	keywords = "quake";
 	    Log.log("Endpoints keywords to add:" + keywords);
 	    boolean isSearchFilterAdded = addSearchFilters(nameFilters, keywords);
 

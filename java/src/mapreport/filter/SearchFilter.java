@@ -23,10 +23,10 @@ public class SearchFilter extends NameFilter {
 	
 	StringBuilder buildWhereClause(String column) {
 		StringBuilder ret = new StringBuilder("");
-		ret.append(" n.");
+		ret.append(" lcase(n.");
 		ret.append(column);
-		ret.append(" like '%");
-		ret.append(keywords);
+		ret.append(") like '%");
+		ret.append(keywords.toLowerCase());
 		ret.append("%' ");
 		return ret;
 	}
