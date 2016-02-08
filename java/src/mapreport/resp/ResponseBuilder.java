@@ -22,6 +22,7 @@ import mapreport.db.NewsQueryBuilder;
 import mapreport.db.URLFilterQueryBuilder;
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.SearchFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
@@ -75,13 +76,13 @@ public class ResponseBuilder {
 			hasLocationFilter = urlFilterQueryBuilder.isHasLocationByName();
 			
 			for (NameFilter filter: nameFilters) {
-				Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter);
+				Log.info("\n before queryBuilder.addFilter(filter) filter=" + filter);
 				if (filter != null && filter.getName() != null) {
 					Log.log("\n before queryBuilder.addFilter(filter) filter=" + filter + " filter.getName()=" + filter.getName());
 				}
 				
-				if (filter instanceof TimeFilter) {
-					Log.log("\n before queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
+				if (filter instanceof TimeFilter || filter instanceof SearchFilter) {
+					Log.info("\n before queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 					queryBuilder.addFilter(filter);  
 					Log.log("\n after queryBuilder.addFilter(filter) TimeFilter filter=" + filter + " filter.getName()=" + filter.getName() + " where=" + filter.getWhereSQL());
 				} else if (filter != null && filter.getName() != null) {

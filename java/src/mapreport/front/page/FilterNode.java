@@ -9,6 +9,7 @@ import java.util.List;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.SearchFilter;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.OfficialTimeFilter;
@@ -20,8 +21,9 @@ import mapreport.util.Log;
 public class FilterNode {	
 	List<Filter> filterList = new ArrayList<Filter>(4);
 	TimeFilter timeFilter = null;
-	
+
 	Topic topicFilter = null;
+	SearchFilter searchFilter = null;
 	SecondTopicFilter topicFilter2 = null;
 
 	LocationByCoords coordFilter = null;
@@ -198,6 +200,11 @@ public class FilterNode {
 			Log.log("FilterNode add LocationByName");   
 	          addFilterType(locationByName);
 	               Log.log("FilterNode add(Filter filter) name=" + locationByName.getName() + " dbFilterCntr=" + locationByName.getDbFilterCntr());
+		} else if (filter instanceof SearchFilter) {
+			SearchFilter searchFilter = (SearchFilter)filter;
+			Log.info("FilterNode add SearchFilter");   
+	        addFilterType(searchFilter);
+	        Log.log("FilterNode add(Filter filter) name=" + searchFilter.getName());
 		}
 	}
 	
@@ -235,6 +242,19 @@ public class FilterNode {
 			}
 		}
 	}
+
+	public void addFilterType(SearchFilter filter) {
+        //      Log.log("addFilterType(SearchFilter filter) filter=" + filter);
+		if (filter != null) { 
+				   Log.log("addFilterType(SearchFilter filter) filter.getName=" + filter.getName());
+			// incrementDBFilterCntr(filter);
+			if (searchFilter == null) {
+				searchFilter = filter;		
+				filterList.add(filter);
+			}
+		}
+	}
+
 
 	private void incrementDBFilterCntr(DBFilter filter) {
 		if (filter == null) {
@@ -301,7 +321,8 @@ public class FilterNode {
 				+ filterToString("topicFilter2", topicFilter2)
 				+ filterToString("coordFilter", coordFilter)
 				+ filterToString("locationFilter", locationFilter)
-				+ filterToString("locationFilter2", locationFilter2);
+				+ filterToString("locationFilter2", locationFilter2)
+				+ filterToString("searchFilter", searchFilter);
 	}
 	
 	public String filterToString( String type, Filter filter) {
@@ -332,7 +353,7 @@ public class FilterNode {
 	}
 	
 	public StringBuilder buildWhereSQL() {
-		      Log.log("FilterNode buildWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
+		      Log.info("FilterNode buildWhereSQL filterList.size()=" + filterList.size() + " timeFilter=" + timeFilter);
 		
 		whereSQL.append("\n where 1=1 ");
 		
@@ -357,7 +378,13 @@ public class FilterNode {
 					//  and  f.name='Farallon Islands, San Francisco, California, USA' 
 
 					anyIdFilter = true;
-			}			
+					
+			} else if (filter instanceof SearchFilter) {
+				String keywords = ((SearchFilter) filter).getKeywords();
+				Log.info("FilterNode buildWhereSQL SearchFilter filter.keywords()=" + keywords);
+				whereSQL.append("\n and ");
+				whereSQL.append(filter.getWhereSQL());
+			}		
 		}
 		Log.log("FilterNode buildWhereSQL anyIdFilter=" + anyIdFilter);
 		

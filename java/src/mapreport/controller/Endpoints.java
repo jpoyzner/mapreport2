@@ -14,6 +14,7 @@ import java.util.Set;
 import javax.servlet.http.HttpServletRequest;
 
 import mapreport.filter.NameFilter;
+import mapreport.filter.SearchFilter;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
@@ -74,9 +75,13 @@ public class Endpoints {
 		Set<NameFilter> nameFilters = new HashSet<NameFilter>();			
 		
 		String topic = getCleanParam(request, "topic");
-		      Log.log("Endpoints topic to add:" + topic);
+	      Log.log("Endpoints topic to add:" + topic);
 		topic = addTopicFilters(nameFilters, topic);
-		
+
+		String keywords = getCleanParam(request, "keywords");
+	    Log.log("Endpoints keywords to add:" + keywords);
+	    boolean isSearchFilterAdded = addSearchFilters(nameFilters, keywords);
+
 		if (location != null && !location.equals(Global.GLOBAL) && !location.equals(Local.LOCAL_NAME)) {
 			Log.info("Endpoints Location:" + location);
 			location = URLDecoder.decode(location, "UTF-8");
@@ -84,17 +89,20 @@ public class Endpoints {
 			Log.info("Endpoints Location added:" + location);
 		}
 		
-		int dateFilterCnt = 0;
+		int dateAndSearchFilterCnt = 0;
 		
 		String dates[] = request.getParameterValues("date"); // for test {"May-11-2008", "May-11-2009"}; 
 		String date = getCleanParam(request, "date");
 		
-		dateFilterCnt = addDateFilters(nameFilters, dateFilterCnt, dates, date);
+		dateAndSearchFilterCnt = addDateFilters(nameFilters, dateAndSearchFilterCnt, dates, date);
 		
 		Log.info("Endpoints news topic;" + topic + " location:" + location + " date:" + date + " dates:" + dates + " left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom);
 		
 		Options options = ResponseBuilder.buildOptionsFromRequest(request);
-		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateFilterCnt, 500, localLong, localLat, options, paramStr).toString();
+		if (isSearchFilterAdded) {
+			dateAndSearchFilterCnt++;
+		}
+		String json = ResponseBuilder.buildJson(rectangle, nameFilters, dateAndSearchFilterCnt, 500, localLong, localLat, options, paramStr).toString();
 		
 		// Cache.putInCache(paramStr, json);
 
@@ -138,6 +146,21 @@ public class Endpoints {
 			}
 		}
 		return topic;
+	}
+
+	public static boolean addSearchFilters(Set<NameFilter> nameFilters,
+			String keywords) throws UnsupportedEncodingException {
+		boolean isSearchFilterAdded = false;
+		if (keywords != null) {	
+			keywords = URLDecoder.decode(keywords, "UTF-8");
+
+			if (!keywords.isEmpty()) {		
+				nameFilters.add(new SearchFilter(keywords));
+				isSearchFilterAdded = true;
+				Log.info("Endpoints topic SearchFilter:" + keywords);
+			}
+		}
+		return isSearchFilterAdded;
 	}
 
 	public static Rectangle buildRectangle(Rectangle rectangle, String left,
