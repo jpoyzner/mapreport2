@@ -157,6 +157,10 @@ public class PagePresentation {
 		Map<String, Integer> iconMap = new HashMap<String, Integer>(20);
 		
 		int max = 0;
+		int flagCntr = 0;
+		String commonFlag = "";
+		boolean isAllFlagsSame = true;
+		
 		for (News news : newsList) {
 			String icon = news.getIcon();
 			
@@ -167,12 +171,35 @@ public class PagePresentation {
 				int newNm = iconMap.get(icon) + 1;
 				iconMap.put(icon, newNm);
 				max = Math.max(newNm, max);
+				
+				if (isAllFlagsSame) {
+					String flag = null;
+					String flag2 = news.getIcon2();
+					
+					if (icon.indexOf("flag") > -1) {
+						flag = icon;
+					} else if (flag2 != null && flag2.indexOf("flag") > -1) {
+						flag = flag2;
+					}
+					if (flag != null) {
+						flagCntr++;
+						
+						if (!flag.equals(commonFlag)) {
+							if (commonFlag.isEmpty()) {
+								commonFlag = flag;
+							} else {
+								isAllFlagsSame = false;
+							}
+						}
+					}
+				}
 			}
 		}
 		
 		Log.log("addSecondIcon max:" + max);
 		
 		Set<Map.Entry<String, Integer>> entrySet = iconMap.entrySet();
+		
 	    for (Map.Entry<String, Integer> entry : entrySet) {
 	          Integer cntr = entry.getValue();
 	          
@@ -186,13 +213,30 @@ public class PagePresentation {
 	        			if (news.getIcon() != null && news.getIcon().equals(maxIcon)) {
 	        				if (isStarted && news.getIcon2() != null && !news.getIcon2().isEmpty()) {
 	        					Log.log("addSecondIcon was news.getIcon()=" + news.getIcon() + " news.getIcon2()=" + news.getIcon2() + " label=" + news.getLabel());
+	        					String firstIcon = new String(news.getIcon());
 	        					news.setIcon(news.getIcon2());
+	        					news.setIcon2(firstIcon);
 	        					Log.log("addSecondIcon after news.getIcon()=" + news.getIcon());
 	        				}
 	        				isStarted = true;
 	        			}
 	        	  }
 	          }
+	    }
+	    
+	    if (isAllFlagsSame) {
+      	  for (News news : newsList) {
+      			if (news.getIcon() != null && news.getIcon().equals(commonFlag)) {
+      				if (news.getIcon2() != null && !news.getIcon2().isEmpty()) {
+      				//	Log.log("addSecondIcon was news.getIcon()=" + news.getIcon() + " news.getIcon2()=" + news.getIcon2() + " label=" + news.getLabel());
+      					news.setIcon(news.getIcon2());
+      				//	Log.log("addSecondIcon after news.getIcon()=" + news.getIcon());
+      				} else {
+      					news.setIcon("common/list2.gif");
+      				}
+      			}
+      	  }
+
 	    }
 		
 		return newsList;
