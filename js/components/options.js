@@ -58,6 +58,7 @@ define(['react', 'utils/css'], function(React, Css) {
 			
 			$(menus[1]).find('div').click(function(event) {
 				this.props.news.loc = $(event.target).html();
+				this.props.news.mapBounds = null;
 				this.props.news.fetch();
 			}.bind(this));
 			

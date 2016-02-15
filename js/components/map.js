@@ -58,11 +58,36 @@ define(['react', 'utils/css'], function(React, Css) {
 			return (
 				<div id="mr-map-bucket">
 					<div id="mr-map" />
+					<div id="mr-search">
+						<input id="mr-search-input" />
+						<span id="mr-search-action">Search</span>
+						<span id="mr-search-clear">x</span>
+					</div>
 					<img id="mr-curloc-button" src="images/curloc.png" />
 				</div>
 			);
 		},
 		componentDidMount: function() {
+			var searchInput = $('#mr-search-input');
+			this.searchInput = searchInput;
+			searchInput.keyup(function(event) {
+				if (event.keyCode == 13) {
+			    	this.props.news.search = searchInput.val();
+					this.props.news.fetch()
+			    }
+			}.bind(this));
+			
+			$('#mr-search-action').show().click(function() {
+				this.props.news.search = searchInput.val();
+				this.props.news.fetch();
+			}.bind(this));
+			
+			$('#mr-search-clear').show().click(function() {
+				this.props.news.search = null;
+				searchInput.val('')
+				this.props.news.fetch();
+			}.bind(this));
+			
 			$('#mr-curloc-button').show().click(function() {
 				this.props.news.loc = "Local";
 				this.props.news.localLat = this.curlat;
@@ -73,6 +98,10 @@ define(['react', 'utils/css'], function(React, Css) {
 		componentDidUpdate: function() {
 			if (this.props.loading) {
 				return;
+			}
+			
+			if (this.props.search) {
+				this.searchInput.val(this.props.search);
 			}
 			
 			if (this.markers && this.markers.length) {

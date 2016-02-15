@@ -51,8 +51,18 @@ body {
 	top: 5%;
 }
 
+.mobile #mr-report-bucket {
+	height: 40%;
+	position: fixed;
+	top: 60%;
+	width: 100%;
+}
+
+/* I forget why, but stuff below needs to be in here, something to do with showing and hiding */
+
 #mr-curloc-button {
 	background-color: white;
+	border-radius: 20px;
 	cursor: pointer;
 	display: none;
     left: 1%;
@@ -61,15 +71,21 @@ body {
     width: 3%;
 }
 
+#mr-search {
+	left: 1%;
+	position: fixed;
+    top: 7%;
+}
+
+#mr-search > span {
+	background-color: white;
+    border: 1px solid;
+    cursor: pointer;
+    padding: 0 2px;
+}
+
 .mobile #mr-curloc-button {
     left: 2%;
     top: 52%;
     width: 10%;
-}
-
-.mobile #mr-report-bucket {
-	height: 40%;
-	position: fixed;
-	top: 60%;
-	width: 100%;
 }

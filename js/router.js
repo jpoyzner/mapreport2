@@ -31,7 +31,7 @@ define(['backbone'], function (Detector) {
 	    		date = path[dateIndex];
 	    	}
 	    	
-	    	var left, right, top, bottom;
+	    	var left, right, top, bottom, search;
 	    	_.each(location.search.slice(1).split('&'), function(queryParam) {
 	    		var entry = queryParam.split('=');
 	    		if (entry[0] === 'left') {
@@ -42,6 +42,8 @@ define(['backbone'], function (Detector) {
 	    			top = entry[1];
 	    		} else if (entry[0] === 'bottom') {
 	    			bottom = entry[1];
+	    		} else if (entry[0] === 'search') {
+	    			search = entry[1];
 	    		}
 	    	});
 	    	
@@ -49,6 +51,10 @@ define(['backbone'], function (Detector) {
 	    	
 	    	if (left && right && top && bottom) {
 	    		this.settings.mapBounds = {left: left, right: right, top: top, bottom: bottom};
+	    	}
+	    	
+	    	if (search) {
+	    		this.settings.search = search;
 	    	}
 	    },
 	    redirectTo: function(path) {

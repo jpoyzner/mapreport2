@@ -22,6 +22,10 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				this.mapBounds = options.mapBounds;
 			}
 			
+			if (options.search) {
+				this.search = options.search;
+			}
+			
 			this.fetches = 0;
 			
 			this.on('request', _.bind(function() {
@@ -53,21 +57,29 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			
 			//console.log(response.SQL);
 			
-			if (this.topic || this.loc || this.date || this.mapBounds) {
+			if (this.topic || this.loc || this.date || this.mapBounds || this.search) {
+				var queryParams = [];
+				
+				if (this.mapBounds) {
+					queryParams.push(
+						"left=" + this.mapBounds.left,
+						"right=" + this.mapBounds.right,
+					    "top=" + this.mapBounds.top,
+					    "bottom=" + this.mapBounds.bottom);
+				}
+				
+				if (this.search) {
+					queryParams.push("search=" + this.search);
+				}
+				
 				require('router').navigateTo(
-					(this.topic ? "topic/" + this.topic : "")
-						+ ((this.topic && this.loc) ? "/" : "")
-						+ (this.loc ? "location/" + this.loc : "")
-						+ (((this.topic || this.loc) && this.date) ? "/" : "")
-						+ (this.date ? "date/" + this.date : "")
-						+ (this.mapBounds ?
-							BuildURL(
-								"",
-								["left=" + this.mapBounds.left,
-								 	"right=" + this.mapBounds.right,
-				            		"top=" + this.mapBounds.top,
-				            		"bottom=" + this.mapBounds.bottom])
-				            : ""));
+					BuildURL(
+						(this.topic ? "topic/" + this.topic : "")
+							+ ((this.topic && this.loc) ? "/" : "")
+							+ (this.loc ? "location/" + this.loc : "")
+							+ (((this.topic || this.loc) && this.date) ? "/" : "")
+							+ (this.date ? "date/" + this.date : ""),
+						queryParams));
 			}
 			
 			return response.news;
@@ -101,6 +113,10 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			
 			if (this.date) {
 				params.push("date=" + encodeURI(this.date));
+			}
+			
+			if (this.search) {
+				params.push("keywords=" + this.search);
 			}
 			
 			return BuildURL(this.rootUrl + 'news', params);
