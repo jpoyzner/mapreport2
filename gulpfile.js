@@ -51,6 +51,6 @@ gulp.task('clean', function(callback) {
 	del(["WebContent/js/**/*"], callback);
 });
 
-gulp.task('db', function(callback) {
-	//TODO: db scripts
-});
+gulp.task('db', require('gulp-shell').task([
+	"cd /usr/local/mysql/bin; sudo ./mysqld -u root"
+]));
