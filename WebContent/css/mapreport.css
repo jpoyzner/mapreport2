@@ -72,14 +72,21 @@ body {
 }
 
 #mr-search {
+	font-size: 18px;
 	left: 1%;
 	position: fixed;
     top: 7%;
 }
 
+#mr-search-input {
+	border-radius: 5px;
+	font-size: 18px;
+}
+
 #mr-search > span {
 	background-color: white;
     border: 1px solid;
+    border-radius: 5px;
     cursor: pointer;
     padding: 0 2px;
 }

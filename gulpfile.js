@@ -50,3 +50,7 @@ gulp.task('debug', ['clean'], function() {
 gulp.task('clean', function(callback) {
 	del(["WebContent/js/**/*"], callback);
 });
+
+gulp.task('db', function(callback) {
+	//TODO: db scripts
+});

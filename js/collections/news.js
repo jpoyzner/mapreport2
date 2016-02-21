@@ -1,6 +1,6 @@
 define(['collections/topics', 'collections/locations', 'collections/dates', 'models/article', 'utils/buildurl', 'utils/spiderfy',
-    'underscore', 'backbone'],
-function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy) {
+    'utils/detector', 'underscore', 'backbone'],
+function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy, Detector) {
 	return Backbone.Collection.extend({
 		model: ArticleModel,
 		initialize: function(rootUrl, options) {
@@ -117,6 +117,10 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 			
 			if (this.search) {
 				params.push("keywords=" + this.search);
+			}
+			
+			if (Detector.phone()) {
+				params.push("isMobile=true");
 			}
 			
 			return BuildURL(this.rootUrl + 'news', params);

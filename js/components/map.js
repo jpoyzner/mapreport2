@@ -61,7 +61,7 @@ define(['react', 'utils/css'], function(React, Css) {
 					<div id="mr-search">
 						<input id="mr-search-input" />
 						<span id="mr-search-action">Search</span>
-						<span id="mr-search-clear">x</span>
+						<span id="mr-search-clear">X</span>
 					</div>
 					<img id="mr-curloc-button" src="images/curloc.png" />
 				</div>

@@ -1,4 +1,4 @@
-define(['backbone'], function (Detector) {
+define(['backbone'], function() {
 	return new (Backbone.Router.extend({
 	    initialize: function() {
 	    	var usePushStates = "pushState" in history;
