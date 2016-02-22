@@ -4,6 +4,7 @@ function(React, Detector, News, Options, Map, Report, Router) {
 		getInitialState: function() {
 			window.page = this;
 			
+			//TODO: duplicated in router.js and page.js
 			new News("http://" + Router.rootDomain + Router.pathPrefix, Router.settings)
 				.on('sync', function(news) {
 					//won't need coordinates probably
