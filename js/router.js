@@ -71,6 +71,8 @@ define(['collections/news', 'backbone'], function(News) {
 			    .on('request', function() {
 			    	this.setState({loading: true});
 			    }.bind(page));
+	    		
+	    		page.setState({loading: true});
 	    	}
 	    },
 	    redirectTo: function(path) {
