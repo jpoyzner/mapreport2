@@ -176,7 +176,7 @@ public class PagePresentation {
 					String flag = null;
 					String flag2 = news.getIcon2();
 					
-					if (icon.indexOf("flag") > -1) {
+					if (icon != null && icon.indexOf("flag") > -1) {
 						flag = icon;
 					} else if (flag2 != null && flag2.indexOf("flag") > -1) {
 						flag = flag2;
