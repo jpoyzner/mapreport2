@@ -16,6 +16,4 @@ requirejs.config({
     }
 });
 
-requirejs(['jquery', 'react', 'components/page'], function($, React, Page) {
-	React.render(React.createElement(Page), $('body')[0]);
-});
+requirejs(['router'], function(Router){});

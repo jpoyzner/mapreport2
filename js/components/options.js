@@ -10,62 +10,55 @@ define(['react', 'utils/css'], function(React, Css) {
 					{this.props.loading ?
 						<span className="header">&nbsp;MAPREPORT</span>
 						: <div id="mr-options">
-							<div className="mr-option mr-topic-option">
+							<div className="mr-option mr-topic-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
 									<span>TOPIC: {this.props.news.topic || 'All Topics'}</span>
 									{this.props.news.topics.models.map(function(topic) {
 										return (
-											<div>{topic.get('node')}</div>
+											<div onClick={this.updateTopic}>{topic.get('node')}</div>
 										);
-									})}
+									}.bind(this))}
 								</span>
 							</div>
-							<div className="mr-option mr-location-option">
+							<div className="mr-option mr-location-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
 									<span>LOCATION: {this.props.news.loc || 'All Locations'}</span>
 									{this.props.news.locations.models.map(function(location) {
 										return (
-											<div>{location.get('node')}</div>
+											<div onClick={this.updateLocation}>{location.get('node')}</div>
 										);
-									})}
+									}.bind(this))}
 								</span>
 							</div>
-							<div className="mr-option mr-time-option">
+							<div className="mr-option mr-time-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
 									<span>TIME: {this.props.news.date || 'All Time'}</span>
 									{this.props.news.dates.models.map(function(date) {
 										return (
-											<div>{date.get('node')}</div>
+											<div onClick={this.updateTime}>{date.get('node')}</div>
 										);
-									})}
+									}.bind(this))}
 								</span>
 							</div>
 						</div>}
 				</div>
 			);
 		},
-		componentDidUpdate: function() {
-			var menus = $('.mr-option');
-			
-			menus.click(function(e) {
-				$(e.currentTarget).toggleClass('mr-expanded')
-			});
-			
-			$(menus[0]).find('div').click(function(event) {
-				this.props.news.topic = $(event.target).html();
-				this.props.news.fetch();
-			}.bind(this));
-			
-			$(menus[1]).find('div').click(function(event) {
-				this.props.news.loc = $(event.target).html();
-				this.props.news.mapBounds = null;
-				this.props.news.fetch();
-			}.bind(this));
-			
-			$(menus[2]).find('div').click(function(event) {
-				this.props.news.date = $(event.target).html();
-				this.props.news.fetch();
-			}.bind(this));
+		toggleMenu: function(event) {
+			$(event.currentTarget).toggleClass('mr-expanded');
+		},
+		updateTopic: function(event) {
+			this.props.news.topic = $(event.target).html();
+			this.props.news.fetch();
+		},
+		updateLocation: function(event) {
+			this.props.news.loc = $(event.target).html();
+			this.props.news.mapBounds = null;
+			this.props.news.fetch();
+		},
+		updateTime: function(event) {
+			this.props.news.date = $(event.target).html();
+			this.props.news.fetch();
 		}
 	});
 });

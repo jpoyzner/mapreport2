@@ -1,11 +1,11 @@
-define(['react', 'utils/detector', 'collections/news', 'components/options', 'components/map', 'components/report', 'router'],
-function(React, Detector, News, Options, Map, Report, Router) {
+define(['react', 'utils/detector', 'collections/news', 'components/options', 'components/map', 'components/report'],
+function(React, Detector, News, Options, Map, Report) {
 	return React.createClass({
 		getInitialState: function() {
 			window.page = this;
 			
 			//TODO: duplicated in router.js and page.js
-			new News("http://" + Router.rootDomain + Router.pathPrefix, Router.settings)
+			new News("http://" + router.rootDomain + router.pathPrefix, router.settings)
 				.on('sync', function(news) {
 					//won't need coordinates probably
 			    	this.setState({

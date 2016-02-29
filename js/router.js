@@ -1,6 +1,8 @@
-define(['collections/news', 'backbone'], function(News) {
+define(['react', 'components/page', 'backbone'], function(React, Page) {
 	return new (Backbone.Router.extend({
 	    initialize: function() {
+	    	window.router = this;
+	    	
 	    	var usePushStates = "pushState" in history;
 	    	Backbone.history.start({pushState: usePushStates, hashChange: usePushStates});
 	    },
@@ -57,22 +59,10 @@ define(['collections/news', 'backbone'], function(News) {
 	    		this.settings.search = search;
 	    	}
 	    	
-	    	if (typeof page !== 'undefined') {
-	    		//TODO: duplicated in router.js and page.js
-	    		new News("http://" + this.rootDomain + this.pathPrefix, this.settings)
-				.on('sync', function(news) {
-					//won't need coordinates probably
-			    	this.setState({
-			    		loading: news.fetches,
-			    		news: news, latitude: 37.759753,
-			    		longitude: -122.50232699999998,
-			    		search: news.search});
-			    }.bind(page))
-			    .on('request', function() {
-			    	this.setState({loading: true});
-			    }.bind(page));
-	    		
-	    		page.setState({loading: true});
+	    	if (typeof page === 'undefined') {
+	    		React.render(React.createElement(Page), $('body')[0]);
+	    	} else {
+	    		page.getInitialState();
 	    	}
 	    },
 	    redirectTo: function(path) {
