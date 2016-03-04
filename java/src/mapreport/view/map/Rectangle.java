@@ -9,6 +9,14 @@ public class Rectangle {
 	double right;
 	double top;
 	double bottom;
+	
+	double xCenter;
+	double yCenter;
+	
+	double xSpan;
+	double ySpan;
+	
+	double clusterNewsRadius;
 	  
 	public Rectangle(
 		double xCenter,
@@ -33,6 +41,8 @@ public class Rectangle {
 		this.yCenter = (this.top + this.bottom) / 2;
 		this.xSpan = Math.abs(this.left - this.right);
 		this.ySpan = Math.abs(this.top - this.bottom);
+		
+		clusterNewsRadius = Math.max(Math.abs(xSpan), Math.abs(ySpan)) / 30;
 	}
 
 	private void init(double xCenter, double yCenter, double xSpan, double ySpan) {
@@ -40,6 +50,8 @@ public class Rectangle {
 		right = xCenter + xSpan / 2;
 		top = yCenter + ySpan / 2;
 		bottom = yCenter - ySpan / 2;
+		
+		clusterNewsRadius = Math.max(Math.abs(xSpan), Math.abs(ySpan)) / 30;
 	}
 	
 	public Rectangle(Options options) {
@@ -54,7 +66,7 @@ public class Rectangle {
 		this.ySpan = Math.abs(this.top - this.bottom);
 
 		Log.log("Rectangle xCenter=" + xCenter + " yCenter=" + yCenter + " xSpan=" + xSpan + " ySpan=" + ySpan 
-		        		 + "  left=" + left + " right=" + right + " top =" + top + " bottom=" + bottom); 
+		        		 + "  left=" + left + " right=" + right + " top =" + top + " bottom=" + bottom + " clusterNewsRadius=" + clusterNewsRadius); 
 		init(xCenter, yCenter, xSpan, ySpan);
 	}
 
@@ -130,8 +142,7 @@ public class Rectangle {
 	public void setySpan(double ySpan) {
 		this.ySpan = ySpan;
 	}
-	double xSpan;
-	double ySpan;
+;
 	public double getXCenter() {
 		return xCenter;
 	}
@@ -147,8 +158,7 @@ public class Rectangle {
 	public void setyCenter(double yCenter) {
 		this.yCenter = yCenter;
 	}
-	double xCenter;
-	double yCenter;
+
 	public String toString() {
 		String ret = "Rectangle left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom + " xSpan:" + xSpan + " ySpan:" + ySpan 
 				 + " xCenter:" + xCenter + " yCenter:" + yCenter;

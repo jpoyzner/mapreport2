@@ -21,6 +21,7 @@ public class RectangleSerializer  implements JsonSerializer<Rectangle> {
 	    jsonObject.add("yCenter", context.serialize(rect.yCenter));
 	    jsonObject.add("xSpan", context.serialize(rect.xSpan));
 	    jsonObject.add("ySpan", context.serialize(rect.ySpan));
+	    jsonObject.add("clusterNewsRadius", context.serialize(rect.clusterNewsRadius));
 	    
 	    return jsonObject;  
 	}
