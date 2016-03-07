@@ -83,11 +83,10 @@ public class DBBase {
 	
 	static Map<String, String> env = System.getenv();
 	
-	static String url = "jdbc:mysql://" + env.get("DBHOST") + ":3306/new_schema2"; 
-	static String user = "root";
-	static String password = env.get("DBPASSWORD");
-	static Connection con;
-
+	static final String url = "jdbc:mysql://" + env.get("DBHOST") + ":3306/new_schema2"; 
+	static final String user = "root";
+	static final String password = env.get("DBPASSWORD");
+	
 	static {
 		try { 
 			Log.info("com.mysql.jdbc.Driver starts url;" + url + " user:" + user + " password:" + password);
@@ -99,22 +98,13 @@ public class DBBase {
 		}
 	}
 
-	public static void buildConnection() {
-		try {
-			con = DriverManager.getConnection(url, user, password);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
 	public String buildSql(int nameFiltersNo, boolean isCoordFilter) {
 		return null;
 	}
 
 	public PreparedStatement prepareStmt() {
 		try {
-			pst = con.prepareStatement(sql);
+			pst = ThreadLocalConnection.get().prepareStatement(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -135,14 +125,12 @@ public class DBBase {
 	}
 
 	public PreparedStatement begin(int nameFilterNo, boolean isCoordFilter) {
-
 		Log.info("DBase begin nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
-		buildConnection();
 
 		buildSql(nameFilterNo, isCoordFilter);
 		pst = prepareStmt();
 
-		Log.log("DBQueryBuilder con=" + con);
+		Log.log("DBQueryBuilder con=" + ThreadLocalConnection.get());
 		return pst;
 	}
 
@@ -163,8 +151,10 @@ public class DBBase {
 				if (pst != null) {
 					pst.close();
 				}
-				if (con != null) {
-					con.close();
+				
+				Connection connection = ThreadLocalConnection.get();
+				if (connection != null) {
+					connection.close();
 				}
 
 			} catch (SQLException ex) {

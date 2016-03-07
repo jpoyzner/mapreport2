@@ -157,10 +157,7 @@ public class FilterDBQueryBuilder {
 	
 	public PreparedStatement prepareStmt() {
 		try {
-			if (DBQueryBuilder.con == null) {
-				DBQueryBuilder.buildConnection();
-			}
-			pst = DBQueryBuilder.con.prepareStatement(sql);
+			pst = ThreadLocalConnection.get().prepareStatement(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
