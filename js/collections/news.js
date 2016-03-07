@@ -1,6 +1,6 @@
-define(['collections/topics', 'collections/locations', 'collections/dates', 'models/article', 'utils/buildurl', 'utils/spiderfy',
-    'utils/detector', 'underscore', 'backbone'],
-function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Spiderfy, Detector) {
+define(['collections/topics', 'collections/locations', 'collections/dates', 'models/article', 'utils/buildurl', 'utils/detector',
+        'underscore', 'backbone'],
+function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, BuildURL, Detector) {
 	return Backbone.Collection.extend({
 		model: ArticleModel,
 		initialize: function(rootUrl, options) {
@@ -53,7 +53,7 @@ function(TopicsCollection, LocationsCollection, DatesCollection, ArticleModel, B
 				this.dates = new DatesCollection(response.dates.children);
 			}
 			
-			Spiderfy(response.news, this.mapBounds);
+			this.radius = response.view.rectangle.clusterNewsRadius;
 			
 			//console.log(response.SQL);
 			

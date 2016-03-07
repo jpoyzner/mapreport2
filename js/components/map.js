@@ -1,4 +1,4 @@
-define(['react', 'utils/css'], function(React, Css) {
+define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) {
 	return React.createClass({
 		getInitialState: function() {
 			window.mapComponent = this;
@@ -113,6 +113,7 @@ define(['react', 'utils/css'], function(React, Css) {
 			this.markers = [];
 			
 			var bounds = new google.maps.LatLngBounds();
+			var shownNews = [];
 			this.props.news.models.map(function(article) {
 				if (!article.get('isMapShow')) {
 					return;
@@ -125,6 +126,9 @@ define(['react', 'utils/css'], function(React, Css) {
 						icon: article.get('icon'),
 						title: article.get('label')
 					});
+				
+				article.set('marker', marker);
+				shownNews.push(article);
 				
 				bounds.extend(marker.getPosition());
 				
@@ -145,6 +149,37 @@ define(['react', 'utils/css'], function(React, Css) {
 			if (!this.mapMoved && this.props.news.models.length) {
 				this.fittingBounds = true;
 				this.map.fitBounds(bounds);
+				
+				Spiderfy(shownNews, this.props.news.radius).map(function(article) {
+					var oldMarker = article.get('marker');
+					var oldMarkerIndex = this.markers.indexOf(oldMarker);
+					if (oldMarkerIndex !== -1) {
+						oldMarker.setMap(null);
+						this.markers.splice(oldMarkerIndex, 1);
+					} 
+					
+					var marker =
+						new google.maps.Marker({
+							position: new google.maps.LatLng(article.get('y'), article.get('x')),
+							map: this.map,
+							icon: article.get('icon'),
+							title: article.get('label')
+						});
+					
+					marker.addListener('click', function() {
+						new google.maps.InfoWindow({
+						    content:
+						    	'<a href="' + article.get('url') + '" target="_blank">' +
+						    		article.get('dateTime') +
+						    		' @ ' + article.get('address') +
+						    		': ' + article.get('label') +
+						    	'</a>'
+						}).open(this.map, marker);
+					}.bind(this));
+					
+					//need to remove original marker! and add to list!
+				}.bind(this));
+				
 				this.fittingBounds = false;
 			}
 			
