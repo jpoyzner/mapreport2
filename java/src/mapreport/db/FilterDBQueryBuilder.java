@@ -1,5 +1,7 @@
 package mapreport.db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -9,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import mapreport.filter.DBFilter;
-import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.loc.LocationByName;
 import mapreport.filter.time.Century;
@@ -23,9 +24,8 @@ import mapreport.filter.topic.Topic;
 import mapreport.news.News;
 import mapreport.util.Log;
 
-public class FilterDBQueryBuilder {
+public class FilterDBQueryBuilder extends DBBase {
 	String sql;
-	PreparedStatement pst;
 	/*
 	 * select  f.priority as filterPriority, f.name as fName, fp.name as pName, fp.isLocation as isPLocation, ff.level as pLevel -- ,
  from  filter f, filter fp, newsfilter nf, filterfilter ff, news n  
@@ -148,36 +148,33 @@ public class FilterDBQueryBuilder {
 
 	       Log.info("FilterDBQueryBuilder buildSql sql=" + sql);
 		return sql;
-	}
-	
-	public PreparedStatement begin(){
-        return pst;
 	}    
 		
 	
-	public PreparedStatement prepareStmt() {
+	public PreparedStatement prepareStmt(Connection connection) {
 		try {
-			pst = ThreadLocalConnection.get().prepareStatement(sql);
+			return connection.prepareStatement(sql);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return pst;
+		return null;
 	}
 	
 	public List <DBFilter> runQuery(Map<Integer, News> newsMap) throws SQLException {
 		if (newsMap.size() == 0) {
 			return new ArrayList <DBFilter>(1);
 		}
-		begin();
 		Log.info("FilterDBQueryBuilder start executeQuery");
    	    buildSql(newsMap);
-   	    prepareStmt();
+   	    Connection connection = DriverManager.getConnection(DBBase.url, DBBase.user, DBBase.password);
+   	    PreparedStatement pst = prepareStmt(connection);
 		Log.info("FilterDBQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("FilterDBQueryBuilder start processResultSet");		
 		List <DBFilter> rows = processResultSet(resultSet, newsMap);
 		Log.info("FilterDBQueryBuilder end processResultSet");
+		end(pst, connection);
 	    return rows;
 	}
 	

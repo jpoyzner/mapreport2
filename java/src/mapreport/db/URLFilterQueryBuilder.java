@@ -1,5 +1,8 @@
 package mapreport.db;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -82,18 +85,19 @@ public class URLFilterQueryBuilder extends FilterDBQueryBuilder {
 		if (nameFilters.size() == 0) {
 			return new  HashMap <String, DBFilter>(1);
 		}
-		begin();
 		Log.info("URLFilterQueryBuilder start executeQuery");
    	    String sql = buildSql(nameFilters);
    	    
    	    if (sql == null) {
    	    	return new  HashMap <String, DBFilter>(1);
    	    }
-   	    prepareStmt();
+   	    Connection connection = DriverManager.getConnection(DBBase.url, DBBase.user, DBBase.password);
+   	    PreparedStatement pst = prepareStmt(connection);
 		Log.info("URLFilterQueryBuilder pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.info("URLFilterQueryBuilder start processResultSet");		
 		Map <String, DBFilter> rows = buildFilters(resultSet);
+		end(pst, connection);
 	    return rows;
 	}
 }

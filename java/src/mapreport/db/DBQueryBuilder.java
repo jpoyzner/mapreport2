@@ -1,5 +1,6 @@
 package mapreport.db;
 
+import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -156,7 +157,7 @@ public class DBQueryBuilder extends DBBase{
 	}
 
 	
-	void bindFilters() throws SQLException {
+	void bindFilters(PreparedStatement pst) throws SQLException {
 		filterNode.bindFilters(pst);
 	}
 
@@ -267,17 +268,18 @@ public class DBQueryBuilder extends DBBase{
 		  return row;
 	}
 	  public List<NewsFilterRow> runQuery(int nameFiltersNo, boolean isCoordFilter) throws SQLException {
-			begin(nameFiltersNo, isCoordFilter);
-			Log.log("start startBindQuery");
-			startBindQuery();	
-			Log.log("start bindFilters");	
-			bindFilters();
-			Log.log("start executeQuery");
-			Log.info("DBQueryBuilder runQuery() pst=\n" + pst.toString());
-			ResultSet resultSet = pst.executeQuery();
-			Log.log("start processResultSet");		
-		    List<NewsFilterRow> rows = processResultSet(resultSet);
-		    return rows;
+		  Connection connection = DriverManager.getConnection(url, user, password);
+		  PreparedStatement pst = begin(connection, nameFiltersNo, isCoordFilter);
+		  Log.log("start startBindQuery");
+		  Log.log("start bindFilters");	
+		  bindFilters(pst);
+		  Log.log("start executeQuery");
+		  Log.info("DBQueryBuilder runQuery() pst=\n" + pst.toString());
+		  ResultSet resultSet = pst.executeQuery();
+		  Log.log("start processResultSet");		
+		  List<NewsFilterRow> rows = processResultSet(resultSet);
+		  end(pst, connection);
+		  return rows;
 	  }
 
 }

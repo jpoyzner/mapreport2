@@ -11,7 +11,6 @@ import java.util.Map;
 import mapreport.util.Log;
 
 public class DBBase {
-	protected PreparedStatement pst = null;
 	int limit = 2;
 
 	public int getLimit() {
@@ -71,14 +70,6 @@ public class DBBase {
 
 	protected StringBuilder orderBySQL = new StringBuilder("");
 
-	public PreparedStatement getPst() {
-		return pst;
-	}
-
-	public void setPst(PreparedStatement pst) {
-		this.pst = pst;
-	}
-
 	protected static ResultSet resultSet = null;
 	
 	static Map<String, String> env = System.getenv();
@@ -102,14 +93,16 @@ public class DBBase {
 		return null;
 	}
 
-	public PreparedStatement prepareStmt() {
-		try {
-			pst = ThreadLocalConnection.get().prepareStatement(sql);
+	public PreparedStatement prepareStmt(Connection connection) {
+		try {			
+			Log.log("DBQueryBuilder con=" + connection);
+			
+			return connection.prepareStatement(sql);
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return pst;
+		
+		return null;
 	}
 
 	public static boolean hasColumn(ResultSet rs, String columnName)
@@ -124,45 +117,19 @@ public class DBBase {
 		return false;
 	}
 
-	public PreparedStatement begin(int nameFilterNo, boolean isCoordFilter) {
+	public PreparedStatement begin(Connection connection, int nameFilterNo, boolean isCoordFilter) {
 		Log.info("DBase begin nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
-
 		buildSql(nameFilterNo, isCoordFilter);
-		pst = prepareStmt();
-
-		Log.log("DBQueryBuilder con=" + ThreadLocalConnection.get());
-		return pst;
+		return prepareStmt(connection);
 	}
 
-	void startBindQuery() throws SQLException {
-
-	}
-
-	public void end() {
+	public void end(PreparedStatement ps, Connection conn) {
 		try {
-			pst.executeUpdate();
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			try {
-				if (pst != null) {
-					pst.close();
-				}
-				
-				Connection connection = ThreadLocalConnection.get();
-				if (connection != null) {
-					connection.close();
-				}
-
-			} catch (SQLException ex) {
-				// Logger lgr = Logger.getLogger(Test.class.getName());
-				// lgr.log(Level.SEVERE, ex.getMessage(), ex);
-				Log.info(ex.getMessage());
-				ex.printStackTrace(System.out);
-			}
+			ps.close();
+			conn.close();
+		} catch (SQLException ex) {
+			Log.info(ex.getMessage());
+			ex.printStackTrace();
 		}
 	}
 
@@ -182,7 +149,7 @@ public class DBBase {
 		return whereSQL;
 	}
 
-	public ResultSet executeQuery() {
+	public ResultSet executeQuery(PreparedStatement pst) {
 		try {
 			Log.info("DBQueryBuilder pst=\n" + pst.toString());
 			resultSet = pst.executeQuery();

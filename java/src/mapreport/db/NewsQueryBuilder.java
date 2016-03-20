@@ -1,6 +1,9 @@
 package mapreport.db;
 
+import java.sql.Connection;
 import java.sql.Date;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -15,21 +18,33 @@ import java.util.Set;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
-import mapreport.filter.time.AllTime;
 import mapreport.filter.time.Latest;
 import mapreport.filter.time.OfficialTimeFilter;
 import mapreport.filter.time.TimeFilter;
-import mapreport.filter.topic.Topic;
 import mapreport.front.option.Options;
 import mapreport.front.page.FilterNode;
 import mapreport.news.News;
 import mapreport.resp.ResponseBuilder;
 import mapreport.util.Log;
-import mapreport.view.map.Rectangle;
 
 public class NewsQueryBuilder extends DBBase {
 	FilterNode filterNode = new FilterNode();
 	Map<String, DBFilter> dbFilterMap = new HashMap<String, DBFilter>(2);
+	private PreparedStatement pst;
+
+	public NewsQueryBuilder(int limit) {
+		this.limit = limit;
+
+		selectSQL = new StringBuilder("");
+
+		fromSQL = new StringBuilder(
+				"\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
+		whereSQL = new StringBuilder(" f.filterId = l.filterId "
+				+ " and n.newsId = nf.newsId "
+				+ "  and f.filterId = nf.filterId ");
+
+		orderBySQL = new StringBuilder("");
+	}
 
 	public FilterNode getFilterNode() {
 		return filterNode;
@@ -37,6 +52,10 @@ public class NewsQueryBuilder extends DBBase {
 
 	public void setFilterNode(FilterNode filterNode) {
 		this.filterNode = filterNode;
+	}
+	
+	public PreparedStatement getPst() {
+		return pst;
 	}
 
 	static final String SELECT_EXTERNAL_COORD_FILTER = "select n.addressText as addressText,"
@@ -80,21 +99,6 @@ public class NewsQueryBuilder extends DBBase {
 			Log.log("NewsQueryBuilder addFilter filter.getWhereSQL()=" + filter.getWhereSQL() + " whereSQL=" + whereSQL 
 					+ " filter.getOrderBySQL()=" + filter.getOrderBySQL() + " orderBySQL=" + orderBySQL);
 		}
-	}
-
-	public NewsQueryBuilder(int limit) {
-		this.limit = limit;
-
-		selectSQL = new StringBuilder("");
-
-		fromSQL = new StringBuilder(
-				"\n from  filter f, filter fp, newsfilter nf, filterfilter ff, news n \n ");
-		whereSQL = new StringBuilder(" f.filterId = l.filterId "
-				+ " and n.newsId = nf.newsId "
-				+ "  and f.filterId = nf.filterId ");
-
-		orderBySQL = new StringBuilder("");
-
 	}
 
 	public String buildSql(int nameFilterNo, boolean isCoordFilter) {
@@ -182,7 +186,7 @@ public class NewsQueryBuilder extends DBBase {
 		Log.log("end main");
 	}
 
-	void bindFilters() throws SQLException {
+	void bindFilters(PreparedStatement pst) throws SQLException {
 		filterNode.bindFilters(pst);
 	}
 
@@ -294,16 +298,17 @@ public class NewsQueryBuilder extends DBBase {
 
 	public List<News> runQuery(int nameFilterNo, boolean isCoordFilter, boolean hasLocationFilter, Options options) throws SQLException {
 		Log.info("NewsQueryBuilder runQuery nameFilterNo:" + nameFilterNo + " isCoordFilter:" + isCoordFilter);
-		begin(nameFilterNo, isCoordFilter);
 		Log.log("start startBindQuery");
-		startBindQuery();
 		Log.log("start bindFilters");
-		bindFilters();
+		Connection connection = DriverManager.getConnection(url, user, password);
+		pst = begin(connection, nameFilterNo, isCoordFilter);
+		bindFilters(pst);
 		Log.log("start executeQuery");
 		Log.info("NewsQueryBuilder runQuery() pst=\n" + pst.toString());
 		ResultSet resultSet = pst.executeQuery();
 		Log.log("start processResultSet");
 		List<News> rows = processResultSet(resultSet, nameFilterNo, hasLocationFilter, options);
+		end(pst, connection);
 		return rows;
 	}
 
