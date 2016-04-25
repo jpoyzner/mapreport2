@@ -14,7 +14,7 @@
 	z-index: 1;
 }
 
-.mr-option div {
+.mr-option div:not(.mr-option-title) {
 	display: none;
 }
 
@@ -28,7 +28,17 @@
 
 .mr-option-cell {
 	display: table-cell;
+	text-align: left;
 	vertical-align: middle;
+}
+
+.mr-option-cell img {
+	margin: 0 5px 0 20px;
+}
+
+.mr-option-title {
+	margin: 0 auto;
+	width: 190px;
 }
 
 .mr-topic-option {

@@ -5,6 +5,8 @@ define(['react', 'utils/css'], function(React, Css) {
 			return {};
 		},
 		render: function() {
+			var imgPrefix = "http://www.mapreport.com/images/";
+			
 			return (
 				<div id="mr-options-bucket">
 					{this.props.loading ?
@@ -12,30 +14,45 @@ define(['react', 'utils/css'], function(React, Css) {
 						: <div id="mr-options">
 							<div className="mr-option mr-topic-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<span>TOPIC: {this.props.news.topic || 'All Topics'}</span>
+									<div className="mr-option-title">TOPIC: {this.props.news.topic || 'All Topics'}</div>
 									{this.props.news.topics.models.map(function(topic) {
 										return (
-											<div onClick={this.updateTopic}>{topic.get('node')}</div>
+											<div>
+												<img src={imgPrefix + topic.get('icon')} />
+												<span onClick={this.updateTopic}>
+													<span>{topic.get('node')}</span>
+												</span>
+											</div>
 										);
 									}.bind(this))}
 								</span>
 							</div>
 							<div className="mr-option mr-location-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<span>LOCATION: {this.props.news.loc || 'All Locations'}</span>
+									<div className="mr-option-title">LOCATION: {this.props.news.loc || 'All Locations'}</div>
 									{this.props.news.locations.models.map(function(location) {
 										return (
-											<div onClick={this.updateLocation}>{location.get('node')}</div>
+											<div>
+												<img src={imgPrefix + location.get('icon')} />
+												<span onClick={this.updateLocation}>	
+													<span>{location.get('node')}</span>
+												</span>
+											</div>
 										);
 									}.bind(this))}
 								</span>
 							</div>
 							<div className="mr-option mr-time-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<span>TIME: {this.props.news.date || 'All Time'}</span>
+									<div className="mr-option-title">TIME: {this.props.news.date || 'All Time'}</div>
 									{this.props.news.dates.models.map(function(date) {
 										return (
-											<div onClick={this.updateTime}>{date.get('node')}</div>
+											<div>
+												<img src={imgPrefix + date.get('icon')} />
+												<span onClick={this.updateTime}>
+													<span>{date.get('node')}</span>
+												</span>
+											</div>
 										);
 									}.bind(this))}
 								</span>
