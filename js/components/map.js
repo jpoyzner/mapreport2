@@ -150,7 +150,7 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 				this.fittingBounds = true;
 				this.map.fitBounds(bounds);
 				
-				Spiderfy(shownNews, this.props.news.radius).map(function(article) {
+				/*Spiderfy(*/shownNews/*, this.props.news.radius)*/.map(function(article) {
 					var oldMarker = article.get('marker');
 					var oldMarkerIndex = this.markers.indexOf(oldMarker);
 					if (oldMarkerIndex !== -1) {
