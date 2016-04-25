@@ -51,7 +51,7 @@ public class Rectangle {
 		top = yCenter + ySpan / 2;
 		bottom = yCenter - ySpan / 2;
 		
-		clusterNewsRadius = Math.max(Math.abs(xSpan), Math.abs(ySpan)) / 30;
+		clusterNewsRadius = Math.max(Math.abs(xSpan), Math.abs(ySpan)) * 2.5;
 	}
 	
 	public Rectangle(Options options) {
@@ -161,7 +161,7 @@ public class Rectangle {
 
 	public String toString() {
 		String ret = "Rectangle left:" + left + " right:" + right + " top:" + top + " bottom:" + bottom + " xSpan:" + xSpan + " ySpan:" + ySpan 
-				 + " xCenter:" + xCenter + " yCenter:" + yCenter;
+				 + " xCenter:" + xCenter + " yCenter:" + yCenter + " clusterNewsRadius:" + clusterNewsRadius;
 		return ret;
 	}
 	
