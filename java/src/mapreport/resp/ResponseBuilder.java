@@ -276,7 +276,12 @@ public class ResponseBuilder {
 
 			   // just for test
 			  // if (true) throw new Exception("test exception"); 
-			   
+
+			PagePresentation.buildMainNews(page.getView().getNewsList().getNewses());   
+			for (News news : page.getView().getNewsList().getNewses()) {
+				 Log.log("ResponseBuilder news.getLabel()=" +  news.getLabel() + " isMapShow=" + news.isMapShow() + " isMain=" + news.isMain());
+			}			  
+  
 			json = JSONHandler.gson.toJson(page); //"data1":100,"data2":"hello","list":["String 1","String 2","String 3"]
 		
 		   Log.info("buildJson end json=" + json);

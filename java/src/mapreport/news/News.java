@@ -33,7 +33,16 @@ public class News implements Comparable{
 	@Expose boolean isMapShow = false;
 	@Expose String rootTopic = null;	
 	String icon2 = null;
+	@Expose boolean isMain = false;
 	
+	public boolean isMain() {
+		return isMain;
+	}
+
+	public void setMain(boolean isMain) {
+		this.isMain = isMain;
+	}
+
 	public String getIcon2() {
 		return icon2;
 	}

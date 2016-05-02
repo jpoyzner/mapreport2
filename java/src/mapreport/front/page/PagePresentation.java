@@ -41,6 +41,7 @@ import mapreport.front.option.Options;
 import mapreport.nav.NavigationList;
 import mapreport.nav.NavigationPath;
 import mapreport.news.News;
+import mapreport.news.NewsPresentation;
 import mapreport.tree.Tree;
 import mapreport.util.Log;
 import mapreport.view.View;
@@ -131,7 +132,7 @@ public class PagePresentation {
 		   Log.info("PagePresentation view.getNewsList()=" + view.getNewsList());
 		   
 				for (News news : newsList) {
-					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + "  isMapShow=" + news.isMapShow());
+					 Log.log("PagePresentation  news.getLabel()=" +  news.getLabel() + " isMapShow=" + news.isMapShow() + " isMain=" + news.isMain());
 				}			  
   	}
 	
@@ -151,6 +152,29 @@ public class PagePresentation {
 		}
 		
 		return newsList;
+	}
+	
+	public static List<NewsPresentation> buildMainNews(List<NewsPresentation> list) {
+		int minPriority = Integer.MAX_VALUE;
+		
+		for (News news : list) {
+			Log.log("buildMainNews maxPriority:" + minPriority + " news.getPriority()=" + news.getPriority());
+			if (news.getPriority() < minPriority) {
+				minPriority = news.getPriority();
+				Log.log("buildMainNews news.getPriority() > minPriority news.getPriority():" + news.getPriority());
+			}
+		}
+		
+		Log.info("buildMainNews after minPriority:" + minPriority); 
+		
+		for (News news : list) {
+			if (news.getPriority() == minPriority) {
+				Log.info("buildMainNews news.getPriority() == minPriority news.getPriority():" + news.getPriority() + " label:" + news.getLabel()); 
+				news.setMain(true);
+			}
+		}
+		
+		return list;
 	}
 	
 	List<News> addSecondIcon(List<News> newsList) {
