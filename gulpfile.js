@@ -31,6 +31,7 @@ gulp.task('bundle', ['temp'], function() {
 	    });
     
     bundle.pipe(require('gulp-uglify')()).pipe(gulp.dest('./WebContent/js/'));
+    gulp.src('js/lib/**/*.js').pipe(gulp.dest('./WebContent/js/lib/'));
     del(["tempjs"]);
 });
 

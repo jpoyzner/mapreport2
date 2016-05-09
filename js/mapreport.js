@@ -6,6 +6,7 @@ requirejs.config({
         backbone: '//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min',
         react: '//cdnjs.cloudflare.com/ajax/libs/react/0.13.3/react.min',
         mobiledetect: '//cdnjs.cloudflare.com/ajax/libs/mobile-detect/0.4.0/mobile-detect.min',
+        richmarker: "lib/richmarker",
         gmaps: '//maps.googleapis.com/maps/api/js?key=AIzaSyCH89LosFbZ6Inmy5T8yCL0ao54qf2htCo&callback=initMap'
     },
     shim: {

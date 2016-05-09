@@ -3,3 +3,12 @@
 	overflow: hidden;
 	width: 100%;
 }
+
+.mr-marker {
+	border-radius: 10px;
+	cursor: pointer;
+}
+
+.mr-marker.mr-main-marker {
+	border: 5px solid black;
+}

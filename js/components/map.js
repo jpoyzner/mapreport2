@@ -4,6 +4,8 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 			window.mapComponent = this;
 			
 			window.initMap = function() {
+				require(['richmarker']);
+				
 				//default is SF :)
 				var latitude = 37.7576793;
 	        	var longitude = -122.5076404;
@@ -114,16 +116,20 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 			
 			var bounds = new google.maps.LatLngBounds();
 			var shownNews = [];
-			this.props.news.models.map(function(article) {
+			this.props.news.models.reverse().map(function(article) {
 				if (!article.get('isMapShow')) {
 					return;
 				}
 				
 				var marker =
-					new google.maps.Marker({
+					new RichMarker({
 						position: new google.maps.LatLng(article.get('y'), article.get('x')),
 						map: this.map,
-						icon: article.get('icon'),
+						anchor: RichMarkerPosition.MIDDLE,
+				        content:
+				        	'<img class="mr-marker ' + (article.get('isMain') ? 'mr-main-marker' : '')
+				        		+ '" src="' + article.get('icon') + '" />',
+						flat: true,
 						title: article.get('label')
 					});
 				
@@ -159,10 +165,14 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 					} 
 					
 					var marker =
-						new google.maps.Marker({
+						new RichMarker({
 							position: new google.maps.LatLng(article.get('y'), article.get('x')),
 							map: this.map,
-							icon: article.get('icon'),
+							anchor: RichMarkerPosition.MIDDLE,
+					        content:
+					        	'<img class="mr-marker ' + (article.get('isMain') ? 'mr-main-marker' : '')
+					        		+ '" src="' + article.get('icon') + '" />',
+							flat: true,
 							title: article.get('label')
 						});
 					

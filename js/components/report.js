@@ -11,7 +11,10 @@ define(['react', 'utils/css', 'utils/color'], function(React, Css, Color) {
 						var style = {'color': article.get('color'), 'backgroundColor': '#' + article.get('colorHex')};
 						
 						return (
-							<div className='mr-report-article' style={style} onClick={this.goToArticle.bind(this, article)}>
+							<div className={'mr-report-article ' + (article.get('isMain') ? 'mr-main-news' : '')}
+								style={style}
+								onClick={this.goToArticle.bind(this, article)}>
+							
 								<img src={article.get('icon')}></img>
 								{article.get('video') ? <img className="mr-video" src="http://www.mapreport.com/images/common/video.jpg"></img> : ''}
 								<p>{article.get('dateTime')}: {article.get('label')}</p>

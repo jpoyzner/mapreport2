@@ -26,3 +26,16 @@
     text-overflow: ellipsis;
 	white-space: nowrap;
 }
+
+.mr-report-article.mr-main-news p {
+	padding-bottom: 4px;
+    padding-top: 4px;
+}    
+
+.mr-main-news {
+	font-weight: bold;
+}
+
+.mr-report-article.mr-main-news img {
+	border: 5px solid black;
+}
