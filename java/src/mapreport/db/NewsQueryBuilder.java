@@ -363,6 +363,11 @@ public class NewsQueryBuilder extends DBBase {
 		for (News news : newsList) {
 			if (newsMap.get(news.getNewsId()) == null) {
 				newsMap.put(news.getNewsId(), news);
+				if (news.getX() == 0) {					
+					news.setMapShow(false);
+				}
+				Log.log("buildNewsMap news.getNewsId()) == null label=" + news.getLabel() 
+						+ " news.getX()=" + news.getX() + " news.getX() == 0=" + (news.getX() == 0) + " news.getMapShow=" + news.isMapShow());
 			} else {
 				News existNews = newsMap.get(news.getNewsId());
 				
@@ -373,7 +378,7 @@ public class NewsQueryBuilder extends DBBase {
 					newsMap.put(news.getNewsId(), existNews);
 				}
 
-				Log.log("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary()
+				Log.log("buildNewsMap label=" + news.getLabel() + " isLocation()=" + news.isLocation() + " isPrimary=" + news.isPrimary() + " news.getX()=" + news.getX()
 						+ " isMapShow=" + existNews.isMapShow() + " news.getNewsId()=" +news.getNewsId() + " get isMapShow=" + newsMap.get(news.getNewsId()).isMapShow());
 				
 				int nfPriority = newsMap.get(news.getNewsId()).getNewsFilterPriority();
@@ -387,7 +392,7 @@ public class NewsQueryBuilder extends DBBase {
 			
 			News newsTest = newsMap.get("158150"); //news.getNewsId()); //"14-year-old middle school student killed by car");
 			if (newsTest != null) {
-				Log.info("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
+				Log.log("buildNewsMap newsTest 158150 news.getLabel()=" + newsTest.getLabel() + "  isMapShow=" + newsTest.isMapShow());
 			}
 		}
 		

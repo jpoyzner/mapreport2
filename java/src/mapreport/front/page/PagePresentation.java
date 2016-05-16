@@ -27,6 +27,7 @@ import mapreport.db.NewsFilterRow;
 import mapreport.filter.DBFilter;
 import mapreport.filter.Filter;
 import mapreport.filter.NameFilter;
+import mapreport.filter.loc.ClusterHandler;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.Local;
 import mapreport.filter.loc.LocationByName;
@@ -77,7 +78,7 @@ public class PagePresentation {
 		FilterNode pageFilters,
 		List<News> newsList,	
 		Map<String, NameFilter> childFilters,
-		String localLong, String localLat, Options options) throws SQLException {    
+		String localLong, String localLat, Rectangle rect, Options options) throws SQLException {    
 		
 		    Log.info("PagePresentation newsList.size()=" + newsList.size() + " pageFilters=" + pageFilters);
 			
@@ -122,6 +123,10 @@ public class PagePresentation {
 
 	    newsList = buildIsMapShow(newsList);
 	    newsList = addSecondIcon(newsList);
+	    
+	    double span = rect == null ? 0 : (rect.getxSpan() + rect.getySpan()) / 2;
+	    newsList = ClusterHandler.buildAllClusterLocations(newsList, span);
+		
 		addChildNodes(pageFilters, childFilters, localLong, localLat, options);
 		title = pageFilters.buildName();
 	//	view = new View(new NewsList(newsList, pageFilters));
@@ -176,6 +181,7 @@ public class PagePresentation {
 		
 		return list;
 	}
+	 
 	
 	List<News> addSecondIcon(List<News> newsList) {
 		Map<String, Integer> iconMap = new HashMap<String, Integer>(20);

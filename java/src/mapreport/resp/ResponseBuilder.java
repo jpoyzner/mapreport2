@@ -23,6 +23,7 @@ import mapreport.db.URLFilterQueryBuilder;
 import mapreport.filter.DBFilter;
 import mapreport.filter.NameFilter;
 import mapreport.filter.SearchFilter;
+import mapreport.filter.loc.ClusterHandler;
 import mapreport.filter.loc.Global;
 import mapreport.filter.loc.LocationByCoords;
 import mapreport.filter.loc.LocationByName;
@@ -265,7 +266,7 @@ public class ResponseBuilder {
 			}
 			Log.info("buildJson options.getIsMoreNews()=" + options.getIsMoreNews() + " newsList.size()=" + newsList.size());
 			
-			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat, options);
+			PagePresentation page = new PagePresentation (newsBuilder.getFilterNode(), newsList, allHintMap, localLong, localLat, rect, options);
 			   Log.log("buildJson page.getView()=" + page.getView());
 			   Log.log("buildJson page.getView().getNewsList()=" + page.getView().getNewsList());
 			   Log.log("buildJson page.getView().getNewsList().getNewses()=" + page.getView().getNewsList().getNewses());
@@ -277,7 +278,8 @@ public class ResponseBuilder {
 			   // just for test
 			  // if (true) throw new Exception("test exception"); 
 
-			PagePresentation.buildMainNews(page.getView().getNewsList().getNewses());   
+			PagePresentation.buildMainNews(page.getView().getNewsList().getNewses());  
+			
 			for (News news : page.getView().getNewsList().getNewses()) {
 				 Log.log("ResponseBuilder news.getLabel()=" +  news.getLabel() + " isMapShow=" + news.isMapShow() + " isMain=" + news.isMain());
 			}			  
