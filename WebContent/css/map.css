@@ -12,3 +12,7 @@
 .mr-marker.mr-main-marker {
 	border: 5px solid black;
 }
+
+.mr-marker.mr-selected-marker {
+	border: 5px solid red;
+}

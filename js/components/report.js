@@ -12,6 +12,7 @@ define(['react', 'utils/css', 'utils/color'], function(React, Css, Color) {
 						
 						return (
 							<div className={'mr-report-article ' + (article.get('isMain') ? 'mr-main-news' : '')}
+								data-cid={article.cid}
 								style={style}
 								onClick={this.goToArticle.bind(this, article)}>
 							
@@ -23,6 +24,17 @@ define(['react', 'utils/css', 'utils/color'], function(React, Css, Color) {
 					}.bind(this))}
 				</div>		
 			);
+		},
+		componentDidMount: function() {
+			setTimeout(function() {
+				$('.mr-report-article').off().hover(
+					function() {
+						$('.mr-marker[data-cid="' + $(this).attr('data-cid') + '"]').addClass('mr-selected-marker');
+					},
+					function() {
+						$('.mr-marker[data-cid="' + $(this).attr('data-cid') + '"]').removeClass('mr-selected-marker');
+					});
+			}, 200);
 		},
 		goToArticle: function(article, event) {
 			open(article.get($(event.target).is('.mr-video') ? 'video' : 'url'), '_blank');

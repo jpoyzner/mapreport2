@@ -128,7 +128,8 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 						anchor: RichMarkerPosition.MIDDLE,
 				        content:
 				        	'<img class="mr-marker ' + (article.get('isMain') ? 'mr-main-marker' : '')
-				        		+ '" src="' + article.get('icon') + '" />',
+				        		+ '" src="' + article.get('icon')
+				        		+ '" data-cid="' + article.cid + '" />',
 						flat: true,
 						title: article.get('label')
 					});
@@ -194,6 +195,22 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 			}
 			
 			this.mapMoved = false;
+			
+			setTimeout(function() {
+				$('.mr-marker').off().hover(
+					function() {
+						var marker = $(this);
+						marker.addClass('mr-selected-marker');
+						var reportItem = $('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]');
+						reportItem.css('background-color', '#EDEDED');
+						reportItem[0].scrollIntoView();
+					},
+					function() {
+						var marker = $(this);
+						marker.removeClass('mr-selected-marker');
+						$('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]').css('background-color', 'white');
+					});
+			}, 200);
 		},
 		fetchDataForNewBounds: function() {
 			this.mapMoved = true;
