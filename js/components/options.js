@@ -17,9 +17,9 @@ define(['react', 'utils/css'], function(React, Css) {
 									<div className="mr-option-title">TOPIC: {this.props.news.topic || 'All Topics'}</div>
 									{this.props.news.topics.models.map(function(topic) {
 										return (
-											<div>
+											<div onClick={this.updateTopic}>
 												<img src={imgPrefix + topic.get('icon')} />
-												<span onClick={this.updateTopic}>
+												<span>
 													<span>{topic.get('node')}</span>
 												</span>
 											</div>
@@ -32,9 +32,9 @@ define(['react', 'utils/css'], function(React, Css) {
 									<div className="mr-option-title">LOCATION: {this.props.news.loc || 'All Locations'}</div>
 									{this.props.news.locations.models.map(function(location) {
 										return (
-											<div>
+											<div onClick={this.updateLocation}>
 												<img src={imgPrefix + location.get('icon')} />
-												<span onClick={this.updateLocation}>	
+												<span>	
 													<span>{location.get('node')}</span>
 												</span>
 											</div>
@@ -47,9 +47,9 @@ define(['react', 'utils/css'], function(React, Css) {
 									<div className="mr-option-title">TIME: {this.props.news.date || 'All Time'}</div>
 									{this.props.news.dates.models.map(function(date) {
 										return (
-											<div>
+											<div onClick={this.updateTime}>
 												<img src={imgPrefix + date.get('icon')} />
-												<span onClick={this.updateTime}>
+												<span>
 													<span>{date.get('node')}</span>
 												</span>
 											</div>
@@ -65,16 +65,16 @@ define(['react', 'utils/css'], function(React, Css) {
 			$(event.currentTarget).toggleClass('mr-expanded');
 		},
 		updateTopic: function(event) {
-			this.props.news.topic = $(event.target).html();
+			this.props.news.topic = $(event.currentTarget).find('span span').html();
 			this.props.news.fetch();
 		},
 		updateLocation: function(event) {
-			this.props.news.loc = $(event.target).html();
+			this.props.news.loc = $(event.currentTarget).find('span span').html();
 			this.props.news.mapBounds = null;
 			this.props.news.fetch();
 		},
 		updateTime: function(event) {
-			this.props.news.date = $(event.target).html();
+			this.props.news.date = $(event.currentTarget).find('span span').html();
 			this.props.news.fetch();
 		}
 	});

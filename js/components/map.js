@@ -156,39 +156,39 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 				this.fittingBounds = true;
 				this.map.fitBounds(bounds);
 				
-				/*Spiderfy(*/shownNews/*, this.props.news.radius)*/.map(function(article) {
-					var oldMarker = article.get('marker');
-					var oldMarkerIndex = this.markers.indexOf(oldMarker);
-					if (oldMarkerIndex !== -1) {
-						oldMarker.setMap(null);
-						this.markers.splice(oldMarkerIndex, 1);
-					} 
+//				/*Spiderfy(*/shownNews/*, this.props.news.radius)*/.map(function(article) {
+//					var oldMarker = article.get('marker');
+//					var oldMarkerIndex = this.markers.indexOf(oldMarker);
+//					if (oldMarkerIndex !== -1) {
+//						oldMarker.setMap(null);
+//						this.markers.splice(oldMarkerIndex, 1);
+//					} 
+//					
+//					var marker =
+//						new RichMarker({
+//							position: new google.maps.LatLng(article.get('y'), article.get('x')),
+//							map: this.map,
+//							anchor: RichMarkerPosition.MIDDLE,
+//					        content:
+//					        	'<img class="mr-marker ' + (article.get('isMain') ? 'mr-main-marker' : '')
+//					        		+ '" src="' + article.get('icon') + '" />',
+//							flat: true,
+//							title: article.get('label')
+//						});
+//					
+//					marker.addListener('click', function() {
+//						new google.maps.InfoWindow({
+//						    content:
+//						    	'<a href="' + article.get('url') + '" target="_blank">' +
+//						    		article.get('dateTime') +
+//						    		' @ ' + article.get('address') +
+//						    		': ' + article.get('label') +
+//						    	'</a>'
+//						}).open(this.map, marker);
+//					}.bind(this));
 					
-					var marker =
-						new RichMarker({
-							position: new google.maps.LatLng(article.get('y'), article.get('x')),
-							map: this.map,
-							anchor: RichMarkerPosition.MIDDLE,
-					        content:
-					        	'<img class="mr-marker ' + (article.get('isMain') ? 'mr-main-marker' : '')
-					        		+ '" src="' + article.get('icon') + '" />',
-							flat: true,
-							title: article.get('label')
-						});
-					
-					marker.addListener('click', function() {
-						new google.maps.InfoWindow({
-						    content:
-						    	'<a href="' + article.get('url') + '" target="_blank">' +
-						    		article.get('dateTime') +
-						    		' @ ' + article.get('address') +
-						    		': ' + article.get('label') +
-						    	'</a>'
-						}).open(this.map, marker);
-					}.bind(this));
-					
-					//need to remove original marker! and add to list!
-				}.bind(this));
+					//need to remove original marker! and add to list!?
+//				}.bind(this));
 				
 				this.fittingBounds = false;
 			}
