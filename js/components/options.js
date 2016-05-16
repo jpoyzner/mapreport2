@@ -44,7 +44,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-time-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<div className="mr-option-title">TIME: {this.props.news.date || 'All Time'}</div>
+									<div className="mr-option-title">TIME: {this.props.news.date || 'Latest'}</div>
 									{this.props.news.dates.models.map(function(date) {
 										return (
 											<div onClick={this.updateTime}>
