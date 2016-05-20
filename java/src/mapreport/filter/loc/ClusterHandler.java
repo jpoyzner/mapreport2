@@ -47,6 +47,11 @@ public class ClusterHandler {
           proximityCoefficient = 0.5 * proximityCoefficient;
       }
       
+      if (span > 150) {
+    	  span = 150;
+    	  Log.info("buildClustersLocations span > 200 span:" + span);
+      }
+      
       for (int i = 0; i < newsList.size(); i++) {      
     	  double magicFormula = 2 * Math.PI * i / newsList.size();
     	  News news = newsList.get(i);
@@ -97,7 +102,7 @@ public class ClusterHandler {
 			  double xSpan = xMax - xMin;
 			  double ySpan = yMax - yMin;			  			  
 			  span = Math.max(xSpan, ySpan) * 1.5;
-			  Log.info("buildAllClusterLocations after span = 0 list.size()=" + newsList.size() + " xMax=" + xMax  + " xMin=" + xMin  + " yMax=" + yMax + " yMin:" + yMin
+			  Log.info("buildAllClusterLocations after span = " + span + " list.size()=" + newsList.size() + " xMax=" + xMax  + " xMin=" + xMin  + " yMax=" + yMax + " yMin:" + yMin
 					  + " xSpan=" + xSpan + " ySpan=" + ySpan);
 		}
 		
