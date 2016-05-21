@@ -32,7 +32,11 @@ public class NavigationNodeSerializer  implements JsonSerializer<NavigationNode>
 	    final JsonElement jsonLink = context.serialize(navigationNode.getPageFilters().getLink());
 	    jsonObject.add("link", jsonLink);
 	    
-	    final JsonElement jsonIcon = context.serialize(navigationNode.metaData.getImage());
+	    String icon = navigationNode.metaData.getImage();		
+		if (icon == null || icon.isEmpty()) {
+			icon = "common/black.gif";
+		}
+	    final JsonElement jsonIcon = context.serialize(icon);
 	    jsonObject.add("icon", jsonIcon );
 
 	    return jsonObject;
