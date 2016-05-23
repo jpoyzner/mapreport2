@@ -37,5 +37,9 @@
 }
 
 .mr-report-article.mr-main-news img {
-	border: 5px solid black;
+	border: 5px solid red;
+}
+
+.mr-report-article.mr-selected-article {
+	background-color: #C0C0C0 !important;
 }

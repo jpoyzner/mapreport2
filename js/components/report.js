@@ -29,11 +29,36 @@ define(['react', 'utils/css', 'utils/color'], function(React, Css, Color) {
 			setTimeout(function() {
 				$('.mr-report-article').off().hover(
 					function() {
-						$('.mr-marker[data-cid="' + $(this).attr('data-cid') + '"]').addClass('mr-selected-marker');
+						$('.mr-marker').removeClass('mr-selected-marker');
+						
+						var article = $(this);
+						article.addClass('mr-selected-article');
+						$('.mr-marker[data-cid="' + article.attr('data-cid') + '"]').addClass('mr-selected-marker');
 					},
 					function() {
-						$('.mr-marker[data-cid="' + $(this).attr('data-cid') + '"]').removeClass('mr-selected-marker');
+						var article = $(this);
+						article.removeClass('mr-selected-article');
+						$('.mr-marker[data-cid="' + article.attr('data-cid') + '"]').removeClass('mr-selected-marker');
 					});
+			}, 200);
+			
+			setTimeout(function() {
+				var articles = $('.mr-report-article');
+				var articleIndex = 0;
+				setInterval(function() {
+					if (articleIndex >= articles.length) {
+						articleIndex = 0;
+					}
+					
+					$('.mr-marker').removeClass('mr-selected-marker');
+					$('.mr-report-article').removeClass('mr-selected-article');
+					
+					var article = $(articles[articleIndex]);
+					article.addClass('mr-selected-article');
+					$('.mr-marker[data-cid="' + article.attr('data-cid') + '"]').addClass('mr-selected-marker');
+					
+					articleIndex++;
+				}, 5000);
 			}, 200);
 		},
 		goToArticle: function(article, event) {

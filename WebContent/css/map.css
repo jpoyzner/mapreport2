@@ -10,9 +10,17 @@
 }
 
 .mr-marker.mr-main-marker {
-	border: 5px solid black;
+	border: 5px solid red;
+	left: -5px;
+	position: relative;
+	top: -5px;
+	z-index: 1001;
 }
 
 .mr-marker.mr-selected-marker {
-	border: 5px solid red;
+	border: 5px solid yellow;
+	left: -5px;
+	position: relative;
+	top: -5px;
+	z-index: 1002;
 }

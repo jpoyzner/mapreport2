@@ -199,16 +199,19 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 			setTimeout(function() {
 				$('.mr-marker').off().hover(
 					function() {
+						$('.mr-marker').removeClass('mr-selected-marker');
+						$('.mr-report-article').removeClass('mr-selected-article');
+						
 						var marker = $(this);
 						marker.addClass('mr-selected-marker');
 						var reportItem = $('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]');
-						reportItem.css('background-color', '#EDEDED');
+						reportItem.addClass('mr-selected-article');
 						reportItem[0].scrollIntoView();
 					},
 					function() {
 						var marker = $(this);
 						marker.removeClass('mr-selected-marker');
-						$('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]').css('background-color', 'white');
+						$('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]').removeClass('mr-selected-article');
 					});
 			}, 200);
 		},
