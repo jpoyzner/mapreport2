@@ -174,8 +174,9 @@ public class PagePresentation {
 		
 		for (News news : list) {
 			if (news.getPriority() == minPriority) {
-				Log.info("buildMainNews news.getPriority() == minPriority news.getPriority():" + news.getPriority() + " label:" + news.getLabel()); 
+				Log.info("buildMainNews news.getPriority() == minPriority:" + news.getPriority() + " label:" + news.getLabel()); 
 				news.setMain(true);
+				break;
 			}
 		}
 		
