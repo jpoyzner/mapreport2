@@ -43,9 +43,56 @@ function(React, Detector, News, Options, Map, Report, Spinner) {
 		},
 		componentDidMount: function() {
 			new Spinner({color: 'blue'}).spin($('#mr-spinner')[0]);
+			
+			setTimeout(function() {
+				this.articleIndex = 0;
+				this.cycleNewsInterval = setInterval(this.cycleNews, 5000);
+			}.bind(this), 200);
 		},
 		componentDidUpdate: function() {
 			$('#mr-spinner').css('display', this.state.loading ? 'static' : 'none');
+		},
+		prepareNewsCycle: function() {
+			clearInterval(this.cycleNewsInterval);
+			clearTimeout(this.cycleNewsTimeout);
+			
+			this.cycleNewsTimeout = setTimeout(function() {
+				this.cycleNewsInterval = setInterval(this.cycleNews, 5000);
+			}.bind(this), 30000);
+		},
+		cycleNews: function() {
+			var articles = $('.mr-report-article');
+			if (this.articleIndex >= articles.length) {
+				this.articleIndex = 0;
+			}
+			
+			$('.mr-marker').removeClass('mr-selected-marker');
+			$('.mr-report-article').removeClass('mr-selected-article');
+			
+			var article = $(articles[this.articleIndex]);
+			if (article.length) {
+				article.addClass('mr-selected-article');
+				this.scrollTo(article);
+			}
+			
+			$('.mr-marker[data-cid="' + article.attr('data-cid') + '"]').addClass('mr-selected-marker');
+			
+			this.articleIndex++;
+		},
+		scrollTo: function($target) {
+		    var $container = $('#mr-report-bucket');
+
+		    var pos = $target.position(), height = $target.outerHeight();
+		    var containerScrollTop = $container.scrollTop(), containerHeight = $container.height();
+		    var top = pos.top + containerScrollTop;     // position.top is relative to the scrollTop of the containing element
+
+		    var paddingPx = containerHeight * 0.15;      // padding keeps the target from being butted up against the top / bottom of the container after scroll
+
+		    if (top < containerScrollTop) {     // scroll up                
+		        $container.scrollTop(top - paddingPx);
+		    } else if (top + height > containerScrollTop + containerHeight) {     // scroll down
+		        $container.scrollTop(top + height - containerHeight + paddingPx);
+		    }
 		}
 	});
 });

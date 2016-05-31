@@ -199,19 +199,26 @@ define(['react', 'utils/css', 'utils/spiderfy'], function(React, Css, Spiderfy) 
 			setTimeout(function() {
 				$('.mr-marker').off().hover(
 					function() {
+						clearInterval(window.page.cycleNewsInterval);
+						
 						$('.mr-marker').removeClass('mr-selected-marker');
 						$('.mr-report-article').removeClass('mr-selected-article');
 						
 						var marker = $(this);
 						marker.addClass('mr-selected-marker');
+						
 						var reportItem = $('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]');
-						reportItem.addClass('mr-selected-article');
-						reportItem[0].scrollIntoView();
+						if (reportItem.length) {
+							reportItem.addClass('mr-selected-article');
+							window.page.scrollTo(reportItem);
+						}
 					},
 					function() {
 						var marker = $(this);
 						marker.removeClass('mr-selected-marker');
 						$('.mr-report-article[data-cid="' + marker.attr('data-cid') + '"]').removeClass('mr-selected-article');
+						
+						window.page.prepareNewsCycle();
 					});
 			}, 200);
 		},
