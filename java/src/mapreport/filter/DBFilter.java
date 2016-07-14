@@ -27,7 +27,7 @@ public class DBFilter extends NameFilter {
 
 	final static String SELECT_SQL = " f{0}.priority as filterPriority{0}, f{0}.name as fName{0}, fp{0}.name as pName{0}, ff{0}.level as pLevel{0}, f{0}.priority as nfPriority{0},  nf{0}.isPrimary as isPrimary{0}, nf{0}.isLocation as isLocation{0}, nf{0}.topicExcludeId as topicExcludeId{0}";
 	final static String FROM_SQL = " filter f{0}, filter fp{0}, newsfilter nf{0}, filterfilter ff{0} ";
-	final static String WHERE_SQL = "  f{0}.filterId = nf{0}.filterId  and nf{0}.newsId = n.newsId and f{0}.filterId = ff{0}.childFilterId  and fp{0}.filterId = ff{0}.parentFilterId and f{0}.legacyType <> KeywordTimeLineFile \n" 
+	final static String WHERE_SQL = "  f{0}.filterId = nf{0}.filterId  and nf{0}.newsId = n.newsId and f{0}.filterId = ff{0}.childFilterId  and fp{0}.filterId = ff{0}.parentFilterId  \n" //and f{0}.legacyType <> KeywordTimeLineFile \n" 
 			+ " and (fp{0}.name ='namePlaceHolder' or f{0}.name = 'namePlaceHolder') ";
 
 	public int getDbFilterCntr() {

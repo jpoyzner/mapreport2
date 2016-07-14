@@ -30,12 +30,12 @@ public class SecondTopicFilter extends Topic {
  and nf.filterId = f.filterId 
  and nf.filterId = ff.childfilterId 
  and fp.filterId = ff.parentfilterId 
- and f.legacyType <> 'KeywordTimeLineFile' 
+ // and f.legacyType <> 'KeywordTimeLineFile' 
  and (fp.name = 'Sports' or f.name = 'Sports')) f2  
- where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId and f.legacyType <> 'KeywordTimeLineFile' 
+ where  f.filterId = nf.filterId  and nf.newsId = n.newsId and f.filterId = ff.childFilterId  and fp.filterId = ff.parentFilterId // and f.legacyType <> 'KeywordTimeLineFile' 
   and n.newsId = f2.newsId  and (fp.name IN ('Germany'  ) or  f.name IN ( 'Germany'   ))  
 
-and  f3.filterId = nf3.filterId  and nf3.newsId = n.newsId and f3.filterId = ff3.childFilterId  and fp3.filterId = ff3.parentFilterId and f3.legacyType <> 'KeywordTimeLineFile' 
+and  f3.filterId = nf3.filterId  and nf3.newsId = n.newsId and f3.filterId = ff3.childFilterId  and fp3.filterId = ff3.parentFilterId // and f3.legacyType <> 'KeywordTimeLineFile' 
  and (fp3.name IN ('France' ) or  f3.name IN ( 'France'   ))   
  
  -- and n.dateTime < ? 
