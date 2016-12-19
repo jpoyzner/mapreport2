@@ -15,7 +15,7 @@
 	z-index: 1;
 }
 
-.mr-option div {
+.mr-option div:not(.mr-option-title) {
     display: none;
 }
  
