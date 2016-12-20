@@ -19,15 +19,16 @@ public class Month extends OfficialTimeFilter {
 
 	public Month(int year, int month) {
 		// 		super(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + (day < 10 ? "0" : "") + String.valueOf(day)  + "-" + String.valueOf(year));		
-	//	super(String.valueOf(year) + "-" + String.valueOf(month));		
-		super(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + String.valueOf(year));
+	//	super(String.valueOf(year) + "-" + String.valueOf(month));
+		
+		super(new DateFormatSymbols().getMonths()[(month == 12 ? (month - 1) : month)].substring(0, 3) + "-" + String.valueOf(year));
 		this.year = year;		
 		this.month = month;
 		
 		begin = new GregorianCalendar(year, month - 1, 1);
 		end = new GregorianCalendar(year, month - 1, begin.getActualMaximum(Calendar.DAY_OF_MONTH));
 		
-		setName(new DateFormatSymbols().getMonths()[month].substring(0, 3) + "-" + String.valueOf(year));	
+		setName(new DateFormatSymbols().getMonths()[(month == 12 ? (month - 1) : month)].substring(0, 3) + "-" + String.valueOf(year));	
 		           Log.log("Month year=" + year + " month=" + month + " name=" + getName());
 
 		parent = new Year(year);	
