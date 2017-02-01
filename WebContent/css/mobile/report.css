@@ -2,8 +2,9 @@
 	background-color: black;
 	border: 1px solid black;
 	border-radius: 3px;
-	overflow: auto;
+	overflow: hidden;
 	padding: 6px;
+	text-overflow: ellipsis;
 	white-space: nowrap;
 	word-wrap: break-word;
 }
