@@ -1,0 +1,26 @@
+{
+  "name": "mapreport-stable",
+  "version": "1.0.0",
+  "description": "MapReport",
+  "main": "server.js",
+  "scripts": {
+    "start": "node ./server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jpoyzner/mapreport2.git"
+  },
+  "author": "Jeff Poyzner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jpoyzner/mapreport2/issues"
+  },
+  "homepage": "mapreport.net",
+  "dependencies": {
+    "gulp": "^3.9.1",
+    "gulp-react": "^3.1.0",
+    "gulp-requirejs": "^1.0.0-rc2",
+    "gulp-shell": "^0.6.3",
+    "gulp-uglify": "^3.0.0"
+  }
+}
