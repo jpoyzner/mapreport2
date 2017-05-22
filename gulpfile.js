@@ -1,11 +1,15 @@
 var gulp = require('gulp');
 var react = require('gulp-react');
-var del = require('del');
+var shell = require('gulp-shell');
 
 //TODO: REPLACE JS IN WEBAPP WITH JS DEPLOYED TO S3!!! Then make one gulp task to deploy all JS!!!
-gulp.task('default', ['bundle'], function() {
+gulp.task('default', ['build'], function() {
     console.log("deploying MapReport JavaScript!");
 });
+
+gulp.task('build', ['bundle'], shell.task([
+	"sleep 5; rm -rf tempjs"
+]));
 
 gulp.task('bundle', ['temp'], function() {
 	var bundle =
@@ -29,10 +33,9 @@ gulp.task('bundle', ['temp'], function() {
 	    	    }
 	        }
 	    });
-    
-    bundle.pipe(require('gulp-uglify')()).pipe(gulp.dest('./WebContent/js/'));
-    gulp.src('js/lib/**/*.js').pipe(gulp.dest('./WebContent/js/lib/'));
-    del(["tempjs"]);
+
+	bundle.pipe(require('gulp-uglify')()).pipe(gulp.dest('./WebContent/js/'));
+	gulp.src('js/lib/**/*.js').pipe(gulp.dest('./WebContent/js/lib/'));
 });
 
 gulp.task('temp', ['tempjs'], function() {
@@ -48,10 +51,10 @@ gulp.task('debug', ['clean'], function() {
 	gulp.src('js/components/**/*.js').pipe(react()).pipe(gulp.dest('./WebContent/js/components/'));
 });
 
-gulp.task('clean', function(callback) {
-	del(["WebContent/js/**/*"], callback);
-});
+gulp.task('clean', shell.task([
+	"rm -rf WebContent/js/*"
+]));
 
-gulp.task('db', require('gulp-shell').task([
+gulp.task('db', shell.task([
 	"cd /usr/local/mysql/bin; sudo ./mysqld -u root"
 ]));
