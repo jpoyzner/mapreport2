@@ -70,6 +70,10 @@ define(['react', 'components/page', 'backbone'], function(React, Page) {
 	    }, 
 	    navigateTo: function(URL) {
 	    	this.navigate(this.pathPrefix + URL);
+
+	    	if (window.parent) {
+	    		window.parent.history.pushState(null, null, URL);
+	    	}
 	    }
 	}))();
 });
