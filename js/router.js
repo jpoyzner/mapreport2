@@ -10,7 +10,7 @@ define(['react', 'components/page', 'backbone'], function(React, Page) {
 	    	'*path': 'homePage'
 	    },
 	    homePage: function(options) {
-	    	this.rootDomain = document.domain + ":8080";
+	    	this.rootDomain = document.domain;// + ":8080";
 	    	this.pathPrefix = document.domain.indexOf('amazon') === -1 ? "/mapreport-stable/" : "/mapreport/";
 
 	    	var path = location.pathname.split('/');
