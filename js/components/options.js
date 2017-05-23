@@ -14,7 +14,7 @@ define(['react', 'utils/css'], function(React, Css) {
 						: <div id="mr-options">
 							<div className="mr-option mr-topic-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<div className="mr-option-title">TOPIC: {decodeURI(this.props.news.topic) || 'All Topics'}</div>
+									<div className="mr-option-title">TOPIC: {decodeURI(this.props.news.topic || 'All Topics')}</div>
 									{this.props.news.topics.models.map(function(topic) {
 										return (
 											<div onClick={this.updateTopic}>
@@ -29,7 +29,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-location-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<div className="mr-option-title">LOCATION: {decodeURI(this.props.news.loc) || 'All Locations'}</div>
+									<div className="mr-option-title">LOCATION: {decodeURI(this.props.news.loc || 'All Locations')}</div>
 									{this.props.news.locations.models.map(function(location) {
 										return (
 											<div onClick={this.updateLocation}>
@@ -44,7 +44,7 @@ define(['react', 'utils/css'], function(React, Css) {
 							</div>
 							<div className="mr-option mr-time-option" onClick={this.toggleMenu}>
 								<span className="mr-option-cell">
-									<div className="mr-option-title">TIME: {decodeURI(this.props.news.date) || 'Latest'}</div>
+									<div className="mr-option-title">TIME: {decodeURI(this.props.news.date || 'Latest')}</div>
 									{this.props.news.dates.models.map(function(date) {
 										return (
 											<div onClick={this.updateTime}>
