@@ -11,7 +11,9 @@ define(['react', 'components/page', 'backbone'], function(React, Page) {
 	    },
 	    homePage: function(options) {
 	    	this.rootDomain = document.domain;// + ":8080";
-	    	this.pathPrefix = document.domain.indexOf('amazon') === -1 ? "/mapreport-stable/" : "/mapreport/";
+
+	    	//TODO: FOR LOCAL TESTING, USE A CONFIG FOR THIS!!!!
+	    	this.pathPrefix = "/";// + (document.domain.indexOf('amazon') === -1 ? "mapreport-stable/" : "mapreport/");
 
 	    	var path = location.pathname.split('/');
 	    	
